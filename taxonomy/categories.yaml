@@ -1,0 +1,37 @@
+version: 1
+categories:
+  - id: web-development
+    titles:
+      es: Desarrollo web
+      en: Web Development
+    description:
+      es: Frontend, backend, APIs, datos, pruebas, accesibilidad y rendimiento.
+      en: Frontend, backend, APIs, data, testing, accessibility, and performance.
+  - id: devops-cloud
+    titles:
+      es: DevOps y cloud
+      en: DevOps and Cloud
+    description:
+      es: Entrega continua, infraestructura, contenedores, observabilidad y seguridad cloud.
+      en: Continuous delivery, infrastructure, containers, observability, and cloud security.
+  - id: hosting-support
+    titles:
+      es: Alojamiento y soporte
+      en: Hosting and Support
+    description:
+      es: DNS, servidores, migraciónes, copias de seguridad, correo y soporte técnico.
+      en: DNS, servers, migrations, backups, email, and technical support.
+  - id: digital-marketing
+    titles:
+      es: Marketing digital
+      en: Digital Marketing
+    description:
+      es: SEO, analítica, contenidos, publicidad, conversión y automatizacion.
+      en: SEO, analytics, content, advertising, conversión, and automation.
+  - id: management-quality
+    titles:
+      es: Gestión y calidad
+      en: Management and Quality
+    description:
+      es: Discovery, requisitos, estimación, QA, entregas y mejora continua.
+      en: Discovery, requirements, estimation, QA, delivery, and continuous improvement.

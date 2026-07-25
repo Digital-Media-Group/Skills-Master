@@ -1,0 +1,43 @@
+schemaVersion: 1
+id: analytics-measurement-plan
+version: 0.1.0
+status: experimental
+category: digital-marketing
+name:
+  es: Plan de medición analítica
+  en: Analytics Measurement Plan
+summary:
+  es: Convertir objetivos de negocio en eventos, dimensiones, KPI y controles de
+    calidad.
+  en: Turn business goals into events, dimensions, KPIs, and quality controls.
+tags:
+  - analytics
+  - measurement
+  - privacy
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - browser
+riskLevel: medium
+inputs:
+  es:
+    - Objetivos, recorrido, conversiones, plataformas, consentimiento y
+      necesidades de reporting.
+  en:
+    - Goals, journey, conversions, platforms, consent, and reporting needs.
+outputs:
+  es:
+    - Plan de medición versionado con especificaciones y validación.
+  en:
+    - Versioned measurement plan with specifications and validation.
+dependencies: []
+lastReviewed: 2026-07-25

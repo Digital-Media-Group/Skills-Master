@@ -1,0 +1,42 @@
+schemaVersion: 1
+id: containerize-web-application
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: Contenerización de una aplicación web
+  en: Containerize a Web Application
+summary:
+  es: Crear una imagen reproducible, segura y operable para una aplicación web.
+  en: Create a reproducible, secure, and operable image for a web application.
+tags:
+  - docker
+  - containers
+  - deployment
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+riskLevel: medium
+inputs:
+  es:
+    - Runtime, comandos, puertos, dependencias, secretos y objetivos de
+      despliegue.
+  en:
+    - Runtime, commands, ports, dependencies, secrets, and deployment targets.
+outputs:
+  es:
+    - Dockerfile validado, exclusiones, documentación y pruebas de ejecución.
+  en:
+    - Validated Dockerfile, exclusions, documentation, and runtime tests.
+dependencies: []
+lastReviewed: 2026-07-25

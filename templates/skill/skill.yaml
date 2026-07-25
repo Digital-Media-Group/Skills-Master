@@ -1,0 +1,38 @@
+schemaVersion: 1
+id: replace-with-skill-id
+version: 0.1.0
+status: experimental
+category: web-development
+name:
+  es: Titulo de la skill
+  en: Skill Title
+summary:
+  es: Describe brevemente el resultado de la skill.
+  en: Briefly describe the outcome of the skill.
+tags:
+  - example
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Contexto necesario para ejecutar la skill.
+  en:
+    - Context required to execute the skill.
+outputs:
+  es:
+    - Resultado verificable producido por la skill.
+  en:
+    - Verifiable result produced by the skill.
+dependencies: []
+lastReviewed: 2026-07-25

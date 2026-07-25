@@ -1,0 +1,42 @@
+schemaVersion: 1
+id: conversion-rate-audit
+version: 0.1.0
+status: experimental
+category: digital-marketing
+name:
+  es: Auditoría de conversión
+  en: Conversion Rate Audit
+summary:
+  es: Identificar fricciones de conversión y formular experimentos medibles.
+  en: Identify conversion friction and formulate measurable experiments.
+tags:
+  - cro
+  - experimentation
+  - user-experience
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - browser
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Objetivo, embudo, segmentos, analítica, investigacion de usuarios y
+      restricciones.
+  en:
+    - Goal, funnel, segments, analytics, user research, and constraints.
+outputs:
+  es:
+    - Backlog de hipotesis priorizadas con metricas y diseño de prueba.
+  en:
+    - Backlog of prioritized hypotheses with metrics and test design.
+dependencies: []
+lastReviewed: 2026-07-25

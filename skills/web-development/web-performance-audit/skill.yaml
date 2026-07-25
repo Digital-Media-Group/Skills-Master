@@ -1,0 +1,43 @@
+schemaVersion: 1
+id: web-performance-audit
+version: 0.1.0
+status: experimental
+category: web-development
+name:
+  es: Auditoria de rendimiento web
+  en: Web Performance Audit
+summary:
+  es: Identificar cuellos de botella y proponer mejoras medibles de rendimiento
+    web.
+  en: Identify bottlenecks and propose measurable web performance improvements.
+tags:
+  - performance
+  - core-web-vitals
+  - audit
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - network
+  - browser
+riskLevel: low
+inputs:
+  es:
+    - URLs, dispositivos, mercados, analítica disponible y objetivos de
+      rendimiento.
+  en:
+    - URLs, devices, markets, available analytics, and performance goals.
+outputs:
+  es:
+    - Linea base, causas verificadas y plan priorizado con metricas objetivo.
+  en:
+    - Baseline, verified causes, and a prioritized plan with target metrics.
+dependencies: []
+lastReviewed: 2026-07-25

@@ -1,0 +1,252 @@
+{
+  "schemaVersion": 1,
+  "locale": "en",
+  "generatedAt": "2026-07-25T00:00:00.000Z",
+  "categories": [
+    {
+      "id": "web-development",
+      "title": "Web Development",
+      "description": "Frontend, backend, APIs, data, testing, accessibility, and performance.",
+      "skills": [
+        {
+          "id": "api-design-review",
+          "name": "API Design Review",
+          "summary": "Assess an API for consistency, security, evolution, and consumer experience.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "api",
+            "review",
+            "security"
+          ],
+          "source": "../../skills/web-development/api-design-review/locales/en/SKILL.md"
+        },
+        {
+          "id": "web-performance-audit",
+          "name": "Web Performance Audit",
+          "summary": "Identify bottlenecks and propose measurable web performance improvements.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "performance",
+            "core-web-vitals",
+            "audit"
+          ],
+          "source": "../../skills/web-development/web-performance-audit/locales/en/SKILL.md"
+        },
+        {
+          "id": "web-project-bootstrap",
+          "name": "Web Project Bootstrap",
+          "summary": "Prepare a maintainable web foundation with initial decisions, structure, and controls.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "bootstrap",
+            "architecture",
+            "quality"
+          ],
+          "source": "../../skills/web-development/web-project-bootstrap/locales/en/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "devops-cloud",
+      "title": "DevOps and Cloud",
+      "description": "Continuous delivery, infrastructure, containers, observability, and cloud security.",
+      "skills": [
+        {
+          "id": "ci-cd-pipeline-design",
+          "name": "CI/CD Pipeline Design",
+          "summary": "Design automated delivery with controls, traceability, and recovery.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "ci-cd",
+            "automation",
+            "release"
+          ],
+          "source": "../../skills/devops-cloud/ci-cd-pipeline-design/locales/en/SKILL.md"
+        },
+        {
+          "id": "cloud-architecture-review",
+          "name": "Cloud Architecture Review",
+          "summary": "Assess cloud architecture for reliability, security, performance, and cost.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "cloud",
+            "architecture",
+            "cost-optimization"
+          ],
+          "source": "../../skills/devops-cloud/cloud-architecture-review/locales/en/SKILL.md"
+        },
+        {
+          "id": "containerize-web-application",
+          "name": "Containerize a Web Application",
+          "summary": "Create a reproducible, secure, and operable image for a web application.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "docker",
+            "containers",
+            "deployment"
+          ],
+          "source": "../../skills/devops-cloud/containerize-web-application/locales/en/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "hosting-support",
+      "title": "Hosting and Support",
+      "description": "DNS, servers, migrations, backups, email, and technical support.",
+      "skills": [
+        {
+          "id": "backup-and-restore",
+          "name": "Backup and Restore",
+          "summary": "Define and verify a backup strategy based on recovery objectives.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "backup",
+            "disaster-recovery",
+            "operations"
+          ],
+          "source": "../../skills/hosting-support/backup-and-restore/locales/en/SKILL.md"
+        },
+        {
+          "id": "dns-configuration",
+          "name": "DNS Configuration",
+          "summary": "Plan and apply DNS changes with validation and safe recovery.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "dns",
+            "hosting",
+            "change-management"
+          ],
+          "source": "../../skills/hosting-support/dns-configuration/locales/en/SKILL.md"
+        },
+        {
+          "id": "website-migration",
+          "name": "Website Migration",
+          "summary": "Move a site between environments while minimizing data loss and downtime.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "migration",
+            "hosting",
+            "backup"
+          ],
+          "source": "../../skills/hosting-support/website-migration/locales/en/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "digital-marketing",
+      "title": "Digital Marketing",
+      "description": "SEO, analytics, content, advertising, conversión, and automation.",
+      "skills": [
+        {
+          "id": "analytics-measurement-plan",
+          "name": "Analytics Measurement Plan",
+          "summary": "Turn business goals into events, dimensions, KPIs, and quality controls.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "analytics",
+            "measurement",
+            "privacy"
+          ],
+          "source": "../../skills/digital-marketing/analytics-measurement-plan/locales/en/SKILL.md"
+        },
+        {
+          "id": "conversion-rate-audit",
+          "name": "Conversion Rate Audit",
+          "summary": "Identify conversion friction and formulate measurable experiments.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "cro",
+            "experimentation",
+            "user-experience"
+          ],
+          "source": "../../skills/digital-marketing/conversion-rate-audit/locales/en/SKILL.md"
+        },
+        {
+          "id": "technical-seo-audit",
+          "name": "Technical SEO Audit",
+          "summary": "Find technical barriers affecting crawling, indexing, and organic performance.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "seo",
+            "audit",
+            "indexing"
+          ],
+          "source": "../../skills/digital-marketing/technical-seo-audit/locales/en/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "management-quality",
+      "title": "Management and Quality",
+      "description": "Discovery, requirements, estimation, QA, delivery, and continuous improvement.",
+      "skills": [
+        {
+          "id": "project-discovery",
+          "name": "Project Discovery",
+          "summary": "Align the problem, outcomes, scope, risks, and validation plan before execution.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "discovery",
+            "requirements",
+            "planning"
+          ],
+          "source": "../../skills/management-quality/project-discovery/locales/en/SKILL.md"
+        },
+        {
+          "id": "release-readiness-review",
+          "name": "Release Readiness Review",
+          "summary": "Decide whether a release can proceed using technical, operational, and business evidence.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "release",
+            "quality-assurance",
+            "change-management"
+          ],
+          "source": "../../skills/management-quality/release-readiness-review/locales/en/SKILL.md"
+        },
+        {
+          "id": "software-estimation",
+          "name": "Software Estimation",
+          "summary": "Produce an explainable estimate with a range, assumptions, risks, and confidence level.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "estimation",
+            "planning",
+            "risk"
+          ],
+          "source": "../../skills/management-quality/software-estimation/locales/en/SKILL.md"
+        }
+      ]
+    }
+  ]
+}

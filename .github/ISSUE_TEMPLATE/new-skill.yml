@@ -1,0 +1,36 @@
+name: Nueva skill / New skill
+description: Proponer una nueva skill bilingue / Propose a new bilingual skill
+title: "[Skill]: "
+labels: ["new-skill"]
+body:
+  - type: input
+    id: proposed-id
+    attributes:
+      label: ID tecnico propuesto / Proposed technical ID
+      description: Usa kebab-case y no lo traduzcas / Use kebab-case and do not translate it
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Categoria / Category
+      options:
+        - web-development
+        - devops-cloud
+        - hosting-support
+        - digital-marketing
+        - management-quality
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Resultado esperado / Expected outcome
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Casos de uso / Use cases
+    validations:
+      required: true

@@ -1,0 +1,42 @@
+schemaVersion: 1
+id: dns-configuration
+version: 0.1.0
+status: experimental
+category: hosting-support
+name:
+  es: Configuración de DNS
+  en: DNS Configuration
+summary:
+  es: Planificar y aplicar cambios DNS con validación y recuperación segura.
+  en: Plan and apply DNS changes with validation and safe recovery.
+tags:
+  - dns
+  - hosting
+  - change-management
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - network
+  - credentials
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Zona, proveedor, registros actuales, objetivo, TTL y ventana de cambio.
+  en:
+    - Zone, provider, current records, target, TTL, and change window.
+outputs:
+  es:
+    - Registros aplicados, propagacion verificada y plan de reversa documentado.
+  en:
+    - Applied records, verified propagation, and documented rollback plan.
+dependencies: []
+lastReviewed: 2026-07-25

@@ -1,13 +1,31 @@
 {
   "systemSetup": [],
   "templateName": "custom",
-  "projectDependencies": [],
-  "codeChecks": [],
-  "buildSteps": [],
+  "projectDependencies": [
+    {
+      "name": "Install Dependencies",
+      "command": "npm install"
+    }
+  ],
+  "codeChecks": [
+    {
+      "name": "Validate Skills",
+      "command": "npm run check"
+    }
+  ],
+  "buildSteps": [
+    {
+      "name": "Build Catalogs",
+      "command": "npm run build"
+    }
+  ],
   "runStep": [],
   "deploySteps": [],
-  "cleanupFiles": [],
-  "packageManager": "",
+  "cleanupFiles": [
+    "node_modules",
+    "dist"
+  ],
+  "packageManager": "npm",
   "envPaths": [
     {
       "name": "default",

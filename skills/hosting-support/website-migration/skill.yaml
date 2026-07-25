@@ -1,0 +1,45 @@
+schemaVersion: 1
+id: website-migration
+version: 0.1.0
+status: experimental
+category: hosting-support
+name:
+  es: Migración de sitio web
+  en: Website Migration
+summary:
+  es: Mover un sitio entre entornos reduciendo pérdida de datos y tiempo de
+    inactividad.
+  en: Move a site between environments while minimizing data loss and downtime.
+tags:
+  - migration
+  - hosting
+  - backup
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - network
+  - credentials
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Inventario, accesos, datos, DNS, correo, trafico y tolerancia a
+      interrupciones.
+  en:
+    - Inventory, access, data, DNS, email, traffic, and downtime tolerance.
+outputs:
+  es:
+    - Sitio migrado, validado, monitorizado y con reversa disponible.
+  en:
+    - Migrated, validated, monitored site with rollback available.
+dependencies: []
+lastReviewed: 2026-07-25

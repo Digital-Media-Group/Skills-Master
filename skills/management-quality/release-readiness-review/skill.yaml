@@ -1,0 +1,44 @@
+schemaVersion: 1
+id: release-readiness-review
+version: 0.1.0
+status: experimental
+category: management-quality
+name:
+  es: Revisión de preparación para release
+  en: Release Readiness Review
+summary:
+  es: Decidir si una release puede avanzar mediante evidencia técnica, operativa y
+    de negocio.
+  en: Decide whether a release can proceed using technical, operational, and
+    business evidence.
+tags:
+  - release
+  - quality-assurance
+  - change-management
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Cambios, pruebas, riesgos, dependencias, observabilidad, soporte y
+      rollback.
+  en:
+    - Changes, tests, risks, dependencies, observability, support, and rollback.
+outputs:
+  es:
+    - Decision registrada de avanzar, detener o avanzar con condiciones.
+  en:
+    - Recorded go, no-go, or conditional-go decision.
+dependencies: []
+lastReviewed: 2026-07-25

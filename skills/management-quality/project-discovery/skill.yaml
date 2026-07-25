@@ -1,0 +1,44 @@
+schemaVersion: 1
+id: project-discovery
+version: 0.1.0
+status: experimental
+category: management-quality
+name:
+  es: Discovery de proyecto
+  en: Project Discovery
+summary:
+  es: Alinear problema, resultados, alcance, riesgos y plan de validación antes de
+    ejecutar.
+  en: Align the problem, outcomes, scope, risks, and validation plan before
+    execution.
+tags:
+  - discovery
+  - requirements
+  - planning
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - human-approval
+riskLevel: low
+inputs:
+  es:
+    - Contexto de negocio, usuarios, evidencia, restricciones, responsables y
+      plazo.
+  en:
+    - Business context, users, evidence, constraints, owners, and timeline.
+outputs:
+  es:
+    - Brief validado, mapa de riesgos, alcance inicial y siguientes decisiones.
+  en:
+    - Validated brief, risk map, initial scope, and next decisions.
+dependencies: []
+lastReviewed: 2026-07-25

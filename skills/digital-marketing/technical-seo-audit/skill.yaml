@@ -1,0 +1,45 @@
+schemaVersion: 1
+id: technical-seo-audit
+version: 0.1.0
+status: experimental
+category: digital-marketing
+name:
+  es: Auditoría SEO técnica
+  en: Technical SEO Audit
+summary:
+  es: Detectar barreras técnicas que afectan rastreo, indexacion y rendimiento
+    orgánico.
+  en: Find technical barriers affecting crawling, indexing, and organic
+    performance.
+tags:
+  - seo
+  - audit
+  - indexing
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - network
+  - browser
+riskLevel: low
+inputs:
+  es:
+    - Dominio, mercados, CMS, analítica, Search Console, cambios recientes y
+      competidores.
+  en:
+    - Domain, markets, CMS, analytics, Search Console, recent changes, and
+      competitors.
+outputs:
+  es:
+    - Informe priorizado con evidencia, impacto y criterios de validación.
+  en:
+    - Prioritized report with evidence, impact, and validation criteria.
+dependencies: []
+lastReviewed: 2026-07-25

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "locale", "generatedAt", "categories"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "locale": { "enum": ["es", "en"] },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "description", "skills"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "name", "summary", "version", "status", "riskLevel", "tags", "source"],
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string", "minLength": 1 },
+                "summary": { "type": "string", "minLength": 1 },
+                "version": { "type": "string" },
+                "status": { "enum": ["experimental", "stable", "deprecated", "archived"] },
+                "riskLevel": { "enum": ["low", "medium", "high"] },
+                "tags": { "type": "array", "items": { "type": "string" } },
+                "source": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

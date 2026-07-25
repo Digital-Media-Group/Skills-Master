@@ -1,0 +1,44 @@
+schemaVersion: 1
+id: software-estimation
+version: 0.1.0
+status: experimental
+category: management-quality
+name:
+  es: Estimación de software
+  en: Software Estimation
+summary:
+  es: Producir una estimación explicable con rango, supuestos, riesgos y nivel de
+    confianza.
+  en: Produce an explainable estimate with a range, assumptions, risks, and
+    confidence level.
+tags:
+  - estimation
+  - planning
+  - risk
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Alcance, criterios de aceptacion, arquitectura, equipo, dependencias y
+      restricciones.
+  en:
+    - Scope, acceptance criteria, architecture, team, dependencies, and
+      constraints.
+outputs:
+  es:
+    - Rango de esfuerzo o calendario con supuestos y riesgos explicitos.
+  en:
+    - Effort or schedule range with explicit assumptions and risks.
+dependencies: []
+lastReviewed: 2026-07-25

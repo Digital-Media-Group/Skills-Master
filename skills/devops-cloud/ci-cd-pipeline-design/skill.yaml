@@ -1,0 +1,43 @@
+schemaVersion: 1
+id: ci-cd-pipeline-design
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: Diseño de pipeline CI/CD
+  en: CI/CD Pipeline Design
+summary:
+  es: Diseñar una entrega automatizada con controles, trazabilidad y recuperación.
+  en: Design automated delivery with controls, traceability, and recovery.
+tags:
+  - ci-cd
+  - automation
+  - release
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - cloud
+  - credentials
+riskLevel: high
+inputs:
+  es:
+    - Repositorios, entornos, riesgos, aprobaciones, pruebas y estrategia de
+      release.
+  en:
+    - Repositories, environments, risks, approvals, tests, and release strategy.
+outputs:
+  es:
+    - Pipeline documentado con etapas, controles, artefactos y rollback.
+  en:
+    - Documented pipeline with stages, controls, artifacts, and rollback.
+dependencies: []
+lastReviewed: 2026-07-25

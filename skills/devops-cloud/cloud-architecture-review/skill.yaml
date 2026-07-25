@@ -1,0 +1,44 @@
+schemaVersion: 1
+id: cloud-architecture-review
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: Revisión de arquitectura cloud
+  en: Cloud Architecture Review
+summary:
+  es: Evaluar una arquitectura cloud por fiabilidad, seguridad, rendimiento y
+    coste.
+  en: Assess cloud architecture for reliability, security, performance, and cost.
+tags:
+  - cloud
+  - architecture
+  - cost-optimization
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - cloud
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Arquitectura, cargas, SLO, datos, amenazas, costes y restricciones
+      regulatorias.
+  en:
+    - Architecture, workloads, SLOs, data, threats, costs, and regulatory
+      constraints.
+outputs:
+  es:
+    - Evaluacion de riesgos y hoja de ruta priorizada de mejoras.
+  en:
+    - Risk assessment and prioritized improvement roadmap.
+dependencies: []
+lastReviewed: 2026-07-25

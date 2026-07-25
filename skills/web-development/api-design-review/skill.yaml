@@ -1,0 +1,43 @@
+schemaVersion: 1
+id: api-design-review
+version: 0.1.0
+status: experimental
+category: web-development
+name:
+  es: Revisión de diseño de API
+  en: API Design Review
+summary:
+  es: Evaluar una API por consistencia, seguridad, evolucion y experiencia de
+    consumo.
+  en: Assess an API for consistency, security, evolution, and consumer experience.
+tags:
+  - api
+  - review
+  - security
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+riskLevel: medium
+inputs:
+  es:
+    - Contrato, casos de uso, consumidores, autenticacion y restricciones
+      operativas.
+  en:
+    - Contract, use cases, consumers, authentication, and operational
+      constraints.
+outputs:
+  es:
+    - Informe priorizado con hallazgos, riesgos y cambios recomendados.
+  en:
+    - Prioritized report with findings, risks, and recommended changes.
+dependencies: []
+lastReviewed: 2026-07-25

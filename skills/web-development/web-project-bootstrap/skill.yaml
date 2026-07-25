@@ -1,0 +1,44 @@
+schemaVersion: 1
+id: web-project-bootstrap
+version: 0.1.0
+status: experimental
+category: web-development
+name:
+  es: Preparación de proyecto web
+  en: Web Project Bootstrap
+summary:
+  es: Preparar una base web mantenible con decisiones, estructura y controles
+    iniciales.
+  en: Prepare a maintainable web foundation with initial decisions, structure, and
+    controls.
+tags:
+  - bootstrap
+  - architecture
+  - quality
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+riskLevel: low
+inputs:
+  es:
+    - Objetivos, usuarios, restricciones, stack aprobado y criterios de entrega.
+  en:
+    - Goals, users, constraints, approved stack, and delivery criteria.
+outputs:
+  es:
+    - Repositorio inicial, convenciones, comandos verificables y registro de
+      decisiones.
+  en:
+    - Initial repository, conventions, verifiable commands, and decision record.
+dependencies: []
+lastReviewed: 2026-07-25

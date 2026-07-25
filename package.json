@@ -1,0 +1,26 @@
+{
+  "name": "professional-skills-directory",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bilingual, agent-neutral professional skills directory",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-skills.mjs",
+    "check:translations": "node scripts/validate-translations.mjs",
+    "catalog": "node scripts/generate-catalog.mjs",
+    "validate:catalogs": "node scripts/validate-catalogs.mjs",
+    "build:adapters": "node scripts/build-adapters.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run validate && npm run check:translations && npm test",
+    "build": "npm run check && npm run catalog && npm run validate:catalogs && npm run build:adapters"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.8.0"
+  }
+}

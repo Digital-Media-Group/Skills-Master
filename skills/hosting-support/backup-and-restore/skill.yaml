@@ -1,0 +1,44 @@
+schemaVersion: 1
+id: backup-and-restore
+version: 0.1.0
+status: experimental
+category: hosting-support
+name:
+  es: Copias de seguridad y restauracion
+  en: Backup and Restore
+summary:
+  es: Definir y verificar una estrategia de backup basada en objetivos de
+    recuperación.
+  en: Define and verify a backup strategy based on recovery objectives.
+tags:
+  - backup
+  - disaster-recovery
+  - operations
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - cloud
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Inventario de datos, RPO, RTO, retencion, cifrado, ubicaciones y
+      responsables.
+  en:
+    - Data inventory, RPO, RTO, retention, encryption, locations, and owners.
+outputs:
+  es:
+    - Politica de backup y evidencia de una restauracion probada.
+  en:
+    - Backup policy and evidence of a tested restore.
+dependencies: []
+lastReviewed: 2026-07-25

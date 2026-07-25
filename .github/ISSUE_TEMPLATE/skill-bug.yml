@@ -1,0 +1,31 @@
+name: Error en una skill / Skill bug
+description: Informar de instrucciones incorrectas o incompletas / Report incorrect or incomplete instructions
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: input
+    id: skill-id
+    attributes:
+      label: Skill ID
+    validations:
+      required: true
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Idioma / Locale
+      options:
+        - es
+        - en
+        - both
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema / Problem
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia y correccion / Evidence and proposed correction
