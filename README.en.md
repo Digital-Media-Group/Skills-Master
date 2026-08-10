@@ -21,6 +21,7 @@ Each skill contains `locales/es/SKILL.md` and `locales/en/SKILL.md`. Catalogs ar
 | `hosting-support` | Alojamiento y soporte | Hosting and Support |
 | `digital-marketing` | Marketing digital | Digital Marketing |
 | `management-quality` | Gestion y calidad | Management and Quality |
+| `ide-instructions` | Instrucciones para IDEs | IDE Instructions |
 
 ## Quick Start
 

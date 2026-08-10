@@ -21,6 +21,7 @@ Cada skill contiene sus versiónes en `locales/es/SKILL.md` y `locales/en/SKILL.
 | `hosting-support` | Alojamiento y soporte | Hosting and Support |
 | `digital-marketing` | Marketing digital | Digital Marketing |
 | `management-quality` | Gestión y calidad | Management and Quality |
+| `ide-instructions` | Instrucciones para IDEs | IDE Instructions |
 
 ## Uso rapido
 

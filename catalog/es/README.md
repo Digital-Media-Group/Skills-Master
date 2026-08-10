@@ -51,3 +51,13 @@ Discovery, requisitos, estimación, QA, entregas y mejora continua.
 | [Discovery de proyecto](../../skills/management-quality/project-discovery/locales/es/SKILL.md) | `project-discovery` | Alinear problema, resultados, alcance, riesgos y plan de validación antes de ejecutar. | experimental | low |
 | [Revisión de preparación para release](../../skills/management-quality/release-readiness-review/locales/es/SKILL.md) | `release-readiness-review` | Decidir si una release puede avanzar mediante evidencia técnica, operativa y de negocio. | experimental | high |
 | [Estimación de software](../../skills/management-quality/software-estimation/locales/es/SKILL.md) | `software-estimation` | Producir una estimación explicable con rango, supuestos, riesgos y nivel de confianza. | experimental | low |
+
+## Instrucciones para IDEs
+
+Archivos de instrucciones y reglas para IDEs y agentes de codificación como Ideavo, Claude Code y Codex.
+
+| Skill | ID | Resumen | Estado | Riesgo |
+| --- | --- | --- | --- | --- |
+| [Redacción de instrucciones para agentes](../../skills/ide-instructions/agent-instructions-authoring/locales/es/SKILL.md) | `agent-instructions-authoring` | Escribir un archivo de instrucciones neutral y reutilizable entre IDEs y agentes de codificación. | experimental | low |
+| [Auditoría de instrucciones de IDE](../../skills/ide-instructions/ide-instructions-audit/locales/es/SKILL.md) | `ide-instructions-audit` | Revisar archivos de instrucciones existentes para detectar reglas obsoletas, contradictorias o inseguras. | experimental | medium |
+| [Configuración de instrucciones para Ideavo](../../skills/ide-instructions/ideavo-instructions-setup/locales/es/SKILL.md) | `ideavo-instructions-setup` | Crear el archivo de instrucciones de Ideavo con contexto, convenciones y límites del proyecto. | experimental | low |

@@ -1,0 +1,46 @@
+schemaVersion: 1
+id: agent-instructions-authoring
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Redacción de instrucciones para agentes
+  en: Agent Instructions Authoring
+summary:
+  es: Escribir un archivo de instrucciones neutral y reutilizable entre IDEs y
+    agentes de codificación.
+  en: Write a neutral, reusable instructions file shared across IDEs and coding
+    agents.
+tags:
+  - instructions
+  - agent
+  - documentation
+  - conventions
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Agentes e IDEs en uso, convenciones del equipo y tareas habituales
+      delegadas al agente.
+  en:
+    - Agents and IDEs in use, team conventions, and tasks routinely delegated to
+      the agent.
+outputs:
+  es:
+    - Archivo de instrucciones neutral con reglas verificables y referencias por
+      agente.
+  en:
+    - Neutral instructions file with verifiable rules and per-agent references.
+dependencies: []
+lastReviewed: 2026-08-10

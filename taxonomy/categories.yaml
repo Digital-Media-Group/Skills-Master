@@ -35,3 +35,10 @@ categories:
     description:
       es: Discovery, requisitos, estimación, QA, entregas y mejora continua.
       en: Discovery, requirements, estimation, QA, delivery, and continuous improvement.
+  - id: ide-instructions
+    titles:
+      es: Instrucciones para IDEs
+      en: IDE Instructions
+    description:
+      es: Archivos de instrucciones y reglas para IDEs y agentes de codificación como Ideavo, Claude Code y Codex.
+      en: Instruction and rule files for IDEs and coding agents such as Ideavo, Claude Code, and Codex.

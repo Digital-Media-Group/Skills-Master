@@ -1,0 +1,46 @@
+schemaVersion: 1
+id: ide-instructions-audit
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Auditoría de instrucciones de IDE
+  en: IDE Instructions Audit
+summary:
+  es: Revisar archivos de instrucciones existentes para detectar reglas obsoletas,
+    contradictorias o inseguras.
+  en: Review existing instruction files to detect outdated, contradictory, or
+    unsafe rules.
+tags:
+  - audit
+  - instructions
+  - agent
+  - maintenance
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+riskLevel: medium
+inputs:
+  es:
+    - Archivos de instrucciones vigentes, estado real del repositorio y
+      incidencias reportadas por el equipo.
+  en:
+    - Current instruction files, actual repository state, and issues reported by
+      the team.
+outputs:
+  es:
+    - Informe de hallazgos priorizados con correcciones aplicadas o propuestas.
+  en:
+    - Prioritized findings report with applied or proposed corrections.
+dependencies:
+  - agent-instructions-authoring
+lastReviewed: 2026-08-10

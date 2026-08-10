@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "locale": "es",
-  "generatedAt": "2026-07-25T00:00:00.000Z",
+  "generatedAt": "2026-08-10T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
@@ -245,6 +245,58 @@
             "risk"
           ],
           "source": "../../skills/management-quality/software-estimation/locales/es/SKILL.md"
+        }
+      ]
+    },
+    {
+      "id": "ide-instructions",
+      "title": "Instrucciones para IDEs",
+      "description": "Archivos de instrucciones y reglas para IDEs y agentes de codificación como Ideavo, Claude Code y Codex.",
+      "skills": [
+        {
+          "id": "agent-instructions-authoring",
+          "name": "Redacción de instrucciones para agentes",
+          "summary": "Escribir un archivo de instrucciones neutral y reutilizable entre IDEs y agentes de codificación.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "instructions",
+            "agent",
+            "documentation",
+            "conventions"
+          ],
+          "source": "../../skills/ide-instructions/agent-instructions-authoring/locales/es/SKILL.md"
+        },
+        {
+          "id": "ide-instructions-audit",
+          "name": "Auditoría de instrucciones de IDE",
+          "summary": "Revisar archivos de instrucciones existentes para detectar reglas obsoletas, contradictorias o inseguras.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "audit",
+            "instructions",
+            "agent",
+            "maintenance"
+          ],
+          "source": "../../skills/ide-instructions/ide-instructions-audit/locales/es/SKILL.md"
+        },
+        {
+          "id": "ideavo-instructions-setup",
+          "name": "Configuración de instrucciones para Ideavo",
+          "summary": "Crear el archivo de instrucciones de Ideavo con contexto, convenciones y límites del proyecto.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "ideavo",
+            "instructions",
+            "agent",
+            "onboarding"
+          ],
+          "source": "../../skills/ide-instructions/ideavo-instructions-setup/locales/es/SKILL.md"
         }
       ]
     }

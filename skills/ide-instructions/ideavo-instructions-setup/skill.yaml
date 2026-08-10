@@ -1,0 +1,47 @@
+schemaVersion: 1
+id: ideavo-instructions-setup
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Configuración de instrucciones para Ideavo
+  en: Ideavo Instructions Setup
+summary:
+  es: Crear el archivo de instrucciones de Ideavo con contexto, convenciones y
+    límites del proyecto.
+  en: Create the Ideavo instructions file with project context, conventions, and
+    boundaries.
+tags:
+  - ideavo
+  - instructions
+  - agent
+  - onboarding
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Estructura del repositorio, comandos de build y pruebas, convenciones de
+      código y restricciones operativas.
+  en:
+    - Repository structure, build and test commands, code conventions, and
+      operational constraints.
+outputs:
+  es:
+    - Archivo de instrucciones de Ideavo versionado y verificado en el
+      repositorio.
+  en:
+    - Versioned and verified Ideavo instructions file committed to the
+      repository.
+dependencies: []
+lastReviewed: 2026-08-10
