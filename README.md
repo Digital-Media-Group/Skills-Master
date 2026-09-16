@@ -23,6 +23,36 @@ Cada skill contiene sus versiónes en `locales/es/SKILL.md` y `locales/en/SKILL.
 | `management-quality` | Gestión y calidad | Management and Quality |
 | `ide-instructions` | Instrucciones para IDEs | IDE Instructions |
 
+<!-- BEGIN GENERATED SKILLS INDEX -->
+
+## Índice de skills
+
+Copia el nombre técnico o la URL completa para indicarle a un agente qué skill instalar: `instala la skill <id> desde <url>`.
+
+| Skill | ID técnico | Categoría | URL |
+| --- | --- | --- | --- |
+| Diseño de pipeline CI/CD | `ci-cd-pipeline-design` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/ci-cd-pipeline-design |
+| Revisión de arquitectura cloud | `cloud-architecture-review` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/cloud-architecture-review |
+| Contenerización de una aplicación web | `containerize-web-application` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/containerize-web-application |
+| Plan de medición analítica | `analytics-measurement-plan` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan |
+| Auditoría de conversión | `conversion-rate-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit |
+| Auditoría SEO técnica | `technical-seo-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/technical-seo-audit |
+| Copias de seguridad y restauracion | `backup-and-restore` | Alojamiento y soporte | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/backup-and-restore |
+| Configuración de DNS | `dns-configuration` | Alojamiento y soporte | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/dns-configuration |
+| Migración de sitio web | `website-migration` | Alojamiento y soporte | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/website-migration |
+| Redacción de instrucciones para agentes | `agent-instructions-authoring` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/agent-instructions-authoring |
+| Auditoría de instrucciones de IDE | `ide-instructions-audit` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ide-instructions-audit |
+| Configuración de instrucciones para Ideavo | `ideavo-instructions-setup` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-instructions-setup |
+| Discovery de proyecto | `project-discovery` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/project-discovery |
+| Revisión de preparación para release | `release-readiness-review` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/release-readiness-review |
+| Estimación de software | `software-estimation` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation |
+| Revisión de diseño de API | `api-design-review` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/api-design-review |
+| Desarrollo IDEAVO - OpenCode | `desarrollo-ideavo-opencode` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/desarrollo-ideavo-opencode |
+| Auditoria de rendimiento web | `web-performance-audit` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-performance-audit |
+| Preparación de proyecto web | `web-project-bootstrap` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-project-bootstrap |
+
+<!-- END GENERATED SKILLS INDEX -->
+
 ## Uso rapido
 
 ```bash

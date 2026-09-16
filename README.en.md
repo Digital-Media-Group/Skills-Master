@@ -23,6 +23,36 @@ Each skill contains `locales/es/SKILL.md` and `locales/en/SKILL.md`. Catalogs ar
 | `management-quality` | Gestion y calidad | Management and Quality |
 | `ide-instructions` | Instrucciones para IDEs | IDE Instructions |
 
+<!-- BEGIN GENERATED SKILLS INDEX -->
+
+## Skills Index
+
+Copy the technical ID or the full URL to tell an agent which skill to install: `install skill <id> from <url>`.
+
+| Skill | Technical ID | Category | URL |
+| --- | --- | --- | --- |
+| CI/CD Pipeline Design | `ci-cd-pipeline-design` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/ci-cd-pipeline-design |
+| Cloud Architecture Review | `cloud-architecture-review` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/cloud-architecture-review |
+| Containerize a Web Application | `containerize-web-application` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/containerize-web-application |
+| Analytics Measurement Plan | `analytics-measurement-plan` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan |
+| Conversion Rate Audit | `conversion-rate-audit` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit |
+| Technical SEO Audit | `technical-seo-audit` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/technical-seo-audit |
+| Backup and Restore | `backup-and-restore` | Hosting and Support | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/backup-and-restore |
+| DNS Configuration | `dns-configuration` | Hosting and Support | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/dns-configuration |
+| Website Migration | `website-migration` | Hosting and Support | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/website-migration |
+| Agent Instructions Authoring | `agent-instructions-authoring` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/agent-instructions-authoring |
+| IDE Instructions Audit | `ide-instructions-audit` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ide-instructions-audit |
+| Ideavo Instructions Setup | `ideavo-instructions-setup` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-instructions-setup |
+| Project Discovery | `project-discovery` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/project-discovery |
+| Release Readiness Review | `release-readiness-review` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/release-readiness-review |
+| Software Estimation | `software-estimation` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation |
+| API Design Review | `api-design-review` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/api-design-review |
+| IDEAVO Development - OpenCode | `desarrollo-ideavo-opencode` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/desarrollo-ideavo-opencode |
+| Web Performance Audit | `web-performance-audit` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-performance-audit |
+| Web Project Bootstrap | `web-project-bootstrap` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-project-bootstrap |
+
+<!-- END GENERATED SKILLS INDEX -->
+
 ## Quick Start
 
 ```bash

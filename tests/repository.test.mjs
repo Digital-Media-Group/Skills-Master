@@ -30,3 +30,17 @@ test("every primary category contains skills", async () => {
   for (const { metadata } of skills) counts.set(metadata.category, (counts.get(metadata.category) ?? 0) + 1);
   for (const count of counts.values()) assert.ok(count >= 1);
 });
+
+test("readme files include a generated index linking every skill", async () => {
+  const skills = await loadSkills();
+  const repositoryUrl = "https://github.com/Digital-Media-Group/Skills-Master";
+  for (const file of ["README.md", "README.en.md"]) {
+    const content = await readFile(file, "utf8");
+    assert.match(content, /<!-- BEGIN GENERATED SKILLS INDEX -->/);
+    for (const { metadata } of skills) {
+      const url = `${repositoryUrl}/tree/main/skills/${metadata.category}/${metadata.id}`;
+      assert.ok(content.includes(`\`${metadata.id}\``), `${file} is missing skill id ${metadata.id}`);
+      assert.ok(content.includes(url), `${file} is missing skill URL ${url}`);
+    }
+  }
+});

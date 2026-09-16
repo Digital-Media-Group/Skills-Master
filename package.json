@@ -11,9 +11,10 @@
     "catalog": "node scripts/generate-catalog.mjs",
     "validate:catalogs": "node scripts/validate-catalogs.mjs",
     "build:adapters": "node scripts/build-adapters.mjs",
+    "readme:index": "node scripts/update-readme-index.mjs",
     "test": "node --test tests/*.test.mjs",
     "check": "npm run validate && npm run check:translations && npm test",
-    "build": "npm run check && npm run catalog && npm run validate:catalogs && npm run build:adapters"
+    "build": "npm run check && npm run catalog && npm run validate:catalogs && npm run build:adapters && npm run readme:index"
   },
   "engines": {
     "node": ">=20"
