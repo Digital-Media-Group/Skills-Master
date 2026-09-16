@@ -24,6 +24,7 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - Framework, language, package manager, architecture, scripts, and configuration.
 - External integrations, environment variables, required access, and definition of done.
 - CI/CD and deployment platform: Dokploy; GitHub Actions, Neon, and Vercel must not provide pipeline or test-environment compute unless explicitly approved.
+- Configuration management: environment variables are not required during development unless a real dependency requires them before Preview.
 
 ### Required MCPs
 
@@ -48,16 +49,17 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 5. Apply secure defaults: never expose secrets, validate inputs at the edge, protect resources, and do not test payments, deletes, migrations, or destructive production mutations without explicit authorization.
 6. For APIs validate method, authentication, authorization, body, query, parameters, headers, errors, limits, pagination, timeouts, and idempotency.
 7. For frontend work cover loading, empty, error, and success states; check desktop, mobile, keyboard, focus, contrast, metadata, and real performance.
-8. For databases detect the existing ORM, preserve data, use compatible migrations, test in an isolated database, and never execute destructive SQL autonomously.
-9. For authentication protect endpoints and resources, authorize per operation, and test anonymous, normal, administrator, and special roles.
-10. For external integrations use sandbox or Preview, least-privilege access, idempotency, backoff, timeouts, and retry limits; do not run real operations without approval.
-11. Classify validation by risk: N1 documentation/styles; N2 UI or logic; N3 APIs, auth, storage, or integrations; N4 migrations, payments, critical security, or production.
-12. At minimum run `typecheck -> affected tests -> focused lint -> diff check`. For N3/N4 add build, integration, E2E, preflight, and read-only remote smoke tests.
-13. Never claim unobserved results. Mark every conclusion as `Confirmed`, `Inferred`, or `Pending`.
-14. Respect Git: do not commit or push unless requested or required by a runbook; do not amend without authorization; never force-push protected branches.
-15. After deployment confirm SHA, `READY` status, aliases, build logs, runtime errors, critical routes, and safe smoke tests. Distinguish historical errors from new ones.
-16. If interrupted, leave the branch, SHA, related PR or deployment, completed and pending checks, blocker, last operation, and exact next action.
-17. Before responding review implementation, validation, diff, and Git status; cite concrete paths and separate local, CI, Preview, and production evidence.
+8. During development avoid configuring environment variables. Use fake values, mocks, stubs, or safe defaults when they allow progress. Configure a variable before Preview only when a real dependency needs it to build, test, or run.
+9. For databases detect the existing ORM, preserve data, use compatible migrations, test in an isolated database, and never execute destructive SQL autonomously.
+10. For authentication protect endpoints and resources, authorize per operation, and test anonymous, normal, administrator, and special roles.
+11. For external integrations use sandbox or Preview, least-privilege access, idempotency, backoff, timeouts, and retry limits; do not run real operations without approval.
+12. Classify validation by risk: N1 documentation/styles; N2 UI or logic; N3 APIs, auth, storage, or integrations; N4 migrations, payments, critical security, or production.
+13. At minimum run `typecheck -> affected tests -> focused lint -> diff check`. For N3/N4 add build, integration, E2E, preflight, and read-only remote smoke tests.
+14. Never claim unobserved results. Mark every conclusion as `Confirmed`, `Inferred`, or `Pending`.
+15. Respect Git: do not commit or push unless requested or required by a runbook; do not amend without authorization; never force-push protected branches.
+16. After deployment confirm SHA, `READY` status, aliases, build logs, runtime errors, critical routes, and safe smoke tests. Distinguish historical errors from new ones.
+17. If interrupted, leave the branch, SHA, related PR or deployment, completed and pending checks, blocker, last operation, and exact next action.
+18. Before responding review implementation, validation, diff, and Git status; cite concrete paths and separate local, CI, Preview, and production evidence.
 
 ### Autonomous Planning and Human Attention
 
@@ -89,6 +91,13 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 - Use `dev` for development and integrated local tests; use `preview` only after PR acceptance; reserve `production` for production and approved migrations.
 - Before creating branches or applying remote migrations, verify the project, region, owner, database name, and parent branch. Never delete or reset branches without explicit authorization.
 
+### Environment Variables
+
+- During development, do not request or configure environment variables by default. Prefer mocks, stubs, fixtures, and safe defaults that allow work without secrets.
+- If a dependency requires a variable before Preview, identify it, explain why it is needed, and use only a local, test, or sandbox value with least-privilege access.
+- Prepare real variables needed during the Preview phase, separated by environment and managed in Dokploy or the authorized secret system; never paste them into chat, commits, or versioned files.
+- Never reuse production variables in development or Preview. Neon `dev`, `preview`, and `production` credentials must remain isolated.
+
 ## Validation
 
 - Repository commands run with its package manager and their results are recorded.
@@ -102,6 +111,7 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 - Every real branch has its `dev`, `preview`, and `production` Neon branches in a region close to Europe.
 - Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.
 - A complete plan exists, tasks are self-contained, and human attention was requested only for a blocker or required approval.
+- Development progresses without environment variables unless a demonstrated technical need exists; real variables are configured in Preview and remain isolated per environment.
 
 ## Expected Result
 

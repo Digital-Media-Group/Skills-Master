@@ -24,6 +24,7 @@ Actuar como un agente de desarrollo orientado a entregar cambios seguros, verifi
 - Framework, lenguaje, gestor de paquetes, arquitectura, scripts y configuración.
 - Integraciones externas, variables de entorno, accesos requeridos y criterio de terminado.
 - Plataforma de CI/CD y despliegue: Dokploy; GitHub Actions, Neon y Vercel no deben aportar cómputo de pipelines o entornos de prueba salvo una decisión explícita.
+- Gestión de configuración: durante desarrollo no se requieren variables de entorno salvo que una dependencia real las exija antes de Preview.
 
 ### MCP requeridos
 
@@ -48,16 +49,17 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 5. Aplica seguridad por defecto: no expongas secretos, valida entradas en el borde, protege recursos y no pruebes pagos, borrados, migraciones o mutaciones destructivas contra producción sin autorización explícita.
 6. Para APIs valida método, autenticación, autorización, body, query, parámetros, headers, errores, límites, paginación, timeouts e idempotencia.
 7. Para frontend cubre estados de carga, vacío, error y éxito; comprueba escritorio, móvil, teclado, foco, contraste, metadata y rendimiento real.
-8. Para bases de datos detecta el ORM existente, conserva datos, usa migraciones compatibles, prueba en una base aislada y nunca ejecutes SQL destructivo de forma autónoma.
-9. Para autenticación protege endpoints y recursos, aplica autorización por operación y prueba usuario anónimo, normal, administrador y roles especiales.
-10. Para integraciones externas usa sandbox o Preview, permisos mínimos, idempotencia, backoff, timeouts y límites; no ejecutes operaciones reales sin aprobación.
-11. Clasifica la validación por riesgo: N1 documentación/estilos; N2 UI o lógica; N3 APIs, auth, storage o integraciones; N4 migraciones, pagos, seguridad crítica o producción.
-12. Ejecuta como mínimo `typecheck -> tests afectados -> lint focalizado -> diff check`. En N3/N4 añade build, integración, E2E, preflight y smoke remoto de solo lectura.
-13. No afirmes resultados no observados. Marca cada conclusión como `Confirmado`, `Inferido` o `Pendiente`.
-14. Respeta Git: no hagas commit ni push salvo petición o runbook; no hagas amend salvo autorización; nunca hagas force push a ramas protegidas.
-15. Tras un despliegue confirma SHA, estado `READY`, aliases, build logs, errores runtime, rutas críticas y smoke tests seguros. Distingue errores históricos de errores nuevos.
-16. Si se interrumpe la tarea, deja rama, SHA, PR o deployment, checks completados y pendientes, bloqueo, última operación y siguiente acción exacta.
-17. Antes de responder revisa implementación, validaciones, diff y estado Git; cita rutas concretas y separa lo local, CI, Preview y producción.
+8. Durante desarrollo evita configurar variables de entorno. Usa valores ficticios, mocks, stubs o defaults seguros cuando permitan avanzar. Configura una variable antes de Preview solo cuando una dependencia real la necesite para compilar, probar o ejecutar.
+9. Para bases de datos detecta el ORM existente, conserva datos, usa migraciones compatibles, prueba en una base aislada y nunca ejecutes SQL destructivo de forma autónoma.
+10. Para autenticación protege endpoints y recursos, aplica autorización por operación y prueba usuario anónimo, normal, administrador y roles especiales.
+11. Para integraciones externas usa sandbox o Preview, permisos mínimos, idempotencia, backoff, timeouts y límites; no ejecutes operaciones reales sin aprobación.
+12. Clasifica la validación por riesgo: N1 documentación/estilos; N2 UI o lógica; N3 APIs, auth, storage o integraciones; N4 migraciones, pagos, seguridad crítica o producción.
+13. Ejecuta como mínimo `typecheck -> tests afectados -> lint focalizado -> diff check`. En N3/N4 añade build, integración, E2E, preflight y smoke remoto de solo lectura.
+14. No afirmes resultados no observados. Marca cada conclusión como `Confirmado`, `Inferido` o `Pendiente`.
+15. Respeta Git: no hagas commit ni push salvo petición o runbook; no hagas amend salvo autorización; nunca hagas force push a ramas protegidas.
+16. Tras un despliegue confirma SHA, estado `READY`, aliases, build logs, errores runtime, rutas críticas y smoke tests seguros. Distingue errores históricos de errores nuevos.
+17. Si se interrumpe la tarea, deja rama, SHA, PR o deployment, checks completados y pendientes, bloqueo, última operación y siguiente acción exacta.
+18. Antes de responder revisa implementación, validaciones, diff y estado Git; cita rutas concretas y separa lo local, CI, Preview y producción.
 
 ### Planificación autónoma y atención humana
 
@@ -89,6 +91,13 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 - El entorno `dev` sirve para desarrollo y pruebas locales integradas; `preview` solo después de la aceptación del PR; `production` queda reservado para producción y sus migraciones aprobadas.
 - Antes de crear ramas o aplicar migraciones remotas, comprueba el proyecto, la región, el propietario, el nombre de la base y la rama padre. No borres ni reinicies ramas sin autorización explícita.
 
+### Variables de entorno
+
+- En desarrollo, no solicites ni configures variables de entorno por defecto. Prioriza mocks, stubs, fixtures y defaults seguros que permitan trabajar sin secretos.
+- Si una dependencia exige una variable antes de Preview, identifica la variable, explica por qué es necesaria y usa únicamente un valor local, de test o sandbox con permisos mínimos.
+- Prepara las variables reales necesarias durante la fase de Preview, separadas por entorno y gestionadas en Dokploy o el sistema autorizado de secretos; nunca las pegues en el chat, commits o archivos versionados.
+- Nunca reutilices variables de producción en desarrollo o Preview. Las credenciales de Neon `dev`, `preview` y `production` deben permanecer aisladas.
+
 ## Validación
 
 - Los comandos indicados por el repositorio se ejecutan con su gestor de paquetes y el resultado se registra.
@@ -102,6 +111,7 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 - Cada rama real tiene sus ramas Neon `dev`, `preview` y `production` en una región próxima a Europa.
 - Los MCP necesarios están disponibles y sus permisos son suficientes, mínimos y verificables para la tarea.
 - Existe una planificación completa, las tareas son autocontenidas y la atención humana se solicitó solo por un bloqueo o aprobación necesaria.
+- El desarrollo avanza sin variables de entorno salvo necesidad técnica demostrada; las variables reales se configuran en Preview y permanecen separadas por entorno.
 
 ## Resultado esperado
 
