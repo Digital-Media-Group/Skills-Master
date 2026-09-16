@@ -23,6 +23,7 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - `AGENTS.md`, `CONTRIBUTING.md`, runbooks, and release documentation.
 - Framework, language, package manager, architecture, scripts, and configuration.
 - External integrations, environment variables, required access, and definition of done.
+- CI/CD and deployment platform: Dokploy; GitHub Actions, Neon, and Vercel must not provide pipeline or test-environment compute unless explicitly approved.
 
 ## Procedure
 
@@ -44,6 +45,23 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 16. If interrupted, leave the branch, SHA, related PR or deployment, completed and pending checks, blocker, last operation, and exact next action.
 17. Before responding review implementation, validation, diff, and Git status; cite concrete paths and separate local, CI, Preview, and production evidence.
 
+### CI/CD and Deployments
+
+- Run CI/CD and test environments through Docker on Dokploy, using Dokploy compute for builds, tests, integration, and validation.
+- Do not use paid resources or GitHub Actions compute for pipelines, builds, or test environments. GitHub may host the repository and PR, but must not execute the pipeline without explicit authorization.
+- Do not use Neon or Vercel compute for CI, builds, or test environments. Use Neon for isolated per-environment persistence, and use Vercel only when the user explicitly authorizes a specific purpose.
+- Do not create automatic previews or automatic deployments from a branch, PR, or commit. A deployment to Preview or any non-production branch requires the user to accept the PR before it runs.
+- Do not promote a work branch directly to production. After PR acceptance, deploy from Dokploy using the approved branch and order.
+- Before consuming remote compute, verify that the job, environment, or deployment matches the approved action and avoid duplicating pending executions.
+
+### Neon Branches
+
+- For every real branch in the software flow, create and maintain three Neon branches: `dev`, `preview`, and `production`.
+- Isolate credentials, test data, and migrations for each Neon branch; never use production data for development, Preview, or tests.
+- Create each Neon branch in the available region closest to Europe, recording the selected region and the reason when no suitable European option exists.
+- Use `dev` for development and integrated local tests; use `preview` only after PR acceptance; reserve `production` for production and approved migrations.
+- Before creating branches or applying remote migrations, verify the project, region, owner, database name, and parent branch. Never delete or reset branches without explicit authorization.
+
 ## Validation
 
 - Repository commands run with its package manager and their results are recorded.
@@ -52,6 +70,9 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - Remote surfaces are checked with read-only smoke tests; metrics, logs, tests, and deployments are never invented.
 - The diff contains no secrets, tokens, PII, or unrelated changes; `git diff --check` passes when applicable.
 - The definition of done and every external blocker are documented.
+- CI/CD validation runs on Dokploy and does not consume paid compute from GitHub Actions, Neon, or Vercel.
+- Preview and non-production branch deployments do not run automatically; recorded PR acceptance exists before execution.
+- Every real branch has its `dev`, `preview`, and `production` Neon branches in a region close to Europe.
 
 ## Expected Result
 
@@ -59,4 +80,4 @@ Functional software with minimal changes, risk-proportional validation, reviewed
 
 ## Safety
 
-Risk level: **high**. Never paste secrets into responses, logs, commits, issues, or documentation. Do not request passwords, cookies, API keys, or tokens in chat. Require explicit approval for production, billing, credentials, destructive migrations, payments, deletes, role changes, and force pushes. Do not use production data for testing or remove user changes.
+Risk level: **high**. Never paste secrets into responses, logs, commits, issues, or documentation. Do not request passwords, cookies, API keys, or tokens in chat. Require explicit approval for production, billing, credentials, destructive migrations, payments, deletes, role changes, external compute usage, and force pushes. Do not use production data for testing or remove user changes.

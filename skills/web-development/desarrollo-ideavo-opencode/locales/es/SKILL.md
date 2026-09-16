@@ -23,6 +23,7 @@ Actuar como un agente de desarrollo orientado a entregar cambios seguros, verifi
 - `AGENTS.md`, `CONTRIBUTING.md`, runbooks y documentación de release.
 - Framework, lenguaje, gestor de paquetes, arquitectura, scripts y configuración.
 - Integraciones externas, variables de entorno, accesos requeridos y criterio de terminado.
+- Plataforma de CI/CD y despliegue: Dokploy; GitHub Actions, Neon y Vercel no deben aportar cómputo de pipelines o entornos de prueba salvo una decisión explícita.
 
 ## Procedimiento
 
@@ -44,6 +45,23 @@ Actuar como un agente de desarrollo orientado a entregar cambios seguros, verifi
 16. Si se interrumpe la tarea, deja rama, SHA, PR o deployment, checks completados y pendientes, bloqueo, última operación y siguiente acción exacta.
 17. Antes de responder revisa implementación, validaciones, diff y estado Git; cita rutas concretas y separa lo local, CI, Preview y producción.
 
+### CI/CD y despliegues
+
+- Ejecuta CI/CD y los entornos de prueba mediante Docker en Dokploy, reutilizando el cómputo de Dokploy para builds, tests, integración y validaciones.
+- No uses recursos de pago ni cómputo de GitHub Actions para pipelines, builds o entornos de prueba. GitHub puede alojar el repositorio y el PR, pero no debe ejecutar el pipeline salvo autorización explícita.
+- No uses cómputo de Neon ni Vercel para CI, builds o entornos de prueba. Neon se utiliza como persistencia aislada por entorno y Vercel solo si el usuario lo autoriza expresamente para una finalidad concreta.
+- No crees previews automáticas ni despliegues automáticos desde una rama, PR o commit. Un despliegue a Preview o a cualquier rama distinta de producción requiere que el usuario acepte el PR antes de ejecutarse.
+- No promociones directamente desde una rama de trabajo a producción. Tras la aceptación del PR, despliega desde Dokploy siguiendo la rama y el orden aprobados.
+- Antes de consumir cómputo remoto, verifica que el job, entorno o deployment corresponde a la acción aprobada y evita duplicar ejecuciones pendientes.
+
+### Ramas de Neon
+
+- Para cada rama real del flujo de software crea y mantén tres ramas de Neon: `dev`, `preview` y `production`.
+- Aísla credenciales, datos de prueba y migraciones por cada rama de Neon; no uses datos de producción para desarrollo, Preview o tests.
+- Crea cada rama de Neon en la región disponible más próxima a Europa, dejando registrada la región elegida y la razón si no existe una opción europea adecuada.
+- El entorno `dev` sirve para desarrollo y pruebas locales integradas; `preview` solo después de la aceptación del PR; `production` queda reservado para producción y sus migraciones aprobadas.
+- Antes de crear ramas o aplicar migraciones remotas, comprueba el proyecto, la región, el propietario, el nombre de la base y la rama padre. No borres ni reinicies ramas sin autorización explícita.
+
 ## Validación
 
 - Los comandos indicados por el repositorio se ejecutan con su gestor de paquetes y el resultado se registra.
@@ -52,6 +70,9 @@ Actuar como un agente de desarrollo orientado a entregar cambios seguros, verifi
 - Las superficies remotas se comprueban con smoke tests read-only; no se inventan métricas, logs, tests ni deployments.
 - El diff no contiene secretos, tokens, PII ni cambios ajenos; `git diff --check` pasa cuando corresponde.
 - El criterio de terminado y todo bloqueo externo quedan documentados.
+- La validación de CI/CD se ejecuta en Dokploy y no consume cómputo de pago de GitHub Actions, Neon o Vercel.
+- Los despliegues de Preview y de ramas no se ejecutan automáticamente; existe aceptación del PR registrada antes de ejecutarlos.
+- Cada rama real tiene sus ramas Neon `dev`, `preview` y `production` en una región próxima a Europa.
 
 ## Resultado esperado
 
@@ -59,4 +80,4 @@ Software funcional con cambios mínimos, validación proporcional al riesgo, seg
 
 ## Seguridad
 
-Nivel de riesgo: **high**. Nunca pegues secretos en respuestas, logs, commits, issues o documentación. No solicites contraseñas, cookies, claves API o tokens por chat. Exige aprobación explícita para producción, facturación, credenciales, migraciones destructivas, pagos, borrados, cambios de roles y force push. No uses datos de producción para pruebas ni elimines cambios del usuario.
+Nivel de riesgo: **high**. Nunca pegues secretos en respuestas, logs, commits, issues o documentación. No solicites contraseñas, cookies, claves API o tokens por chat. Exige aprobación explícita para producción, facturación, credenciales, migraciones destructivas, pagos, borrados, cambios de roles, consumo de cómputo externo y force push. No uses datos de producción para pruebas ni elimines cambios del usuario.
