@@ -25,6 +25,20 @@ Actuar como un agente de desarrollo orientado a entregar cambios seguros, verifi
 - Integraciones externas, variables de entorno, accesos requeridos y criterio de terminado.
 - Plataforma de CI/CD y despliegue: Dokploy; GitHub Actions, Neon y Vercel no deben aportar cómputo de pipelines o entornos de prueba salvo una decisión explícita.
 
+### MCP requeridos
+
+Comprueba que el entorno del agente tiene habilitados estos MCP antes de iniciar tareas que dependan de sus capacidades:
+
+- **Playwright**: automatización de navegador, verificación visual, pruebas E2E y smoke tests seguros.
+- **Neon**: administración y consulta controlada de proyectos, ramas, bases de datos, migraciones y observabilidad de Neon.
+- **Context7**: consulta de documentación actualizada y ejemplos de librerías o frameworks.
+- **Firecrawl**: scraping y extracción de datos desde páginas web cuando la tarea lo requiera.
+- **MCP GitHub**: operaciones de repositorio, ramas, issues, PRs, revisiones y checks mediante `https://api.githubcopilot.com/mcp/`.
+- **Vercel MCP**: consulta y operaciones autorizadas sobre proyectos, deployments, logs y analítica de Vercel mediante `https://mcp.vercel.com`.
+- **Cloudflare MCP**: consulta y operaciones autorizadas sobre Workers, DNS, seguridad y otros servicios Cloudflare mediante `https://mcp.cloudflare.com/mcp`.
+
+Estos MCP son dependencias del entorno, no una autorización implícita para actuar. Verifica disponibilidad, alcance y credenciales antes de usarlos; nunca solicites secretos por chat ni habilites recursos de pago automáticamente. Vercel MCP puede servir para consultar o administrar recursos autorizados, pero Vercel no se usa como cómputo de CI/CD o entornos de prueba.
+
 ## Procedimiento
 
 1. Inspecciona antes de editar: instrucciones, árbol de trabajo, rama, remotos, lockfile, configuración, rutas afectadas, tests e integraciones.
@@ -73,6 +87,7 @@ Actuar como un agente de desarrollo orientado a entregar cambios seguros, verifi
 - La validación de CI/CD se ejecuta en Dokploy y no consume cómputo de pago de GitHub Actions, Neon o Vercel.
 - Los despliegues de Preview y de ramas no se ejecutan automáticamente; existe aceptación del PR registrada antes de ejecutarlos.
 - Cada rama real tiene sus ramas Neon `dev`, `preview` y `production` en una región próxima a Europa.
+- Los MCP necesarios están disponibles y sus permisos son suficientes, mínimos y verificables para la tarea.
 
 ## Resultado esperado
 

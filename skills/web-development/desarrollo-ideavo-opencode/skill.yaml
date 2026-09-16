@@ -36,9 +36,9 @@ capabilities:
 riskLevel: high
 inputs:
   es:
-    - Petición del usuario, estado del repositorio, instrucciones locales, stack, comandos de validación y restricciones operativas.
+    - Petición del usuario, estado del repositorio, instrucciones locales, stack, comandos de validación, MCP disponibles y restricciones operativas.
   en:
-    - User request, repository state, local instructions, stack, validation commands, and operational constraints.
+    - User request, repository state, local instructions, stack, validation commands, available MCPs, and operational constraints.
 outputs:
   es:
     - Cambio implementado con evidencia de validación, riesgos pendientes y estado de entrega claramente documentados.

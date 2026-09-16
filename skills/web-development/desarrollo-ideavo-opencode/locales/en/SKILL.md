@@ -25,6 +25,20 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - External integrations, environment variables, required access, and definition of done.
 - CI/CD and deployment platform: Dokploy; GitHub Actions, Neon, and Vercel must not provide pipeline or test-environment compute unless explicitly approved.
 
+### Required MCPs
+
+Verify that the agent environment has these MCPs enabled before starting tasks that depend on their capabilities:
+
+- **Playwright**: browser automation, visual verification, E2E testing, and safe smoke tests.
+- **Neon**: controlled administration and querying of Neon projects, branches, databases, migrations, and observability.
+- **Context7**: current documentation and library or framework examples.
+- **Firecrawl**: web scraping and data extraction when required by the task.
+- **MCP GitHub**: repository, branch, issue, PR, review, and check operations through `https://api.githubcopilot.com/mcp/`.
+- **Vercel MCP**: authorized queries and operations for Vercel projects, deployments, logs, and analytics through `https://mcp.vercel.com`.
+- **Cloudflare MCP**: authorized queries and operations for Workers, DNS, security, and other Cloudflare services through `https://mcp.cloudflare.com/mcp`.
+
+These MCPs are environment dependencies, not implicit authorization to act. Verify availability, scope, and credentials before using them; never request secrets in chat or enable paid resources automatically. Vercel MCP may be used to query or manage authorized resources, but Vercel is not used as CI/CD or test-environment compute.
+
 ## Procedure
 
 1. Inspect before editing: instructions, worktree, branch, remotes, lockfile, configuration, affected paths, tests, and integrations.
@@ -73,6 +87,7 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - CI/CD validation runs on Dokploy and does not consume paid compute from GitHub Actions, Neon, or Vercel.
 - Preview and non-production branch deployments do not run automatically; recorded PR acceptance exists before execution.
 - Every real branch has its `dev`, `preview`, and `production` Neon branches in a region close to Europe.
+- Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.
 
 ## Expected Result
 
