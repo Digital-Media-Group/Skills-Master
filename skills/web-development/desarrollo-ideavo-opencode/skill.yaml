@@ -1,0 +1,48 @@
+schemaVersion: 1
+id: desarrollo-ideavo-opencode
+version: 0.1.0
+status: experimental
+category: web-development
+name:
+  es: Desarrollo IDEAVO - OpenCode
+  en: IDEAVO Development - OpenCode
+summary:
+  es: Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode.
+  en: General workflow for safe, verifiable, and governed development with IDEAVO in OpenCode.
+tags:
+  - ideavo
+  - opencode
+  - software-development
+  - security
+  - validation
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+  - browser
+  - database
+  - cloud
+  - credentials
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Petición del usuario, estado del repositorio, instrucciones locales, stack, comandos de validación y restricciones operativas.
+  en:
+    - User request, repository state, local instructions, stack, validation commands, and operational constraints.
+outputs:
+  es:
+    - Cambio implementado con evidencia de validación, riesgos pendientes y estado de entrega claramente documentados.
+  en:
+    - Implemented change with validation evidence, documented remaining risks, and a clearly stated delivery status.
+dependencies: []
+lastReviewed: 2026-08-10

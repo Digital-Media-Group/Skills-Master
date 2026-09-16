@@ -9,6 +9,7 @@ Frontend, backend, APIs, datos, pruebas, accesibilidad y rendimiento.
 | Skill | ID | Resumen | Estado | Riesgo |
 | --- | --- | --- | --- | --- |
 | [Revisión de diseño de API](../../skills/web-development/api-design-review/locales/es/SKILL.md) | `api-design-review` | Evaluar una API por consistencia, seguridad, evolucion y experiencia de consumo. | experimental | medium |
+| [Desarrollo IDEAVO - OpenCode](../../skills/web-development/desarrollo-ideavo-opencode/locales/es/SKILL.md) | `desarrollo-ideavo-opencode` | Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode. | experimental | high |
 | [Auditoria de rendimiento web](../../skills/web-development/web-performance-audit/locales/es/SKILL.md) | `web-performance-audit` | Identificar cuellos de botella y proponer mejoras medibles de rendimiento web. | experimental | low |
 | [Preparación de proyecto web](../../skills/web-development/web-project-bootstrap/locales/es/SKILL.md) | `web-project-bootstrap` | Preparar una base web mantenible con decisiones, estructura y controles iniciales. | experimental | low |
 

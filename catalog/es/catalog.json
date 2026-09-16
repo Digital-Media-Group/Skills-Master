@@ -23,6 +23,22 @@
           "source": "../../skills/web-development/api-design-review/locales/es/SKILL.md"
         },
         {
+          "id": "desarrollo-ideavo-opencode",
+          "name": "Desarrollo IDEAVO - OpenCode",
+          "summary": "Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "ideavo",
+            "opencode",
+            "software-development",
+            "security",
+            "validation"
+          ],
+          "source": "../../skills/web-development/desarrollo-ideavo-opencode/locales/es/SKILL.md"
+        },
+        {
           "id": "web-performance-audit",
           "name": "Auditoria de rendimiento web",
           "summary": "Identificar cuellos de botella y proponer mejoras medibles de rendimiento web.",

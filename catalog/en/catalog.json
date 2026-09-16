@@ -23,6 +23,22 @@
           "source": "../../skills/web-development/api-design-review/locales/en/SKILL.md"
         },
         {
+          "id": "desarrollo-ideavo-opencode",
+          "name": "IDEAVO Development - OpenCode",
+          "summary": "General workflow for safe, verifiable, and governed development with IDEAVO in OpenCode.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "ideavo",
+            "opencode",
+            "software-development",
+            "security",
+            "validation"
+          ],
+          "source": "../../skills/web-development/desarrollo-ideavo-opencode/locales/en/SKILL.md"
+        },
+        {
           "id": "web-performance-audit",
           "name": "Web Performance Audit",
           "summary": "Identify bottlenecks and propose measurable web performance improvements.",
