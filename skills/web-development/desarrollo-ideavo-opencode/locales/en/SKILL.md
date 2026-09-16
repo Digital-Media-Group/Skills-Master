@@ -43,7 +43,7 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 
 1. Inspect before editing: instructions, worktree, branch, remotes, lockfile, configuration, affected paths, tests, and integrations.
 2. Preserve unrelated changes. Never use `git reset --hard`, `git checkout --`, `git clean -fd`, or other destructive commands unless explicitly requested.
-3. Define scope, likely files, risks, tests, and approval-gated actions. For work with three or more phases, use a task list with one active task.
+3. Define scope, likely files, risks, tests, and approval-gated actions. Before editing, create a complete plan with tasks broad enough to cover each phase from start to finish.
 4. Make the smallest necessary change. Preserve the existing architecture, APIs, conventions, imports, and folder structure; avoid unnecessary dependencies and refactors.
 5. Apply secure defaults: never expose secrets, validate inputs at the edge, protect resources, and do not test payments, deletes, migrations, or destructive production mutations without explicit authorization.
 6. For APIs validate method, authentication, authorization, body, query, parameters, headers, errors, limits, pagination, timeouts, and idempotency.
@@ -58,6 +58,19 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 15. After deployment confirm SHA, `READY` status, aliases, build logs, runtime errors, critical routes, and safe smoke tests. Distinguish historical errors from new ones.
 16. If interrupted, leave the branch, SHA, related PR or deployment, completed and pending checks, blocker, last operation, and exact next action.
 17. Before responding review implementation, validation, diff, and Git status; cite concrete paths and separate local, CI, Preview, and production evidence.
+
+### Autonomous Planning and Human Attention
+
+- At the start of a task, create a complete work list covering discovery, implementation, tests, review, documentation, commit, and delivery when applicable.
+- Use long, self-contained tasks with a verifiable outcome to reduce interruptions and preserve context throughout each phase. Do not split a phase into micro-tasks that require confirmation after every command.
+- Keep one task active, but perform all safe and related actions needed to reach that task's outcome within it.
+- Anticipate dependencies, commands, affected files, validations, and likely failures before execution. Update the plan when new information appears.
+- Decide autonomously on safe options that can be inferred from the repository, its instructions, and its conventions. Do not ask about routine preferences.
+- Group inspection, editing, and validation in the same work cycle whenever this adds no risk.
+- Report at meaningful checkpoints, not after every internal step. Each checkpoint should state progress, evidence, blockers, and the next phase.
+- Ask for human attention only when there is material ambiguity, a missing non-inferable secret or identifier, or approval is required for production, billing, compute usage, permissions, destructive actions, remote migrations, or PR acceptance.
+- Do not use autonomy to bypass a required approval. If a phase is blocked, complete all unblocked work first and ask one concrete question with a recommended option.
+- When closing each long task, record its result, executed commands, modified files, residual risks, and verified acceptance criteria.
 
 ### CI/CD and Deployments
 
@@ -88,6 +101,7 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 - Preview and non-production branch deployments do not run automatically; recorded PR acceptance exists before execution.
 - Every real branch has its `dev`, `preview`, and `production` Neon branches in a region close to Europe.
 - Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.
+- A complete plan exists, tasks are self-contained, and human attention was requested only for a blocker or required approval.
 
 ## Expected Result
 

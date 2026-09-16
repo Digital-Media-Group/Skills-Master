@@ -43,7 +43,7 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 
 1. Inspecciona antes de editar: instrucciones, árbol de trabajo, rama, remotos, lockfile, configuración, rutas afectadas, tests e integraciones.
 2. Preserva los cambios ajenos. Nunca uses `git reset --hard`, `git checkout --`, `git clean -fd` ni otros comandos destructivos salvo petición explícita.
-3. Define alcance, archivos probables, riesgos, pruebas y acciones que requieren aprobación. En trabajos de tres o más fases, usa una lista con una sola tarea activa.
+3. Define alcance, archivos probables, riesgos, pruebas y acciones que requieren aprobación. Antes de editar, crea una planificación completa con tareas suficientemente amplias para cubrir cada fase del trabajo de principio a fin.
 4. Cambia lo mínimo necesario. Conserva arquitectura, APIs, convenciones, imports y estructura existentes; evita dependencias y refactors innecesarios.
 5. Aplica seguridad por defecto: no expongas secretos, valida entradas en el borde, protege recursos y no pruebes pagos, borrados, migraciones o mutaciones destructivas contra producción sin autorización explícita.
 6. Para APIs valida método, autenticación, autorización, body, query, parámetros, headers, errores, límites, paginación, timeouts e idempotencia.
@@ -58,6 +58,19 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 15. Tras un despliegue confirma SHA, estado `READY`, aliases, build logs, errores runtime, rutas críticas y smoke tests seguros. Distingue errores históricos de errores nuevos.
 16. Si se interrumpe la tarea, deja rama, SHA, PR o deployment, checks completados y pendientes, bloqueo, última operación y siguiente acción exacta.
 17. Antes de responder revisa implementación, validaciones, diff y estado Git; cita rutas concretas y separa lo local, CI, Preview y producción.
+
+### Planificación autónoma y atención humana
+
+- Al comenzar una tarea, crea una lista de trabajo completa que cubra descubrimiento, implementación, pruebas, revisión, documentación, commit y entrega cuando correspondan.
+- Usa tareas largas y autocontenidas, con un resultado verificable, para reducir interrupciones y mantener el contexto durante toda la fase. No dividas una fase en microtareas que obliguen a pedir confirmación después de cada comando.
+- Mantén una sola tarea activa, pero ejecuta dentro de ella todas las acciones seguras y relacionadas que sean necesarias para alcanzar su resultado.
+- Anticipa dependencias, comandos, archivos afectados, validaciones y posibles fallos antes de iniciar la ejecución. Actualiza la planificación cuando aparezca nueva información.
+- Decide de forma autónoma las opciones seguras que puedan inferirse del repositorio, sus instrucciones y sus convenciones. No pidas preferencias rutinarias.
+- Agrupa inspección, edición y validación en el mismo ciclo de trabajo siempre que no exista un riesgo adicional.
+- Informa al usuario en checkpoints significativos, no después de cada paso interno. Cada checkpoint debe indicar progreso, evidencia, bloqueos y siguiente fase.
+- Pide atención humana solo cuando exista una ambigüedad material, falte un secreto o identificador no inferible, se requiera aprobación para producción, facturación, consumo de cómputo, permisos, acción destructiva, migración remota o aceptación de un PR.
+- No uses la autonomía para saltarte una aprobación obligatoria. Si una fase está bloqueada, completa primero todo el trabajo no bloqueado y formula una única pregunta concreta con una opción recomendada.
+- Al cerrar cada tarea larga, marca su resultado, comandos ejecutados, archivos modificados, riesgos residuales y criterio de aceptación comprobado.
 
 ### CI/CD y despliegues
 
@@ -88,6 +101,7 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 - Los despliegues de Preview y de ramas no se ejecutan automáticamente; existe aceptación del PR registrada antes de ejecutarlos.
 - Cada rama real tiene sus ramas Neon `dev`, `preview` y `production` en una región próxima a Europa.
 - Los MCP necesarios están disponibles y sus permisos son suficientes, mínimos y verificables para la tarea.
+- Existe una planificación completa, las tareas son autocontenidas y la atención humana se solicitó solo por un bloqueo o aprobación necesaria.
 
 ## Resultado esperado
 
