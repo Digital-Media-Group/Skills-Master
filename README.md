@@ -33,6 +33,12 @@ npm run build
 
 Los artefactos para agentes se generan en `dist/<adaptador>/<idioma>/`.
 
+## Skill de desarrollo IDEAVO
+
+La skill `desarrollo-ideavo-opencode` define el flujo general para desarrollar con IDEAVO en OpenCode: inspección antes de editar, preservación de cambios ajenos, seguridad, validación proporcional al riesgo, Git, despliegues, observabilidad y formato de entrega.
+
+Fuente: `skills/web-development/desarrollo-ideavo-opencode/`.
+
 ## Estructura de una skill
 
 ```text

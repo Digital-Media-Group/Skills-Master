@@ -33,6 +33,12 @@ npm run build
 
 Agent artifacts are generated under `dist/<adapter>/<locale>/`.
 
+## IDEAVO Development Skill
+
+The `desarrollo-ideavo-opencode` skill defines the general workflow for development with IDEAVO in OpenCode: inspect before editing, preserve unrelated changes, apply security controls, validate according to risk, and document Git, deployment, observability, and delivery status.
+
+Source: `skills/web-development/desarrollo-ideavo-opencode/`.
+
 ## Skill Structure
 
 ```text
