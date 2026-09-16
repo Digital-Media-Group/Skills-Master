@@ -1,6 +1,6 @@
 schemaVersion: 1
 id: desarrollo-ideavo-opencode
-version: 0.1.0
+version: 0.2.0
 status: experimental
 category: web-development
 name:
@@ -45,4 +45,4 @@ outputs:
   en:
     - Implemented change with validation evidence, documented remaining risks, and a clearly stated delivery status.
 dependencies: []
-lastReviewed: 2026-08-10
+lastReviewed: 2026-09-16

@@ -74,6 +74,21 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 - Do not use autonomy to bypass a required approval. If a phase is blocked, complete all unblocked work first and ask one concrete question with a recommended option.
 - When closing each long task, record its result, executed commands, modified files, residual risks, and verified acceptance criteria.
 
+### Session Closure, Autocomment, and Release Signing
+
+IDEAVO may run an `autocomment` when the response ends and comment, upload, or confirm the session changes. Treat the final message as an operational boundary: everything required for Preview, production, or a version signature must be resolved and verified before the conversation closes.
+
+- Do not defer tests, migrations, preflight, signing, PR acceptance, deployment, smoke tests, or promotion-critical checks to the next message.
+- Before the final message, freeze the change set: branch, exact commit SHA, complete diff, generated files, migrations, version, PR, and worktree status.
+- Run every applicable gate against that SHA and record evidence from tests, build, Dokploy, Neon, permissions, security, and smoke tests.
+- For Preview or production, close and verify the signature or acceptance associated with the exact SHA before sending the final response. The signature must identify the version, branch, environment, and approver.
+- IDEAVO's automatic `autocomment`, autocommit, or push is not equivalent to a signature, PR acceptance, human authorization, deployment, or production promotion.
+- If automatic closure creates or modifies a commit after verification, every signature and piece of evidence tied to the previous SHA is invalid. Repeat preflight and signing against the new SHA before promotion.
+- If it cannot be guaranteed that automatic closure will preserve the verified SHA, do not promote. Close as a `non-promotable checkpoint`, state the SHA, and leave acceptance or signing for a new session.
+- After closing the signature, do not modify code, documentation, lockfiles, generated artifacts, migrations, tags, or release configuration. Any change requires a new version or signature.
+- The final response must explicitly state SHA, branch, PR, signature/acceptance, deployment, environment, and the status of each gate, separating `Confirmed`, `Inferred`, and `Pending`.
+- For production, never state `production-ready` if signing, PR acceptance, or SHA verification was not closed before the final message.
+
 ### CI/CD and Deployments
 
 - Run CI/CD and test environments through Docker on Dokploy, using Dokploy compute for builds, tests, integration, and validation.
@@ -112,6 +127,8 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 - Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.
 - A complete plan exists, tasks are self-contained, and human attention was requested only for a blocker or required approval.
 - Development progresses without environment variables unless a demonstrated technical need exists; real variables are configured in Preview and remain isolated per environment.
+- Session closure has an explicit checkpoint and no signature or promotion depends on the next message.
+- Preview or production signatures and evidence correspond to the exact SHA being promoted.
 
 ## Expected Result
 

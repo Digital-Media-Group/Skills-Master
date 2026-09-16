@@ -74,6 +74,21 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 - No uses la autonomía para saltarte una aprobación obligatoria. Si una fase está bloqueada, completa primero todo el trabajo no bloqueado y formula una única pregunta concreta con una opción recomendada.
 - Al cerrar cada tarea larga, marca su resultado, comandos ejecutados, archivos modificados, riesgos residuales y criterio de aceptación comprobado.
 
+### Cierre de sesión, autocomment y firma de releases
+
+IDEAVO puede ejecutar un `autocomment` al terminar la respuesta y comentar, subir o confirmar los cambios de la sesión. Trata el último mensaje como una frontera operativa: todo lo necesario para Preview, producción o una firma de versión debe quedar resuelto y verificado antes de cerrar la conversación.
+
+- No dejes para el siguiente mensaje tests, migraciones, preflight, firma, aceptación del PR, despliegue, smoke test ni comprobaciones que condicionen la promoción.
+- Antes del último mensaje, congela el conjunto de cambios: rama, commit SHA exacto, diff completo, archivos generados, migraciones, versión, PR y estado del árbol de trabajo.
+- Ejecuta todos los gates aplicables sobre ese SHA y registra evidencia de tests, build, Dokploy, Neon, permisos, seguridad y smoke tests.
+- Para Preview o producción, cierra y verifica la firma o aceptación asociada al SHA exacto antes de enviar la respuesta final. La firma debe identificar claramente la versión, la rama, el entorno y el responsable de la aprobación.
+- El `autocomment`, autocommit o push automático de IDEAVO no equivale a firma, aceptación del PR, autorización humana, despliegue ni promoción a producción.
+- Si el cierre automático crea o modifica un commit después de la verificación, cualquier firma o evidencia asociada al SHA anterior queda invalidada. Repite el preflight y la firma sobre el nuevo SHA antes de promocionar.
+- Si no se puede garantizar que el cierre automático conservará el SHA verificado, no promociones. Cierra como `checkpoint no promocionable`, indica el SHA y deja la aceptación o firma pendiente para una nueva sesión.
+- Después de cerrar la firma no modifiques código, documentación, lockfiles, artefactos generados, migraciones, tags ni configuración del release. Cualquier cambio exige una nueva versión o firma.
+- La respuesta final debe indicar explícitamente SHA, rama, PR, firma/aceptación, deployment, entorno y estado de cada gate, separando `Confirmado`, `Inferido` y `Pendiente`.
+- Para producción, nunca uses `listo para producción` si la firma, la aceptación del PR o la verificación del SHA no quedaron cerradas antes del último mensaje.
+
 ### CI/CD y despliegues
 
 - Ejecuta CI/CD y los entornos de prueba mediante Docker en Dokploy, reutilizando el cómputo de Dokploy para builds, tests, integración y validaciones.
@@ -112,6 +127,8 @@ Estos MCP son dependencias del entorno, no una autorización implícita para act
 - Los MCP necesarios están disponibles y sus permisos son suficientes, mínimos y verificables para la tarea.
 - Existe una planificación completa, las tareas son autocontenidas y la atención humana se solicitó solo por un bloqueo o aprobación necesaria.
 - El desarrollo avanza sin variables de entorno salvo necesidad técnica demostrada; las variables reales se configuran en Preview y permanecen separadas por entorno.
+- El cierre de sesión tiene un checkpoint explícito y ninguna firma o promoción depende del siguiente mensaje.
+- Las firmas y evidencias de Preview o producción corresponden al SHA exacto que se va a promocionar.
 
 ## Resultado esperado
 
