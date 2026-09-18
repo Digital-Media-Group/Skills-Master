@@ -26,7 +26,7 @@
           "id": "desarrollo-ideavo-opencode",
           "name": "IDEAVO Development - OpenCode",
           "summary": "General workflow for safe, verifiable, and governed development with IDEAVO in OpenCode.",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "status": "experimental",
           "riskLevel": "high",
           "tags": [

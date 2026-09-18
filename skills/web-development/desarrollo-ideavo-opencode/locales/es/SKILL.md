@@ -98,6 +98,16 @@ IDEAVO puede ejecutar un `autocomment` al terminar la respuesta y comentar, subi
 - No promociones directamente desde una rama de trabajo a producción. Tras la aceptación del PR, despliega desde Dokploy siguiendo la rama y el orden aprobados.
 - Antes de consumir cómputo remoto, verifica que el job, entorno o deployment corresponde a la acción aprobada y evita duplicar ejecuciones pendientes.
 
+### Aislamiento obligatorio del cómputo de pruebas
+
+Anotación crítica: cualquier prueba de migración, test, gate o validación ejecutada vía CI/CD debe ejecutarse siempre en un entorno externo aislado como Dokploy, habitualmente conectado mediante MCP.
+
+- En desarrollo, ninguna prueba de migración ni ejecución de CI/CD se hace directamente desde Vercel, Neon ni cualquier otro cómputo exterior. Siempre se enruta al entorno aislado de Dokploy.
+- En Preview, aunque la base de datos esté puesta directamente en Neon, las pruebas, migraciones y gates se ejecutan en un entorno aislado de Dokploy contra una copia o rama de datos desechable; nunca contra el servicio que sirve el tráfico.
+- Las migraciones entre entornos, las pruebas de gates y las verificaciones de despliegue también se aíslan en Dokploy antes de tocar el entorno de destino.
+- La finalidad es ahorrar cómputo de Neon, Vercel y de cualquier otro operador de despliegues: su cómputo queda reservado para servir tráfico real autorizado, no para ejecutar pruebas.
+- Gestiona este enrutamiento de forma automática según el workflow activo: detecta la fase actual (desarrollo, Preview, producción) y dirige cada prueba al entorno aislado de Dokploy sin pedir confirmación rutinaria. Solo pregunta si Dokploy no está disponible o el workflow no permite el aislamiento.
+
 ### Ramas de Neon
 
 - Para cada rama real del flujo de software crea y mantén tres ramas de Neon: `dev`, `preview` y `production`.
@@ -122,6 +132,7 @@ IDEAVO puede ejecutar un `autocomment` al terminar la respuesta y comentar, subi
 - El diff no contiene secretos, tokens, PII ni cambios ajenos; `git diff --check` pasa cuando corresponde.
 - El criterio de terminado y todo bloqueo externo quedan documentados.
 - La validación de CI/CD se ejecuta en Dokploy y no consume cómputo de pago de GitHub Actions, Neon o Vercel.
+- Toda prueba de migración, gate o validación se ejecutó en el entorno aislado de Dokploy, incluso en Preview y con base de datos en Neon.
 - Los despliegues de Preview y de ramas no se ejecutan automáticamente; existe aceptación del PR registrada antes de ejecutarlos.
 - Cada rama real tiene sus ramas Neon `dev`, `preview` y `production` en una región próxima a Europa.
 - Los MCP necesarios están disponibles y sus permisos son suficientes, mínimos y verificables para la tarea.

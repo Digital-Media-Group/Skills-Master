@@ -98,6 +98,16 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 - Do not promote a work branch directly to production. After PR acceptance, deploy from Dokploy using the approved branch and order.
 - Before consuming remote compute, verify that the job, environment, or deployment matches the approved action and avoid duplicating pending executions.
 
+### Mandatory Isolation of Test Compute
+
+Critical note: any migration test, test run, gate, or validation executed through CI/CD must always run in an isolated external environment such as Dokploy, usually connected through MCP.
+
+- During development, no migration test or CI/CD run happens directly on Vercel, Neon, or any other external compute. Always route it to the isolated Dokploy environment.
+- In Preview, even when the database is wired directly to Neon, tests, migrations, and gates run in an isolated Dokploy environment against a disposable data copy or branch; never against the service serving traffic.
+- Cross-environment migrations, gate tests, and deployment verifications are also isolated in Dokploy before touching the target environment.
+- The goal is to save Neon, Vercel, and any other deployment operator's compute: their compute is reserved for serving real authorized traffic, not for running tests.
+- Manage this routing automatically according to the active workflow: detect the current phase (development, Preview, production) and direct every test to the isolated Dokploy environment without asking for routine confirmation. Only ask when Dokploy is unavailable or the workflow does not allow isolation.
+
 ### Neon Branches
 
 - For every real branch in the software flow, create and maintain three Neon branches: `dev`, `preview`, and `production`.
@@ -122,6 +132,7 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 - The diff contains no secrets, tokens, PII, or unrelated changes; `git diff --check` passes when applicable.
 - The definition of done and every external blocker are documented.
 - CI/CD validation runs on Dokploy and does not consume paid compute from GitHub Actions, Neon, or Vercel.
+- Every migration test, gate, or validation ran in the isolated Dokploy environment, even in Preview and with the database on Neon.
 - Preview and non-production branch deployments do not run automatically; recorded PR acceptance exists before execution.
 - Every real branch has its `dev`, `preview`, and `production` Neon branches in a region close to Europe.
 - Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.

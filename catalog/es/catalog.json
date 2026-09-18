@@ -26,7 +26,7 @@
           "id": "desarrollo-ideavo-opencode",
           "name": "Desarrollo IDEAVO - OpenCode",
           "summary": "Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode.",
-          "version": "0.2.0",
+          "version": "0.3.0",
           "status": "experimental",
           "riskLevel": "high",
           "tags": [
