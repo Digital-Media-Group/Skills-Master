@@ -22,6 +22,7 @@ Entrega continua, infraestructura, contenedores, observabilidad y seguridad clou
 | [Diseño de pipeline CI/CD](../../skills/devops-cloud/ci-cd-pipeline-design/locales/es/SKILL.md) | `ci-cd-pipeline-design` | Diseñar una entrega automatizada con controles, trazabilidad y recuperación. | experimental | high |
 | [Revisión de arquitectura cloud](../../skills/devops-cloud/cloud-architecture-review/locales/es/SKILL.md) | `cloud-architecture-review` | Evaluar una arquitectura cloud por fiabilidad, seguridad, rendimiento y coste. | experimental | high |
 | [Contenerización de una aplicación web](../../skills/devops-cloud/containerize-web-application/locales/es/SKILL.md) | `containerize-web-application` | Crear una imagen reproducible, segura y operable para una aplicación web. | experimental | medium |
+| [Despliegue Dokploy en modo Stack (Swarm) multi-nodo](../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/es/SKILL.md) | `dokploy-swarm-stack-deployment` | Desplegar una aplicación en Dokploy con Compose Type Stack (docker stack deploy) lista para escalar a varios nodos, construyendo la imagen en un registry externo. | experimental | high |
 
 ## Alojamiento y soporte
 
