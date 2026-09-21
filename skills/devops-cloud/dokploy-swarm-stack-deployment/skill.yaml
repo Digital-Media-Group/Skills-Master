@@ -1,0 +1,48 @@
+schemaVersion: 1
+id: dokploy-swarm-stack-deployment
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: Despliegue Dokploy en modo Stack (Swarm) multi-nodo
+  en: Dokploy Swarm Stack Deployment
+summary:
+  es: Desplegar una aplicación en Dokploy con Compose Type Stack (docker stack deploy) lista para escalar a varios nodos, construyendo la imagen en un registry externo.
+  en: Deploy an application to Dokploy with Stack Compose Type (docker stack deploy) ready for multi-node scaling, building the image in an external registry.
+tags:
+  - dokploy
+  - docker-swarm
+  - stack-deployment
+  - ghcr
+  - multi-node
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+  - cloud
+  - credentials
+riskLevel: high
+inputs:
+  es:
+    - Repositorio Git y rama de despliegue, dominio público, variables de entorno de la aplicación y acceso al panel Dokploy.
+    - Registry de imágenes disponible (GHCR por defecto) y workflow de CI/CD que construye y publica la imagen.
+  en:
+    - Git repository and deployment branch, public domain, application environment variables, and Dokploy panel access.
+    - Available image registry (GHCR by default) and a CI/CD workflow that builds and pushes the image.
+outputs:
+  es:
+    - Servicio Compose de Dokploy operativo en modo Stack con pipeline de imágenes en registry, documentación de operación y plan verificado de escala a multi-nodo.
+  en:
+    - Dokploy Compose service running in Stack mode with registry-backed image pipeline, operations documentation, and a verified multi-node scaling plan.
+dependencies:
+  - containerize-web-application
+lastReviewed: 2026-09-21
