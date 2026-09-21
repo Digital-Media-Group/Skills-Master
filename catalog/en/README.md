@@ -22,6 +22,7 @@ Continuous delivery, infrastructure, containers, observability, and cloud securi
 | [CI/CD Pipeline Design](../../skills/devops-cloud/ci-cd-pipeline-design/locales/en/SKILL.md) | `ci-cd-pipeline-design` | Design automated delivery with controls, traceability, and recovery. | experimental | high |
 | [Cloud Architecture Review](../../skills/devops-cloud/cloud-architecture-review/locales/en/SKILL.md) | `cloud-architecture-review` | Assess cloud architecture for reliability, security, performance, and cost. | experimental | high |
 | [Containerize a Web Application](../../skills/devops-cloud/containerize-web-application/locales/en/SKILL.md) | `containerize-web-application` | Create a reproducible, secure, and operable image for a web application. | experimental | medium |
+| [Dokploy Swarm Stack Deployment](../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/en/SKILL.md) | `dokploy-swarm-stack-deployment` | Deploy an application to Dokploy with Stack Compose Type (docker stack deploy) ready for multi-node scaling, building the image in an external registry. | experimental | high |
 
 ## Hosting and Support
 

@@ -34,6 +34,7 @@ Copy the technical ID or the full URL to tell an agent which skill to install: `
 | CI/CD Pipeline Design | `ci-cd-pipeline-design` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/ci-cd-pipeline-design |
 | Cloud Architecture Review | `cloud-architecture-review` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/cloud-architecture-review |
 | Containerize a Web Application | `containerize-web-application` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/containerize-web-application |
+| Dokploy Swarm Stack Deployment | `dokploy-swarm-stack-deployment` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-swarm-stack-deployment |
 | Analytics Measurement Plan | `analytics-measurement-plan` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan |
 | Conversion Rate Audit | `conversion-rate-audit` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit |
 | Technical SEO Audit | `technical-seo-audit` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/technical-seo-audit |
