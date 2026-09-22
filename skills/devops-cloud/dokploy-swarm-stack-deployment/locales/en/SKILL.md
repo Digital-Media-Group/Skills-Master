@@ -7,12 +7,12 @@ Prepare and operate an application in Dokploy using **Compose Type `Stack`** and
 Reference flow:
 
 ```text
-merge to deployment branch
-  -> CI validates and publishes private SHA images
-  -> Dokploy fetches source and runs docker stack deploy --with-registry-auth
-  -> Swarm pulls images on every node
-  -> bootstrap/entrypoint applies idempotent migrations
-  -> Web passes smoke/health checks and receives traffic
+Development -> Preview -> Production
+  -> CI publishes immutable SHA image
+  -> Dokploy refreshes the branch and runs docker stack deploy --with-registry-auth
+  -> bootstrap/migrations run in the target environment
+  -> domain points to the full Swarm service
+  -> authenticated smoke test and approval
 ```
 
 ## When to Use
@@ -31,21 +31,21 @@ merge to deployment branch
 
 ## Required Information
 
-- Git repository, protected branch, and exact Compose path.
-- Domain, internal service, and container port.
+- Git repository, `development`, `preview`, and `production` branches, and exact Compose path in all three.
+- Domain, full internal service name, and container port for each environment.
 - Environment variables and secrets stored in Dokploy, never Git.
 - Private registry, username, read-only token, and exact image names.
-- PostgreSQL, uploads, backups, object storage, and placement policy.
+- Persistence policy for PostgreSQL, uploads, backups, and object storage.
 - Manager/worker nodes and placement constraints.
 - Dokploy panel/API access and, for advanced diagnosis, SSH to a manager.
 
 ## Credential Safety
 
-- Never request or paste passwords, PATs, private keys, cookies, or tokens in chat.
+- Never request or paste passwords, PATs, private keys, or tokens in chat.
 - A private key pasted into a conversation must be revoked and replaced.
 - For SSH, use a new local key file with mode `600`, referenced by `ATLAS_SSH_KEY_PATH`; never store its contents in `.env` or Git.
 - Use the least-privileged SSH account. Docker diagnosis may use passwordless `sudo -n docker` without revealing the password.
-- Dokploy may hide secret values in its UI/API. Missing visibility does not mean missing configuration: verify presence, length, and behavior, or rotate the value through a protected channel.
+- Dokploy may hide secret values in its UI/API. Missing visibility does not mean missing configuration: verify presence, length, and behavior, or rotate through a protected channel.
 
 ## Procedure
 
@@ -83,9 +83,9 @@ Requirements:
 - Production must never receive fixture data.
 - A one-shot bootstrap service may correctly show `0/1` after exit code 0; inspect its last task and logs.
 
-### 3. Publish Images
+### 3. Publish Images with Lightweight CI
 
-Publish every runtime image using the full commit SHA. Never use `latest` for Preview/Production.
+GitHub Actions should validate and publish the SHA image, not run migrations or E2E against remote databases. Verify that every command exists:
 
 ```yaml
 permissions:
@@ -121,7 +121,15 @@ jobs:
           tags: ghcr.io/organization/project-worker:${{ github.sha }}
 ```
 
-Verify every CI command exists. A root `bun run test` with no root script prevents the image job from running.
+To reduce GitHub compute, run on Dokploy/Swarm:
+
+- validation build or CI image through `docker-stack.ci-cd.yml`, with `ci-runner` at `replicas: 0` by default;
+- integration, E2E, authenticated smoke, and domain tests;
+- Development/Preview migrations, role provisioning, and seeds;
+- Production migrations-only;
+- runtime logs and sanitized evidence.
+
+GitHub Actions must not run migrations against any remote environment. The Dokploy runner should use a least-privileged service token, private networking, and sanitized evidence artifacts. Temporarily enable its replicas only with an approved CI image, then return them to `0`.
 
 For private GHCR:
 
@@ -131,24 +139,35 @@ For private GHCR:
 - Test the registry in Dokploy before the first deployment.
 - Anonymous `401` is normal for private GHCR packages; `denied` during deployment means a missing tag or unapplied credentials.
 
-### 4. Configure Dokploy
+### 4. Promote Development -> Preview -> Production
+
+All three branches must contain the Compose and compatible Stack workflow. Use this fail-closed flow:
+
+1. **Development:** publish SHA, update Development variables only, deploy with `autoDeploy=false`, allow seed, and run protected internal/external smoke tests.
+2. **Preview:** promote exactly the SHA that passed Development; deploy with `freshVolumes=false`, Basic Auth, and maintenance; run migrations plus fixtures and authenticated smoke tests.
+3. **Production:** promote exactly the SHA that passed Preview; deploy migrations-only, no seed, with maintenance enabled and `autoDeploy=false`; run backup/preflight and authenticated smoke tests; require human approval before removing maintenance.
+4. Never promote `latest`, the wrong branch, or a SHA without evidence.
+5. Never copy databases, volumes, or fixtures between environments.
+
+### 5. Configure Dokploy
 
 - Select Compose Type `Stack`.
-- Set repository, owner, branch, and exact `composePath`.
+- Set repository, owner, branch, and exact `composePath` per environment.
 - Keep `autoDeploy=false` for Preview/Production; use manual fail-closed promotion.
 - Register the private registry before the first deployment.
 - Verify deployment runs `docker stack deploy ... --with-registry-auth`.
 - Store per-environment variables in Dokploy and generate distinct secrets.
 - Use `freshVolumes=false` for normal redeploys and recovery.
 - Never delete stacks, volumes, or data to fix an image pull.
+- After creating a domain, verify `serviceName` is the full `<stack>_web`, not only `web`; use internal port 4000 for this pattern.
 
-### 5. Image and Source-Cache Diagnosis
+### 6. Image and Source-Cache Diagnosis
 
 When `No such image`, `pull access denied`, or Web startup failures occur:
 
 1. Inspect `docker service ps --no-trunc <stack>_<service>` on the manager.
 2. Inspect the effective image with `docker service inspect`.
-3. Confirm the tag exists and CI completed before deploying.
+3. Confirm the tag exists and CI completed before deployment.
 4. Test the registry from Dokploy (`registry.testRegistryById`).
 5. Compare Dokploy's checkout SHA with the GitHub branch.
 6. Refresh the source before deployment (`compose.fetchSourceType`/service loading with `type=fetch`).
@@ -157,29 +176,18 @@ When `No such image`, `pull access denied`, or Web startup failures occur:
 
 A Dokploy `done` status does not prove tasks are ready; inspect replicas and service errors.
 
-### 6. Domain Access and Traefik
+### 7. Domain Access and Traefik
 
 - DNS must point to the intended VPS.
-- Configure the domain for Web and the internal container port.
-- Redeploy after creating or changing the domain when Dokploy requires it.
-- The route may require the full Swarm service name `<stack>_<service>`, not just `web`.
+- Create the Dokploy domain with `composeId`, `serviceName=<stack>_web`, `port=4000`, Let’s Encrypt, and `/`.
+- Redeploy after creating it when Dokploy requires it.
+- The full Swarm service name `<stack>_web` is required, not `web`.
 - Confirm Web is attached to Traefik's external network.
-- If the domain exists in the API but Traefik returns `404` and no dynamic rule exists, stop repeating deployments: add a controlled file-provider rule targeting the full service and internal port.
+- If the domain exists in the API but Traefik returns `404` and no dynamic rule exists, add a controlled file-provider rule targeting the full service and internal port.
 - For Let’s Encrypt, temporarily use Cloudflare DNS-only if proxying causes `526`; restore proxying after TLS is verified.
 - Never use `verify=false` or leave Cloudflare in insecure mode as a permanent fix.
 
-Example smoke checks:
-
-```bash
-curl -I http://dev.example.com/
-# Expected: 308/301 to HTTPS
-curl -I https://dev.example.com/
-# Expected: 401 when Basic Auth is enabled
-curl -u "$DEV_USER:$DEV_PASSWORD" -I https://dev.example.com/
-# Expected: 200, 307 to maintenance, or the environment's defined response
-```
-
-### 7. Persistence and Placement
+### 8. Persistence and Placement
 
 Pin PostgreSQL and Redis local volumes to durable data nodes:
 
@@ -192,7 +200,7 @@ deploy:
 
 Do not store important uploads on a replica's local filesystem. Use external object storage. Do not move PostgreSQL without replicated storage and tested backups.
 
-### 8. Scale After the First Node
+### 9. Scale After the First Node
 
 1. Register the new node in Dokploy.
 2. Join it to Swarm.
@@ -208,6 +216,7 @@ Do not store important uploads on a replica's local filesystem. Use external obj
 - Compose parses and has no duplicate YAML keys.
 - Runtime does not depend on `build:`.
 - Web/Worker use SHA images.
+- All three branches contain compatible Compose and workflow files.
 - CI uses existing scripts and publishes before deployment.
 - Production has no seed variables.
 
@@ -229,6 +238,7 @@ Do not store important uploads on a replica's local filesystem. Use external obj
 - TLS is valid.
 - Unauthenticated requests return `401/403` as designed.
 - Authenticated requests reach maintenance, home, or the health endpoint.
+- Each domain is bound to `<stack>_web`, not the short `web` alias.
 - Development, Preview, and Production are not confused.
 
 ## Troubleshooting
@@ -245,9 +255,13 @@ Inspect `validate` first: missing root scripts, required environment variables, 
 
 Disable `autoDeploy`, refresh the GitHub source, inspect converted Compose, and perform one manual deployment. Inspect `docker service inspect` afterward.
 
+### `Compose file not found`
+
+Verify the file exists on the configured branch, `composePath` matches exactly, and the branch is not stale. Sync only Stack/workflow files; never copy `.env`, secrets, or data.
+
 ### Domain returns 404 while the service is healthy
 
-Check the Traefik network, full `<stack>_<service>` name, internal port, and dynamic rule. Some Dokploy versions register the domain without generating a route for Swarm Compose; use a documented file-provider rule.
+Check the Traefik network, full `<stack>_web` name, internal port, and dynamic rule. Some Dokploy versions register the domain without generating a route for Swarm Compose; use a documented file-provider rule.
 
 ### Domain returns 526
 
@@ -259,7 +273,7 @@ This is expected for protected secrets. Verify presence/length and authenticatio
 
 ## Expected Result
 
-A reproducible Dokploy Stack that works on one node and scales to multiple nodes, with immutable images, authenticated registry, safe migrations, persistence, verified Traefik routes, external smoke tests, and rollback documentation.
+A reproducible Dokploy Stack that works on one node and scales to multiple nodes, with immutable images, authenticated registry, Development -> Preview -> Production promotion, safe migrations executed in Dokploy, persistence, verified Traefik routes, external smoke tests, and rollback documentation.
 
 ## Security
 
