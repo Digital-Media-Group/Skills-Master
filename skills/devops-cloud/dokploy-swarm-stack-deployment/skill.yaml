@@ -36,12 +36,12 @@ riskLevel: high
 inputs:
   es:
     - Repositorio Git, rama de despliegue protegida y workflow que publique una imagen versionada en un registry.
-    - Acceso al panel Dokploy, Compose Type Stack, dominio, variables de entorno y credenciales de registry de solo lectura.
-    - Decisiones de persistencia: base de datos, uploads, object storage externo, backups y nodos manager/worker.
+    - "Acceso al panel Dokploy, Compose Type Stack, dominio, variables de entorno y credenciales de registry de solo lectura."
+    - "Decisiones de persistencia: base de datos, uploads, object storage externo, backups y nodos manager/worker."
   en:
     - Git repository, protected deployment branch, and workflow that publishes a versioned image to a registry.
-    - Dokploy panel access, Stack Compose Type, domain, environment variables, and read-only registry credentials.
-    - Persistence decisions: database, uploads, external object storage, backups, and manager/worker nodes.
+    - "Dokploy panel access, Stack Compose Type, domain, environment variables, and read-only registry credentials."
+    - "Persistence decisions: database, uploads, external object storage, backups, and manager/worker nodes."
 outputs:
   es:
     - Stack Dokploy/Swarm operativo desde un solo nodo y preparado para escalar web a múltiples nodos.
