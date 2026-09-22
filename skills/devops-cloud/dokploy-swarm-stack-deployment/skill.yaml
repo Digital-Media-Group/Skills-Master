@@ -1,20 +1,23 @@
 schemaVersion: 1
 id: dokploy-swarm-stack-deployment
-version: 0.3.0
+version: 0.4.0
 status: experimental
 category: devops-cloud
 name:
   es: Despliegue Dokploy en modo Stack (Swarm) multi-nodo
   en: Dokploy Swarm Stack Deployment
 summary:
-  es: Preparar, diagnosticar y operar stacks Dokploy/Swarm con imágenes SHA, GHCR privado, caché de fuente, Traefik, Cloudflare, persistencia y smoke tests externos.
-  en: Prepare, diagnose, and operate Dokploy/Swarm stacks with SHA images, private GHCR, source-cache handling, Traefik, Cloudflare, persistence, and external smoke tests.
+  es: Preparar, promover y diagnosticar stacks Dokploy/Swarm entre Development, Preview y Production con imágenes SHA, GHCR privado, CI ligero, CI runtime en Dokploy, Traefik y Cloudflare.
+  en: Prepare, promote, and diagnose Dokploy/Swarm stacks across Development, Preview, and Production with SHA images, private GHCR, lightweight CI, Dokploy runtime CI, Traefik, and Cloudflare.
 tags:
   - dokploy
   - docker-swarm
   - stack-deployment
   - ghcr
   - private-registry
+  - ci-cd
+  - runtime-ci
+  - promotion
   - traefik
   - cloudflare
   - multi-node
@@ -39,26 +42,26 @@ capabilities:
 riskLevel: high
 inputs:
   es:
-    - Repositorio Git, rama protegida, workflow CI válido y ruta exacta del Compose.
-    - "Acceso al panel/API Dokploy, Compose Type Stack, dominio, variables protegidas y registry privado con read:packages."
+    - Repositorio Git con ramas development, preview y production, Compose y workflow compatibles.
+    - "Acceso al panel/API Dokploy, Compose Type Stack, dominios, variables protegidas y registry privado con read:packages."
     - "Acceso SSH opcional a un manager mediante clave local nueva, nunca pegada en chat."
-    - "Decisiones de persistencia: base de datos, uploads, object storage externo, backups, nodos y estrategia de rollback."
+    - "Decisiones de persistencia, backups, seeds, smoke tests, promoción y aprobación de Production."
   en:
-    - Git repository, protected branch, valid CI workflow, and exact Compose path.
-    - "Dokploy panel/API access, Stack Compose Type, domain, protected variables, and private registry with read:packages."
+    - Git repository with development, preview, and production branches containing compatible Compose and workflow files.
+    - "Dokploy panel/API access, Stack Compose Type, domains, protected variables, and private registry with read:packages."
     - "Optional SSH access to a manager using a new local key, never pasted in chat."
-    - "Persistence decisions: database, uploads, external object storage, backups, nodes, and rollback strategy."
+    - "Persistence, backup, seed, smoke-test, promotion, and Production approval decisions."
 outputs:
   es:
-    - Stack Dokploy/Swarm operativo desde un solo nodo y preparado para escalar web a múltiples nodos.
-    - CI que valida scripts existentes y publica imágenes SHA antes del deploy.
-    - Registry privado autenticado, recuperación sin borrar volúmenes y diagnóstico de caché Dokploy.
-    - Migraciones idempotentes, healthchecks, rutas Traefik/Cloudflare verificadas, smoke tests externos y rollback documentado.
+    - Stacks Dokploy/Swarm aislados y promovibles Development -> Preview -> Production.
+    - CI de GitHub limitado a validación/publicación de imágenes SHA y CI pesado/runtime ejecutado en Dokploy.
+    - Registry privado autenticado, recuperación sin borrar volúmenes, migraciones seguras y diagnóstico de caché.
+    - Dominios enlazados al servicio completo de Swarm, Traefik/Cloudflare verificados, smoke tests y rollback.
   en:
-    - Dokploy/Swarm stack operational on one node and ready to scale web across multiple nodes.
-    - CI that validates existing scripts and publishes SHA images before deployment.
-    - Authenticated private registry, volume-preserving recovery, and Dokploy source-cache diagnosis.
-    - Idempotent migrations, health checks, verified Traefik/Cloudflare routes, external smoke tests, and documented rollback.
+    - Isolated Dokploy/Swarm stacks promotable from Development to Preview to Production.
+    - GitHub CI limited to validation/image publication, with heavy runtime CI executed in Dokploy.
+    - Authenticated private registry, volume-preserving recovery, safe migrations, and source-cache diagnosis.
+    - Domains bound to the full Swarm service, verified Traefik/Cloudflare, smoke tests, and rollback.
 dependencies:
   - containerize-web-application
 lastReviewed: 2026-09-22
