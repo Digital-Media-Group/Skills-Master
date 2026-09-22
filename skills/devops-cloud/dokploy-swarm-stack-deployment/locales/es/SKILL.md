@@ -7,12 +7,12 @@ Preparar y operar una aplicación en Dokploy usando **Compose Type `Stack`** y `
 El patrón de referencia es:
 
 ```text
-merge a la rama de despliegue
-  -> CI valida y publica imágenes privadas por SHA
-  -> Dokploy obtiene la fuente y ejecuta docker stack deploy --with-registry-auth
-  -> Swarm hace pull de la imagen en cada nodo
-  -> bootstrap/entrypoint aplica migraciones idempotentes
-  -> Web pasa smoke/healthcheck y recibe tráfico
+Development -> Preview -> Production
+  -> CI publica imagen inmutable por SHA
+  -> Dokploy refresca la rama y ejecuta docker stack deploy --with-registry-auth
+  -> bootstrap/migraciones se ejecutan en el entorno destino
+  -> dominio apunta al servicio Swarm completo
+  -> smoke autenticado y aprobación
 ```
 
 ## Cuándo utilizarla
@@ -31,8 +31,8 @@ merge a la rama de despliegue
 
 ## Información necesaria
 
-- Repositorio Git, rama protegida y ruta exacta del Compose.
-- Dominio, servicio interno y puerto del contenedor.
+- Repositorio Git, ramas `development`, `preview`, `production` y ruta exacta del Compose en las tres.
+- Dominio, servicio interno completo y puerto del contenedor para cada entorno.
 - Variables y secretos almacenados en Dokploy, nunca en Git.
 - Registry privado, usuario, token de solo lectura y nombres exactos de imágenes.
 - Política de persistencia para PostgreSQL, uploads, backups y object storage.
@@ -84,9 +84,9 @@ Requisitos:
 - Production debe ser migrations-only y nunca recibir fixtures.
 - Un servicio bootstrap `replicas: 1` puede terminar con `0/1` después de código 0: es normal; comprueba su último task y logs.
 
-### 3. Publicar imágenes
+### 3. Publicar imágenes con CI ligero
 
-Publica cada imagen con el SHA completo del commit. No uses `latest` en Preview/Production.
+GitHub Actions debe validar y publicar la imagen SHA, no ejecutar migraciones ni pruebas E2E contra bases remotas. Comprueba que los scripts existen:
 
 ```yaml
 permissions:
@@ -122,7 +122,15 @@ jobs:
           tags: ghcr.io/organizacion/proyecto-worker:${{ github.sha }}
 ```
 
-Comprueba que todos los scripts llamados por CI existen. Un `bun run test` en la raíz sin script válido hace que nunca se publiquen las imágenes.
+Para reducir cómputo de GitHub, ejecuta en Dokploy/Swarm:
+
+- build de validación o imagen CI con `docker-stack.ci-cd.yml` y `ci-runner` a `replicas: 0` por defecto;
+- pruebas de integración, E2E, smoke autenticado y pruebas de dominio;
+- migraciones, provisión de roles y seeds de Development/Preview;
+- migraciones-only de Production;
+- logs y evidencia runtime.
+
+GitHub Actions no debe ejecutar migraciones contra ningún entorno remoto. El runner Dokploy debe usar un token de servicio mínimo, red privada y artefactos/evidencia saneados. Activa temporalmente sus réplicas solo con una imagen CI aprobada y vuelve a `0` al terminar.
 
 Para GHCR privado:
 
@@ -132,18 +140,29 @@ Para GHCR privado:
 - Prueba el registry en Dokploy antes del primer deploy.
 - `401` anónimo en GHCR es normal para paquetes privados; `denied` durante el deploy indica tag inexistente o credenciales no aplicadas.
 
-### 4. Configurar Dokploy
+### 4. Promoción Development -> Preview -> Production
+
+Los tres Compose deben existir en las tres ramas y apuntar al mismo formato de Stack. Usa el siguiente flujo fail-closed:
+
+1. **Development:** publica SHA, actualiza variables solo en Development, despliega con `autoDeploy=false`, seed permitido y smoke interno/externo protegido.
+2. **Preview:** promueve exactamente el SHA que pasó Development; despliega con `freshVolumes=false`, Basic Auth y mantenimiento; ejecuta migraciones + fixtures y smoke autenticado.
+3. **Production:** promueve exactamente el SHA que pasó Preview; despliega migrations-only, sin seed, con mantenimiento activo y `autoDeploy=false`; ejecuta backup/preflight, smoke autenticado y requiere aprobación humana antes de retirar mantenimiento.
+4. Nunca promociones por `latest`, rama equivocada o un SHA que no esté registrado como evidencia.
+5. Nunca copies bases, volúmenes o fixtures entre entornos.
+
+### 5. Configurar Dokploy
 
 - Selecciona Compose Type `Stack`.
-- Configura repositorio, propietario, rama y `composePath` exactos.
+- Configura repositorio, propietario, rama y `composePath` exactos en cada entorno.
 - Mantén `autoDeploy=false` en Preview/Production; usa deploy manual y fail-closed.
 - Registra el registry privado antes del primer deploy.
 - Verifica que el deploy ejecuta `docker stack deploy ... --with-registry-auth`.
 - Guarda variables por entorno en Dokploy; genera secretos distintos para cada entorno.
 - Usa `freshVolumes=false` en redeploys normales y recuperación.
 - No borres stacks, volúmenes ni datos para resolver un pull fallido.
+- Después de crear el dominio, comprueba que `serviceName` sea el nombre completo `<stack>_web`, no solo `web`; puerto interno 4000 en este patrón.
 
-### 5. Diagnóstico de imágenes y caché
+### 6. Diagnóstico de imágenes y caché
 
 Cuando aparezca `No such image`, `pull access denied` o el Web no arranque:
 
@@ -154,33 +173,33 @@ Cuando aparezca `No such image`, `pull access denied` o el Web no arranque:
 5. Compara el SHA del checkout de Dokploy con la rama GitHub.
 6. Refresca la fuente antes del deploy (`compose.fetchSourceType`/carga de servicios tipo `fetch`).
 7. Si Dokploy conserva una definición antigua, deja `autoDeploy=false`, actualiza variables, refresca fuente y ejecuta un único deploy manual.
-8. Si GHCR sigue bloqueado y el nodo es de Development, construye temporalmente en el manager desde el checkout verificado, etiqueta con el SHA y despliega sin borrar volúmenes. Documenta esa excepción y publica las imágenes en GHCR antes de Preview/Production.
+8. Si GHCR sigue bloqueado y el nodo es de Development, construye temporalmente en el manager desde el checkout verificado, etiqueta con el SHA y despliega sin borrar volúmenes. Documenta la excepción y publica las imágenes en GHCR antes de Preview/Production.
 
 Nunca asumas que el estado `done` de Dokploy implica que las tareas están listas: verifica las réplicas y los errores de cada servicio.
 
-### 6. Acceso de dominio y Traefik
+### 7. Acceso de dominio y Traefik
 
 - El dominio debe apuntar al VPS y resolver al origen correcto.
-- Configura el dominio en Dokploy con servicio Web y puerto interno.
+- Crea el dominio en Dokploy con `composeId`, `serviceName=<stack>_web`, `port=4000`, HTTPS Let’s Encrypt y ruta `/`.
 - Si Dokploy genera la ruta, haz redeploy después de crearla.
-- El nombre del servicio puede requerir el nombre completo de Swarm: `<stack>_<service>`, no solo `web`.
+- El nombre del servicio requiere el nombre completo de Swarm: `<stack>_web`, no `web`.
 - Comprueba la red externa de Traefik en el servicio Web.
-- Si el dominio aparece en la API pero Traefik devuelve `404` y no existe una regla dinámica, no repitas deployments indefinidamente: crea una regla file-provider controlada que apunte al servicio completo y al puerto interno.
-- Para emitir Let’s Encrypt, usa temporalmente DNS-only durante el challenge si el proxy Cloudflare produce `526`; vuelve a activar proxy después de verificar TLS.
+- Si el dominio aparece en la API pero Traefik devuelve `404` y no existe una regla dinámica, crea una regla file-provider controlada hacia el servicio completo y el puerto interno.
+- Para emitir Let’s Encrypt, usa temporalmente DNS-only durante el challenge si Cloudflare produce `526`; vuelve a activar proxy después de verificar TLS.
 - No uses `verify=false` ni dejes Cloudflare en modo inseguro como solución permanente.
 
-Ejemplo de smoke:
+Smoke mínimo:
 
 ```bash
-curl -I http://dev.example.com/
+curl -I http://preview.example.com/
 # Esperado: 308/301 a HTTPS
-curl -I https://dev.example.com/
+curl -I https://preview.example.com/
 # Esperado: 401 si Basic Auth está activo
-curl -u "$DEV_USER:$DEV_PASSWORD" -I https://dev.example.com/
+curl -u "$PREVIEW_USER:$PREVIEW_PASSWORD" -I https://preview.example.com/
 # Esperado: 200, 307 a mantenimiento u otra respuesta definida por el entorno
 ```
 
-### 7. Persistencia y placement
+### 8. Persistencia y placement
 
 PostgreSQL y Redis con volumen local deben fijarse a nodos con almacenamiento durable:
 
@@ -193,7 +212,7 @@ deploy:
 
 No guardes uploads importantes en el filesystem local de una réplica. Usa object storage externo. No muevas PostgreSQL sin almacenamiento replicado y backup probado.
 
-### 8. Escalar después del primer nodo
+### 9. Escalar después del primer nodo
 
 1. Registra el nuevo nodo en Dokploy.
 2. Únelo al Swarm.
@@ -209,6 +228,7 @@ No guardes uploads importantes en el filesystem local de una réplica. Usa objec
 - Compose válido y sin claves YAML duplicadas.
 - No depende de `build:` para runtime.
 - Web/Worker tienen imágenes SHA.
+- Las tres ramas contienen Compose y workflow compatibles.
 - CI valida con scripts existentes y publica antes de desplegar.
 - Production no contiene variables de seed.
 
@@ -230,6 +250,7 @@ No guardes uploads importantes en el filesystem local de una réplica. Usa objec
 - TLS es válido.
 - Sin credenciales devuelve `401/403` cuando corresponde.
 - Con acceso de entorno responde a mantenimiento, home o healthcheck.
+- Cada dominio está enlazado a `<stack>_web`, no al alias corto `web`.
 - Preview y Production no se confunden con Development.
 
 ## Troubleshooting
@@ -246,9 +267,13 @@ Revisa primero el job `validate`: scripts raíz inexistentes, tests con variable
 
 Desactiva `autoDeploy`, refresca la fuente GitHub, comprueba el Compose convertido y ejecuta un único deploy manual. Inspecciona `docker service inspect` después.
 
+### `Compose file not found`
+
+Comprueba que el archivo existe en la rama configurada, que `composePath` coincide exactamente y que la rama no está desfasada. Sincroniza únicamente el Stack/workflow; nunca copies `.env`, secretos o datos.
+
 ### Dominio 404 con servicio activo
 
-Comprueba la red Traefik, el nombre completo `<stack>_<service>`, el puerto interno y la regla dinámica. Dokploy puede registrar el dominio sin generar la regla para ciertos Compose Swarm; usa una configuración file-provider controlada y documentada.
+Comprueba la red Traefik, el nombre completo `<stack>_web`, el puerto interno y la regla dinámica. Dokploy puede registrar el dominio sin generar la regla para ciertos Compose Swarm; usa una configuración file-provider controlada y documentada.
 
 ### Dominio 526
 
@@ -260,7 +285,7 @@ Es comportamiento esperado para secretos protegidos. Verifica presencia/longitud
 
 ## Resultado esperado
 
-Un Stack Dokploy reproducible en un nodo y escalable a varios, con imágenes inmutables, registry autenticado, migraciones seguras, persistencia, rutas Traefik verificadas, smoke tests externos y rollback documentado.
+Un Stack Dokploy reproducible en un nodo y escalable a varios, con imágenes inmutables, registry autenticado, promoción Development -> Preview -> Production, migraciones seguras ejecutadas en Dokploy, persistencia, rutas Traefik verificadas, smoke tests externos y rollback documentado.
 
 ## Seguridad
 
