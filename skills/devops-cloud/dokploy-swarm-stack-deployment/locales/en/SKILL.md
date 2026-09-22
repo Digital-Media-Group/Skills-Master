@@ -180,7 +180,7 @@ docker service scale <stack>_formularios-dev-web=2
 ```
 
 6. Check tasks, healthchecks, domain routing, and logs.
-7. Do not move PostgreSQL without replicated storage and a tested backup strategy.
+7. Do not move PostgreSQL without a replicated storage and tested backup strategy.
 
 ## Validation
 
@@ -272,4 +272,4 @@ Risk level: **high**.
 - Keep the registry package private and use read-only node credentials.
 - Create and verify a backup before migrating PostgreSQL or importing data.
 - Do not delete volumes, stacks, or nodes without approval and a rollback plan.
-- Protect `production` with mandatory PR review and owner approval.
+- Protect the `production` branch with mandatory PR review and owner approval.
