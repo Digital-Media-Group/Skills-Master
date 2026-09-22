@@ -2,80 +2,274 @@
 
 ## Purpose
 
-Deploy an application to Dokploy with **Stack Compose Type** (`docker stack deploy`, Swarm), ready to scale to multiple nodes, with the image published to an external registry (GHCR) and no build tricks on the server.
+Prepare and operate an application in Dokploy using **Compose Type `Stack`** and
+`docker stack deploy`, even when the cluster has only one node at first. The
+result must scale web replicas to new nodes without changing deployment mode or
+rebuilding the architecture.
+
+The reference flow is:
+
+```text
+merge to production
+  -> CI builds and publishes a private registry image
+  -> Dokploy runs docker stack deploy
+  -> Swarm pulls the image on every node
+  -> entrypoint acquires a lock and applies migrations
+  -> web passes its healthcheck and receives traffic
+```
 
 ## When to Use
 
-- The project is already containerized (Dockerfile with a runtime target) and deploys to Dokploy.
-- You plan to add nodes to the cluster (horizontal scaling) or use `docker service scale`.
-- You want a reproducible pipeline: CI builds the image, Swarm pulls it.
+- The project must deploy as a Swarm Stack from day one.
+- Additional manager/worker nodes and horizontal web scaling are planned.
+- The project has a Dockerfile, healthcheck, and a registry reachable by every node.
+- Migrations and bootstrap work can run idempotently from the image entrypoint.
 
 ## When Not to Use
 
-- Single-node deployment with no scaling plans: Dokploy's "Docker Compose" Compose Type is simpler (it builds with its default command).
-- The image cannot be pushed to an external registry due to security policy.
-- The application relies on one-shot services or `depends_on` conditions: refactor those first (see Procedure, step 2).
+- The project is strictly single-node with no scaling plan: use Dokploy Compose Type `docker-compose`.
+- The organization cannot publish images to an external registry.
+- The application relies on `depends_on` conditions, profiles, or one-shot jobs for startup.
+- The database or uploads depend on a local volume without a persistence strategy that works across nodes.
 
 ## Required Information
 
-- Git repository, protected deployment branch (e.g. `production`), and CI/CD workflow.
-- Public domain and application environment variables (never secrets in the repo).
-- Dokploy panel access and, if something fails, SSH access to the server for cleanup.
-- The Dokploy Compose service name (visible in the project URL).
+- Git repository and protected deployment branch, usually `production`.
+- Domain and internal service routed by Traefik.
+- Environment variables and secrets stored in Dokploy, never in Git.
+- Private registry, moving deployment image tag, and immutable SHA tag for rollback.
+- Persistence policy for PostgreSQL, uploads, backups, and object storage.
+- Manager/worker nodes and placement constraints.
+- Dokploy panel access and, for advanced diagnosis, SSH to a manager.
 
 ## Procedure
 
-1. **Choose "Stack" Compose Type when creating the service** (Dokploy → Create Service → Compose). It cannot be changed later: the service must be recreated.
+### 1. Design for Swarm from the start
 
-2. **Adapt `docker-compose.yml` to Swarm constraints**:
-   - No one-shot services and no `depends_on` conditions (Swarm ignores them).
-   - Migrations and data bootstrap: move them to an image **entrypoint** that runs before the main process. It must be idempotent and use a database advisory lock to serialize simultaneous starts.
-   - Short `env_file` syntax (`- .env`): the Stack validator rejects the long syntax (`path:`/`required:`).
-   - `web` uses `expose` (internal port), not `ports`: Traefik publishes the domain.
-   - A `deploy:` section with `restart_policy` for each service.
+Do not mechanically convert a regular Compose file. Review these incompatibilities:
 
-3. **Publish the image to a registry (mandatory for multi-node)**:
-   - Swarm **does not build images** with `docker stack deploy`: it only pulls `image:`.
-   - A local image on the manager **does not work** for worker nodes: each node must pull.
-   - Add a `build-push` job to the release workflow that builds the runtime target and publishes it with two tags: a moving one (`production`) used by the compose, and an immutable per-SHA one for rollback. On GHCR, `GITHUB_TOKEN` with `packages: write` is enough.
-   - Declare `image: ghcr.io/<org>/<repo>:production` in the compose. The package is born **private by default** (private repository): keep it that way and register the registry in Dokploy with a **GitHub Personal Access Token** scoped to `read:packages` so the manager and every node can `pull`. Never make the package public.
+- `docker stack deploy` **does not build** images from `build:`. The compose must use `image:` from a registry.
+- Do not rely on `depends_on` to order migrations: Swarm does not implement Compose conditions.
+- Do not make a one-shot `migrate` service a prerequisite for `web`: Swarm does not guarantee that flow.
+- Do not use profiles for essential stack operations.
+- Do not rely on `env_file` as an implicit source; declare variables in Dokploy and ensure the stack receives them.
+- Use `deploy.restart_policy`, `deploy.update_config`, and `deploy.rollback_config`.
+- Use an `overlay` network for node-to-node traffic and Dokploy's external network for Traefik.
 
-4. **Configure the Dokploy service**:
-   - Git provider, deployment branch, Compose Path.
-   - **Leave the custom command EMPTY**: the Default Command (`docker stack deploy ... --with-registry-auth`) is enough once the image lives in the registry. Dokploy prepends `docker` automatically and its validator rejects chained commands that do not start with `docker compose`.
-   - Environment tab: paste variables in Raw mode (Dokploy generates the `.env` next to the compose).
-   - Copy the Deploy Webhook and store it as an environment secret in GitHub.
+### 2. Move migrations into the entrypoint
 
-5. **Add the domain**: Dokploy → Domains → public domain, `web` service, internal port, HTTPS with Let's Encrypt.
+The web service must apply migrations before starting the main process:
 
-6. **Verify the deployment**:
-   - Containers: tasks named `<stack>_<service>.1.<id>` (Swarm format).
-   - `web` logs: entrypoint (migrations + bootstrap) and then the main process.
-   - `GET /api/health` (or equivalent healthcheck) returns `200`.
+```sh
+run_migrations_with_lock() {
+  # The exact SQL client depends on the runtime image.
+  # Acquire a PostgreSQL advisory lock before migrate deploy.
+  prisma migrate deploy
+  node prisma/seed/ensure-schema.js
+}
 
-7. **Prepare multi-node scaling** (documented, not executed yet):
-   - Register the node server in Dokploy → Settings → Remote Servers.
-   - Join it with `docker swarm join` using the manager token.
-   - Scale with `docker service scale <stack>_web=2`; use constraints if `db`/`worker` must stay on the manager.
-   - New nodes pull from the registry with no manual steps.
+run_migrations_with_lock
+exec node server.js
+```
+
+Requirements:
+
+- The operation must be idempotent.
+- Use a PostgreSQL advisory lock or the ORM equivalent.
+- Release the lock even when migration fails.
+- Retry while PostgreSQL is starting.
+- Do not accept traffic before migration completes.
+- Every replica may run the entrypoint; the lock serializes the ledger.
+
+> Prisma protects its migration ledger, but that does not automatically protect
+> custom convergence scripts, seeds, or bootstrap code. Those must be idempotent too.
+
+### 3. Separate roles without required one-shot jobs
+
+The same image can support `ROLE=app`, `ROLE=scheduler`, and other persistent
+roles. Point-in-time operations such as importing a dump should be disabled by
+default (`replicas: 0`) and run explicitly on a manager.
+
+- `web`: multiple replicas allowed.
+- `scheduler`: normally one replica to avoid duplicate work.
+- `db`: one replica, pinned to a manager with persistent storage.
+- `import`: zero replicas; enable only during an approved migration.
+
+### 4. Publish the image to a registry
+
+Reference example:
+
+```yaml
+x-app-image: &app-image
+  image: ghcr.io/organization/project:production
+```
+
+The workflow should publish two tags:
+
+- `production`: moving tag consumed by Dokploy.
+- `${{ github.sha }}`: immutable rollback tag.
+
+Essential workflow steps:
+
+```yaml
+permissions:
+  contents: read
+  packages: write
+
+- uses: docker/login-action@v3
+  with:
+    registry: ghcr.io
+    username: ${{ github.actor }}
+    password: ${{ secrets.GITHUB_TOKEN }}
+
+- uses: docker/build-push-action@v6
+  with:
+    push: true
+    tags: |
+      ghcr.io/organization/project:production
+      ghcr.io/organization/project:${{ github.sha }}
+```
+
+For a private package, configure a GitHub token scoped to `read:packages` in
+Dokploy. Never make the package public just to avoid registry configuration.
+
+### 5. Configure Dokploy
+
+- Select Compose Type `Stack`.
+- Connect the `production` branch.
+- Set the correct Compose Path.
+- Leave custom command empty unless the Dokploy version explicitly requires a different value. The default command should be equivalent to `docker stack deploy ... --with-registry-auth`.
+- Configure variables in the panel, not in the repository.
+- Configure the private registry before the first deploy.
+- Add the domain to the web service, internal port 3000, and HTTPS.
+- Redeploy after adding or changing the domain so Traefik updates its route.
+
+### 6. Persistence and placement
+
+PostgreSQL with a local volume must not float freely between nodes:
+
+```yaml
+deploy:
+  placement:
+    constraints:
+      - node.role == manager
+volumes:
+  app-db-data:
+```
+
+For web scaling:
+
+- Do not store important uploads on a replica's local filesystem.
+- Use S3/B2 or another external object store for shared files.
+- Use `WEB_REPLICAS` or `docker service scale` to change capacity.
+- Pin schedulers, stateful workers, and databases according to their state requirements.
+
+### 7. Scale after the first node
+
+Do not execute scaling automatically as part of this skill. First validate the
+stack on one node:
+
+1. Register the new server in Dokploy.
+2. Join it to Swarm using the correct worker or manager token.
+3. Verify `docker node ls` from a manager.
+4. Confirm the node can pull the private registry image.
+5. Scale only the stateless service:
+
+```bash
+docker service scale <stack>_formularios-dev-web=2
+```
+
+6. Check tasks, healthchecks, domain routing, and logs.
+7. Do not move PostgreSQL without replicated storage and a tested backup strategy.
 
 ## Validation
 
-- The deploy finishes without `pull access denied` or `No such image`: the registry image exists and the compose references it.
-- All three service kinds (database, web, worker) have `running` tasks and the `web` healthcheck passes.
-- A second deploy (redeploy) is idempotent: migrations do not duplicate data or fail.
-- The domain serves the application over HTTPS and `docker stack ls` lists the stack.
-- Simulating simultaneous web and worker starts (or resizing) does not corrupt the database: the entrypoint advisory lock serializes migrations.
+### Repository validation
+
+- Both compose files parse as YAML.
+- No duplicate YAML mapping keys, especially two `<<` anchors in one mapping.
+- Every persistent service has `deploy.restart_policy`.
+- Web has configurable `deploy.replicas` and sensible update/rollback settings.
+- Database has a healthcheck and manager placement.
+- Internal network is `overlay`; Traefik network is external.
+- The compose does not depend on `build:` for a worker to start.
+- The workflow publishes the image before deployment.
+
+### Deployment validation
+
+- `docker stack ls` shows the stack.
+- `docker service ls` shows the expected replicas.
+- Tasks use the `<stack>_<service>.<replica>.<id>` format.
+- Web logs show database wait, lock, migrations, and Next.js startup.
+- `GET /api/health` returns 200.
+- A second deployment is idempotent.
+- Rollback to the previous SHA tag is possible without rebuilding on the server.
+- A new node can pull the image from the registry.
+
+## Troubleshooting
+
+### `Map keys must be unique` or duplicate YAML anchors
+
+Common cause:
+
+```yaml
+environment:
+  <<: *db-vars
+  <<: *app-env
+```
+
+If `app-env` already contains `db-vars`, the second reference is invalid. Use
+one anchor per mapping or merge values into a single anchor.
+
+### `service declares mutually exclusive network_mode and networks`
+
+Do not mix `network_mode` with `networks`. In Swarm, use `networks` and an
+`overlay` network; connect the web service to Dokploy's external Traefik network.
+
+### `all predefined address pools have been fully subnetted`
+
+Do not force Docker to create per-project bridge networks. In Swarm, use the
+cluster-managed overlay network and remove duplicate/orphan networks only after
+verifying that no service still uses them.
+
+### `pull access denied` or `No such image`
+
+Verify that:
+
+- The tag exists in the registry.
+- Every node can resolve and reach the registry.
+- Dokploy has `read:packages` credentials for the private package.
+- Deployment uses `--with-registry-auth`.
+- The compose tag matches the tag published by CI.
+
+### The `migrate` job restarts or web starts before migrations
+
+That design is incompatible with Swarm. Move `prisma migrate deploy` and
+idempotent scripts into the `web` entrypoint, protect them with an advisory lock,
+and remove the one-shot prerequisite.
+
+### The domain does not respond after creation
+
+Check that:
+
+- The service is connected to Dokploy's external network.
+- The domain points to the exact service name.
+- The internal port matches the container port.
+- A redeploy was performed after creating the domain.
 
 ## Expected Result
 
-A Dokploy Compose service running in Stack mode, a `merge → build → push to registry → webhook → stack deploy` pipeline, operations documentation (domain, variables, webhooks, SHA-based rollback), and a verified path to add nodes.
+A Dokploy Stack that works with one node from day one but already has the same
+image, network, persistence, migration, healthcheck, registry, and rollback
+requirements needed to add nodes without changing operating mode.
 
 ## Safety
 
-Risk level: **high**. Do not perform irreversible changes, production access, or credentialed operations without explicit authorization, a recoverable backup, and a rollback plan. Specific rules:
+Risk level: **high**.
 
-- Never store secrets in the compose or the repository: they live in Dokploy (Environment) or a secret manager.
-- The registry image package exposes compiled code and is **private**: do not change its visibility. The `read:packages` PAT is a read-only credential; configure it only in Dokploy (Settings → Registries) and rotate it if it changes hands. Verify in GitHub → Packages that the visibility is "Private" after the workflow's first push.
-- `docker stack rm` and volume deletion are destructive: confirm first and verify there is no production data in them.
-- Protect the deployment branch (PR required) and use CODEOWNERS to enforce owner approval.
+- Never store secrets in Git, Compose, dumps, or images.
+- Use Dokploy or a secret manager for sensitive variables.
+- Keep the registry package private and use read-only node credentials.
+- Create and verify a backup before migrating PostgreSQL or importing data.
+- Do not delete volumes, stacks, or nodes without approval and a rollback plan.
+- Protect `production` with mandatory PR review and owner approval.
