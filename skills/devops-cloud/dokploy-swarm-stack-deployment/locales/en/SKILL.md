@@ -2,274 +2,272 @@
 
 ## Purpose
 
-Prepare and operate an application in Dokploy using **Compose Type `Stack`** and
-`docker stack deploy`, even when the cluster has only one node at first. The
-result must scale web replicas to new nodes without changing deployment mode or
-rebuilding the architecture.
+Prepare and operate an application in Dokploy using **Compose Type `Stack`** and `docker stack deploy`, including a single-node cluster. The result must scale web replicas to new nodes without changing deployment mode or rebuilding the architecture.
 
-The reference flow is:
+Reference flow:
 
 ```text
-merge to production
-  -> CI builds and publishes a private registry image
-  -> Dokploy runs docker stack deploy
-  -> Swarm pulls the image on every node
-  -> entrypoint acquires a lock and applies migrations
-  -> web passes its healthcheck and receives traffic
+merge to deployment branch
+  -> CI validates and publishes private SHA images
+  -> Dokploy fetches source and runs docker stack deploy --with-registry-auth
+  -> Swarm pulls images on every node
+  -> bootstrap/entrypoint applies idempotent migrations
+  -> Web passes smoke/health checks and receives traffic
 ```
 
 ## When to Use
 
 - The project must deploy as a Swarm Stack from day one.
 - Additional manager/worker nodes and horizontal web scaling are planned.
-- The project has a Dockerfile, healthcheck, and a registry reachable by every node.
-- Migrations and bootstrap work can run idempotently from the image entrypoint.
+- The project has Dockerfiles, health checks, and a registry reachable by every node.
+- Migrations and bootstrap can run idempotently.
 
 ## When Not to Use
 
 - The project is strictly single-node with no scaling plan: use Dokploy Compose Type `docker-compose`.
-- The organization cannot publish images to an external registry.
-- The application relies on `depends_on` conditions, profiles, or one-shot jobs for startup.
-- The database or uploads depend on a local volume without a persistence strategy that works across nodes.
+- The organization cannot publish images to a registry.
+- The application relies on `depends_on` conditions, profiles, or one-shot startup jobs.
+- The database or uploads depend on local volumes without a cross-node persistence strategy.
 
 ## Required Information
 
-- Git repository and protected deployment branch, usually `production`.
-- Domain and internal service routed by Traefik.
-- Environment variables and secrets stored in Dokploy, never in Git.
-- Private registry, moving deployment image tag, and immutable SHA tag for rollback.
-- Persistence policy for PostgreSQL, uploads, backups, and object storage.
+- Git repository, protected branch, and exact Compose path.
+- Domain, internal service, and container port.
+- Environment variables and secrets stored in Dokploy, never Git.
+- Private registry, username, read-only token, and exact image names.
+- PostgreSQL, uploads, backups, object storage, and placement policy.
 - Manager/worker nodes and placement constraints.
-- Dokploy panel access and, for advanced diagnosis, SSH to a manager.
+- Dokploy panel/API access and, for advanced diagnosis, SSH to a manager.
+
+## Credential Safety
+
+- Never request or paste passwords, PATs, private keys, cookies, or tokens in chat.
+- A private key pasted into a conversation must be revoked and replaced.
+- For SSH, use a new local key file with mode `600`, referenced by `ATLAS_SSH_KEY_PATH`; never store its contents in `.env` or Git.
+- Use the least-privileged SSH account. Docker diagnosis may use passwordless `sudo -n docker` without revealing the password.
+- Dokploy may hide secret values in its UI/API. Missing visibility does not mean missing configuration: verify presence, length, and behavior, or rotate the value through a protected channel.
 
 ## Procedure
 
-### 1. Design for Swarm from the start
+### 1. Design the Stack for Swarm
 
-Do not mechanically convert a regular Compose file. Review these incompatibilities:
+- `docker stack deploy` does not build images from `build:`. Compose must use registry `image:` values.
+- Do not rely on `depends_on` to order migrations.
+- Do not make a one-shot `migrate` service a prerequisite for Web.
+- Do not use profiles for essential operations.
+- Declare variables in Dokploy; do not rely on implicit `env_file` behavior.
+- Use `deploy.restart_policy`, `update_config`, and `rollback_config`.
+- Use overlay networks and connect Web to Dokploy/Traefik's external network.
+- Use `APP_REPLICAS=1` on a one-node cluster; scale only after another eligible node is validated.
 
-- `docker stack deploy` **does not build** images from `build:`. The compose must use `image:` from a registry.
-- Do not rely on `depends_on` to order migrations: Swarm does not implement Compose conditions.
-- Do not make a one-shot `migrate` service a prerequisite for `web`: Swarm does not guarantee that flow.
-- Do not use profiles for essential stack operations.
-- Do not rely on `env_file` as an implicit source; declare variables in Dokploy and ensure the stack receives them.
-- Use `deploy.restart_policy`, `deploy.update_config`, and `deploy.rollback_config`.
-- Use an `overlay` network for node-to-node traffic and Dokploy's external network for Traefik.
+### 2. Migrations and Bootstrap
 
-### 2. Move migrations into the entrypoint
-
-The web service must apply migrations before starting the main process:
+Bootstrap or the entrypoint must migrate before serving traffic:
 
 ```sh
-run_migrations_with_lock() {
-  # The exact SQL client depends on the runtime image.
-  # Acquire a PostgreSQL advisory lock before migrate deploy.
-  prisma migrate deploy
-  node prisma/seed/ensure-schema.js
-}
-
-run_migrations_with_lock
-exec node server.js
+set -eu
+# Retry PostgreSQL with a bounded backoff.
+# Acquire an advisory lock before migrating.
+bun run db:migrate
+bun run provision-runtime
+# Seed Development/Preview only; Production is migrations-only.
+exec bun run start
 ```
 
 Requirements:
 
-- The operation must be idempotent.
-- Use a PostgreSQL advisory lock or the ORM equivalent.
-- Release the lock even when migration fails.
-- Retry while PostgreSQL is starting.
-- Do not accept traffic before migration completes.
-- Every replica may run the entrypoint; the lock serializes the ledger.
+- Migrations, role provisioning, and seeds are idempotent.
+- Use an advisory lock or ORM equivalent.
+- Release the lock on failure.
+- Retry PostgreSQL startup with a limit.
+- Production must never receive fixture data.
+- A one-shot bootstrap service may correctly show `0/1` after exit code 0; inspect its last task and logs.
 
-> Prisma protects its migration ledger, but that does not automatically protect
-> custom convergence scripts, seeds, or bootstrap code. Those must be idempotent too.
+### 3. Publish Images
 
-### 3. Separate roles without required one-shot jobs
-
-The same image can support `ROLE=app`, `ROLE=scheduler`, and other persistent
-roles. Point-in-time operations such as importing a dump should be disabled by
-default (`replicas: 0`) and run explicitly on a manager.
-
-- `web`: multiple replicas allowed.
-- `scheduler`: normally one replica to avoid duplicate work.
-- `db`: one replica, pinned to a manager with persistent storage.
-- `import`: zero replicas; enable only during an approved migration.
-
-### 4. Publish the image to a registry
-
-Reference example:
-
-```yaml
-x-app-image: &app-image
-  image: ghcr.io/organization/project:production
-```
-
-The workflow should publish two tags:
-
-- `production`: moving tag consumed by Dokploy.
-- `${{ github.sha }}`: immutable rollback tag.
-
-Essential workflow steps:
+Publish every runtime image using the full commit SHA. Never use `latest` for Preview/Production.
 
 ```yaml
 permissions:
   contents: read
   packages: write
 
-- uses: docker/login-action@v3
-  with:
-    registry: ghcr.io
-    username: ${{ github.actor }}
-    password: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  validate:
+    steps:
+      - run: bun install --frozen-lockfile --linker=hoisted
+      - run: bun run typecheck
+      - run: bun run --filter '*' test
+      - run: bun run lint
 
-- uses: docker/build-push-action@v6
-  with:
-    push: true
-    tags: |
-      ghcr.io/organization/project:production
-      ghcr.io/organization/project:${{ github.sha }}
+  images:
+    needs: validate
+    if: github.event_name == 'push'
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: Dockerfile.web
+          tags: ghcr.io/organization/project-web:${{ github.sha }}
+      - uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: Dockerfile.worker
+          tags: ghcr.io/organization/project-worker:${{ github.sha }}
 ```
 
-For a private package, configure a GitHub token scoped to `read:packages` in
-Dokploy. Never make the package public just to avoid registry configuration.
+Verify every CI command exists. A root `bun run test` with no root script prevents the image job from running.
 
-### 5. Configure Dokploy
+For private GHCR:
+
+- Use a classic PAT with at least `read:packages` in Dokploy for pulls.
+- Use `GITHUB_TOKEN` with `packages: write` in Actions for publishing.
+- Link package permissions to the organization/repository when required.
+- Test the registry in Dokploy before the first deployment.
+- Anonymous `401` is normal for private GHCR packages; `denied` during deployment means a missing tag or unapplied credentials.
+
+### 4. Configure Dokploy
 
 - Select Compose Type `Stack`.
-- Connect the `production` branch.
-- Set the correct Compose Path.
-- Leave custom command empty unless the Dokploy version explicitly requires a different value. The default command should be equivalent to `docker stack deploy ... --with-registry-auth`.
-- Configure variables in the panel, not in the repository.
-- Configure the private registry before the first deploy.
-- Add the domain to the web service, internal port 3000, and HTTPS.
-- Redeploy after adding or changing the domain so Traefik updates its route.
+- Set repository, owner, branch, and exact `composePath`.
+- Keep `autoDeploy=false` for Preview/Production; use manual fail-closed promotion.
+- Register the private registry before the first deployment.
+- Verify deployment runs `docker stack deploy ... --with-registry-auth`.
+- Store per-environment variables in Dokploy and generate distinct secrets.
+- Use `freshVolumes=false` for normal redeploys and recovery.
+- Never delete stacks, volumes, or data to fix an image pull.
 
-### 6. Persistence and placement
+### 5. Image and Source-Cache Diagnosis
 
-PostgreSQL with a local volume must not float freely between nodes:
+When `No such image`, `pull access denied`, or Web startup failures occur:
+
+1. Inspect `docker service ps --no-trunc <stack>_<service>` on the manager.
+2. Inspect the effective image with `docker service inspect`.
+3. Confirm the tag exists and CI completed before deploying.
+4. Test the registry from Dokploy (`registry.testRegistryById`).
+5. Compare Dokploy's checkout SHA with the GitHub branch.
+6. Refresh the source before deployment (`compose.fetchSourceType`/service loading with `type=fetch`).
+7. If Dokploy keeps an old definition, set `autoDeploy=false`, update variables, refresh the source, and run one manual deployment.
+8. If GHCR remains blocked and this is Development, temporarily build on the manager from the verified checkout, tag with the SHA, and deploy without deleting volumes. Document the exception and publish to GHCR before Preview/Production.
+
+A Dokploy `done` status does not prove tasks are ready; inspect replicas and service errors.
+
+### 6. Domain Access and Traefik
+
+- DNS must point to the intended VPS.
+- Configure the domain for Web and the internal container port.
+- Redeploy after creating or changing the domain when Dokploy requires it.
+- The route may require the full Swarm service name `<stack>_<service>`, not just `web`.
+- Confirm Web is attached to Traefik's external network.
+- If the domain exists in the API but Traefik returns `404` and no dynamic rule exists, stop repeating deployments: add a controlled file-provider rule targeting the full service and internal port.
+- For Let’s Encrypt, temporarily use Cloudflare DNS-only if proxying causes `526`; restore proxying after TLS is verified.
+- Never use `verify=false` or leave Cloudflare in insecure mode as a permanent fix.
+
+Example smoke checks:
+
+```bash
+curl -I http://dev.example.com/
+# Expected: 308/301 to HTTPS
+curl -I https://dev.example.com/
+# Expected: 401 when Basic Auth is enabled
+curl -u "$DEV_USER:$DEV_PASSWORD" -I https://dev.example.com/
+# Expected: 200, 307 to maintenance, or the environment's defined response
+```
+
+### 7. Persistence and Placement
+
+Pin PostgreSQL and Redis local volumes to durable data nodes:
 
 ```yaml
 deploy:
   placement:
     constraints:
-      - node.role == manager
-volumes:
-  app-db-data:
+      - node.labels.gescodi.data == true
 ```
 
-For web scaling:
+Do not store important uploads on a replica's local filesystem. Use external object storage. Do not move PostgreSQL without replicated storage and tested backups.
 
-- Do not store important uploads on a replica's local filesystem.
-- Use S3/B2 or another external object store for shared files.
-- Use `WEB_REPLICAS` or `docker service scale` to change capacity.
-- Pin schedulers, stateful workers, and databases according to their state requirements.
+### 8. Scale After the First Node
 
-### 7. Scale after the first node
-
-Do not execute scaling automatically as part of this skill. First validate the
-stack on one node:
-
-1. Register the new server in Dokploy.
-2. Join it to Swarm using the correct worker or manager token.
-3. Verify `docker node ls` from a manager.
-4. Confirm the node can pull the private registry image.
-5. Scale only the stateless service:
-
-```bash
-docker service scale <stack>_formularios-dev-web=2
-```
-
-6. Check tasks, healthchecks, domain routing, and logs.
-7. Do not move PostgreSQL without a replicated storage and tested backup strategy.
+1. Register the new node in Dokploy.
+2. Join it to Swarm.
+3. Verify `docker node ls`.
+4. Confirm private registry authentication and pulls.
+5. Scale stateless services only.
+6. Check tasks, health, domain routing, and logs.
 
 ## Validation
 
-### Repository validation
+### Repository
 
-- Both compose files parse as YAML.
-- No duplicate YAML mapping keys, especially two `<<` anchors in one mapping.
-- Every persistent service has `deploy.restart_policy`.
-- Web has configurable `deploy.replicas` and sensible update/rollback settings.
-- Database has a healthcheck and manager placement.
-- Internal network is `overlay`; Traefik network is external.
-- The compose does not depend on `build:` for a worker to start.
-- The workflow publishes the image before deployment.
+- Compose parses and has no duplicate YAML keys.
+- Runtime does not depend on `build:`.
+- Web/Worker use SHA images.
+- CI uses existing scripts and publishes before deployment.
+- Production has no seed variables.
 
-### Deployment validation
+### Runtime
 
-- `docker stack ls` shows the stack.
-- `docker service ls` shows the expected replicas.
-- Tasks use the `<stack>_<service>.<replica>.<id>` format.
-- Web logs show database wait, lock, migrations, and Next.js startup.
-- `GET /api/health` returns 200.
+- `docker stack services <stack>` shows expected replicas.
+- `docker service ps --no-trunc` has no `No such image` errors.
+- PostgreSQL/Redis are healthy.
+- Bootstrap completes migrations and roles with exit code 0.
+- Web logs show `Ready`.
+- Worker logs show `ready`.
 - A second deployment is idempotent.
-- Rollback to the previous SHA tag is possible without rebuilding on the server.
-- A new node can pull the image from the registry.
+- SHA rollback is available.
+
+### Domain
+
+- DNS resolves to the intended destination.
+- HTTP redirects to HTTPS.
+- TLS is valid.
+- Unauthenticated requests return `401/403` as designed.
+- Authenticated requests reach maintenance, home, or the health endpoint.
+- Development, Preview, and Production are not confused.
 
 ## Troubleshooting
 
-### `Map keys must be unique` or duplicate YAML anchors
+### `No such image` / `pull access denied`
 
-Common cause:
+Verify the tag, workflow, GHCR package, PAT `read:packages`, `--with-registry-auth`, and each service's effective image. Do not delete volumes.
 
-```yaml
-environment:
-  <<: *db-vars
-  <<: *app-env
-```
+### CI completes but does not publish
 
-If `app-env` already contains `db-vars`, the second reference is invalid. Use
-one anchor per mapping or merge values into a single anchor.
+Inspect `validate` first: missing root scripts, required environment variables, failing tests, or lint prevent the image job.
 
-### `service declares mutually exclusive network_mode and networks`
+### Dokploy deploys an old SHA
 
-Do not mix `network_mode` with `networks`. In Swarm, use `networks` and an
-`overlay` network; connect the web service to Dokploy's external Traefik network.
+Disable `autoDeploy`, refresh the GitHub source, inspect converted Compose, and perform one manual deployment. Inspect `docker service inspect` afterward.
 
-### `all predefined address pools have been fully subnetted`
+### Domain returns 404 while the service is healthy
 
-Do not force Docker to create per-project bridge networks. In Swarm, use the
-cluster-managed overlay network and remove duplicate/orphan networks only after
-verifying that no service still uses them.
+Check the Traefik network, full `<stack>_<service>` name, internal port, and dynamic rule. Some Dokploy versions register the domain without generating a route for Swarm Compose; use a documented file-provider rule.
 
-### `pull access denied` or `No such image`
+### Domain returns 526
 
-Verify that:
+The origin certificate is invalid or the ACME challenge is incomplete. Temporarily use DNS-only, validate origin HTTP/TLS, then restore the proxy.
 
-- The tag exists in the registry.
-- Every node can resolve and reach the registry.
-- Dokploy has `read:packages` credentials for the private package.
-- Deployment uses `--with-registry-auth`.
-- The compose tag matches the tag published by CI.
+### Credentials are not visible in Dokploy
 
-### The `migrate` job restarts or web starts before migrations
-
-That design is incompatible with Swarm. Move `prisma migrate deploy` and
-idempotent scripts into the `web` entrypoint, protect them with an advisory lock,
-and remove the one-shot prerequisite.
-
-### The domain does not respond after creation
-
-Check that:
-
-- The service is connected to Dokploy's external network.
-- The domain points to the exact service name.
-- The internal port matches the container port.
-- A redeploy was performed after creating the domain.
+This is expected for protected secrets. Verify presence/length and authentication behavior without printing the value. Rotate through the protected panel/API if needed.
 
 ## Expected Result
 
-A Dokploy Stack that works with one node from day one but already has the same
-image, network, persistence, migration, healthcheck, registry, and rollback
-requirements needed to add nodes without changing operating mode.
+A reproducible Dokploy Stack that works on one node and scales to multiple nodes, with immutable images, authenticated registry, safe migrations, persistence, verified Traefik routes, external smoke tests, and rollback documentation.
 
-## Safety
+## Security
 
 Risk level: **high**.
 
-- Never store secrets in Git, Compose, dumps, or images.
-- Use Dokploy or a secret manager for sensitive variables.
-- Keep the registry package private and use read-only node credentials.
-- Create and verify a backup before migrating PostgreSQL or importing data.
-- Do not delete volumes, stacks, or nodes without approval and a rollback plan.
-- Protect the `production` branch with mandatory PR review and owner approval.
+- Never store secrets in Git, Compose, dumps, images, logs, or chat.
+- Keep GHCR private and use read-only runtime tokens.
+- Revoke exposed credentials.
+- Verify backups before PostgreSQL migrations or imports.
+- Do not delete volumes, stacks, or nodes without approval and rollback.
+- Protect Production with mandatory PR review, maintenance, and human approval.
