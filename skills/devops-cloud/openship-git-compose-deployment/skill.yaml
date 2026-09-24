@@ -1,0 +1,51 @@
+schemaVersion: 1
+id: openship-git-compose-deployment
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: Despliegue Git y Compose en Openship
+  en: Openship Git and Compose Deployment
+summary:
+  es: Desplegar aplicaciones Git con Dockerfile y Compose multi-servicio en Openship, incluyendo variables, dominios, salud y recuperación.
+  en: Deploy Git applications with Dockerfile and multi-service Compose on Openship, including variables, domains, health, and recovery.
+tags:
+  - openship
+  - docker-compose
+  - deployment
+  - mcp
+  - environment-variables
+  - observability
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+  - network
+  - cloud
+  - credentials
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Repositorio Git, rama, Dockerfile o Compose, servicios, puerto, dominio, endpoint de salud y variables de entorno.
+    - Endpoint MCP de Openship y token de servidor; nunca valores de secretos en texto visible.
+  en:
+    - Git repository, branch, Dockerfile or Compose file, services, port, domain, health endpoint, and environment variables.
+    - Openship MCP endpoint and server token; never expose secret values in plaintext.
+outputs:
+  es:
+    - Proyecto Openship configurado, despliegue verificado, plantilla de variables y evidencia de salud, logs y rollback.
+  en:
+    - Configured Openship project, verified deployment, environment template, and evidence for health, logs, and rollback.
+dependencies:
+  - containerize-web-application
+lastReviewed: 2026-09-24
