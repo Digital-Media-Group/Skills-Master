@@ -4,6 +4,20 @@
 
 Operate Dokploy/Swarm stacks across Development, Preview, and Production with fail-closed promotion, independent site/app maintenance, and verifiable diagnosis. The procedure supports a single node but never presents local storage as high availability.
 
+## When to Use
+
+- The application must be deployed as a Dokploy Stack on Docker Swarm.
+
+## When Not to Use
+
+- The destination is not Dokploy/Swarm or there is no verifiable persistence and rollback strategy.
+
+## Required Information
+
+- Repository, Compose file, domains, protected variables, registry, and authorized access.
+
+## Procedure
+
 ## Access and secrets
 
 - Use Dokploy REST API with protected local environment variables; never accept tokens, PATs, or private keys pasted into chat.
@@ -16,8 +30,8 @@ A Stack does not build `build:`. For published source, use images with a verifie
 
 ```text
 allowlisted ZIP -> temporary Dokploy Application (sourceType=drop, Dockerfile, replicas=0)
-                -> image built on the Dokploy Engine
-                -> raw Stack with --resolve-image never and placement on the builder node
+                 -> image built on the Dokploy Engine
+                 -> raw Stack with --resolve-image never and placement on the builder node
 ```
 
 The ZIP must exclude `.git`, real `.env*` files, keys, certificates, dumps, backups, `node_modules`, `.next`, logs, and browser evidence. Reject symlinks, absolute paths, `..` traversal, duplicate paths, and unexpected files. Record ZIP/manifest SHA-256, Dockerfile hashes, informative source commit, builder, and image ID.
@@ -68,6 +82,10 @@ With `sourceType=raw`, the binding must use the complete Swarm name `<stack>_web
 - For timeouts, compare IPv4/IPv6, DNS, Cloudflare, TLS, Traefik, binding, and backend before redeploying. A timeout on one host while its sibling returns `307` may be ingress/routing, not Next.js.
 - Always verify HTTP->HTTPS, TLS, expected `401/403`, maintenance/app behavior, and authorized health.
 
+## Expected Result
+
+Isolated, verifiable, and promotable Dokploy/Swarm stacks with documented backups, domains, diagnosis, and rollback.
+
 ## Validation
 
 ```bash
@@ -81,6 +99,6 @@ curl -I https://app.example.com/
 
 Validate Compose, typecheck, tests, Swarm tasks, images/digests, backups, both hosts per environment, and rollback. Do not declare HA with one node or a local data volume.
 
-## Security
+## Safety
 
 Risk level: **high**. Never store secrets in Git, Compose, dumps, images, logs, or chat. Do not confuse a configured integration with publication permissions. Do not remove Basic Auth, maintenance, killswitches, or provider disablement as part of domain setup.

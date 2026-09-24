@@ -22,14 +22,15 @@ Continuous delivery, infrastructure, containers, observability, and cloud securi
 | [CI/CD Pipeline Design](../../skills/devops-cloud/ci-cd-pipeline-design/locales/en/SKILL.md) | `ci-cd-pipeline-design` | Design automated delivery with controls, traceability, and recovery. | experimental | high |
 | [Cloud Architecture Review](../../skills/devops-cloud/cloud-architecture-review/locales/en/SKILL.md) | `cloud-architecture-review` | Assess cloud architecture for reliability, security, performance, and cost. | experimental | high |
 | [Containerize a Web Application](../../skills/devops-cloud/containerize-web-application/locales/en/SKILL.md) | `containerize-web-application` | Create a reproducible, secure, and operable image for a web application. | experimental | medium |
-| [Dokploy Swarm Stack Deployment](../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/en/SKILL.md) | `dokploy-swarm-stack-deployment` | Deploy an application to Dokploy with Stack Compose Type (docker stack deploy) ready for multi-node scaling, building the image in an external registry. | experimental | high |
+| [Dokploy Swarm Stack Deployment](../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/en/SKILL.md) | `dokploy-swarm-stack-deployment` | Prepare, promote, and diagnose Dokploy/Swarm stacks with verifiable backup gates, API-only builds, independent maintenance, and site/app bindings. | experimental | high |
+| [Openship Git and Compose Deployment](../../skills/devops-cloud/openship-git-compose-deployment/locales/en/SKILL.md) | `openship-git-compose-deployment` | Deploy Git applications with Dockerfile and multi-service Compose on Openship, including variables, domains, health, and recovery. | experimental | high |
 
 ## Hosting and Support
 
 DNS, servers, migrations, backups, email, and technical support.
 
 | Skill | ID | Summary | Status | Risk |
-| --- | --- | --- | --- | --- |
+ | --- | --- | --- | --- |
 | [Backup and Restore](../../skills/hosting-support/backup-and-restore/locales/en/SKILL.md) | `backup-and-restore` | Define and verify a backup strategy based on recovery objectives. | experimental | high |
 | [DNS Configuration](../../skills/hosting-support/dns-configuration/locales/en/SKILL.md) | `dns-configuration` | Plan and apply DNS changes with validation and safe recovery. | experimental | high |
 | [Website Migration](../../skills/hosting-support/website-migration/locales/en/SKILL.md) | `website-migration` | Move a site between environments while minimizing data loss and downtime. | experimental | high |
@@ -49,7 +50,7 @@ SEO, analytics, content, advertising, conversión, and automation.
 Discovery, requirements, estimation, QA, delivery, and continuous improvement.
 
 | Skill | ID | Summary | Status | Risk |
-| --- | --- | --- | --- | --- |
+ | --- | --- | --- | --- |
 | [Project Discovery](../../skills/management-quality/project-discovery/locales/en/SKILL.md) | `project-discovery` | Align the problem, outcomes, scope, risks, and validation plan before execution. | experimental | low |
 | [Release Readiness Review](../../skills/management-quality/release-readiness-review/locales/en/SKILL.md) | `release-readiness-review` | Decide whether a release can proceed using technical, operational, and business evidence. | experimental | high |
 | [Software Estimation](../../skills/management-quality/software-estimation/locales/en/SKILL.md) | `software-estimation` | Produce an explainable estimate with a range, assumptions, risks, and confidence level. | experimental | low |
@@ -59,7 +60,7 @@ Discovery, requirements, estimation, QA, delivery, and continuous improvement.
 Instruction and rule files for IDEs and coding agents such as Ideavo, Claude Code, and Codex.
 
 | Skill | ID | Summary | Status | Risk |
-| --- | --- | --- | --- | --- |
+ | --- | --- | --- | --- |
 | [Agent Instructions Authoring](../../skills/ide-instructions/agent-instructions-authoring/locales/en/SKILL.md) | `agent-instructions-authoring` | Write a neutral, reusable instructions file shared across IDEs and coding agents. | experimental | low |
 | [IDE Instructions Audit](../../skills/ide-instructions/ide-instructions-audit/locales/en/SKILL.md) | `ide-instructions-audit` | Review existing instruction files to detect outdated, contradictory, or unsafe rules. | experimental | medium |
 | [Ideavo Instructions Setup](../../skills/ide-instructions/ideavo-instructions-setup/locales/en/SKILL.md) | `ideavo-instructions-setup` | Create the Ideavo instructions file with project context, conventions, and boundaries. | experimental | low |

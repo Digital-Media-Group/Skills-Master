@@ -4,7 +4,7 @@ version: 0.6.1
 status: experimental
 category: devops-cloud
 name:
-  es: Despliegue Dokploy en modo Stack (Swarm) multi-entorno
+  es: Despliegue Dokploy en modo Stack (Swarm) multi-nodo
   en: Dokploy Swarm Stack Deployment
 summary:
   es: Preparar, promover y diagnosticar stacks Dokploy/Swarm con gates de backup verificable, builds API-only, mantenimiento independiente y bindings site/app.
