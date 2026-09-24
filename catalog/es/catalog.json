@@ -1,320 +1,47 @@
 {
   "schemaVersion": 1,
   "locale": "es",
-  "generatedAt": "2026-09-16T00:00:00.000Z",
+  "generatedAt": "2026-09-24T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
       "title": "Desarrollo web",
       "description": "Frontend, backend, APIs, datos, pruebas, accesibilidad y rendimiento.",
       "skills": [
-        {
-          "id": "api-design-review",
-          "name": "Revisión de diseño de API",
-          "summary": "Evaluar una API por consistencia, seguridad, evolucion y experiencia de consumo.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "medium",
-          "tags": [
-            "api",
-            "review",
-            "security"
-          ],
-          "source": "../../skills/web-development/api-design-review/locales/es/SKILL.md"
-        },
-        {
-          "id": "desarrollo-ideavo-opencode",
-          "name": "Desarrollo IDEAVO - OpenCode",
-          "summary": "Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode.",
-          "version": "0.3.0",
-          "status": "experimental",
-          "riskLevel": "high",
-          "tags": [
-            "ideavo",
-            "opencode",
-            "software-development",
-            "security",
-            "validation"
-          ],
-          "source": "../../skills/web-development/desarrollo-ideavo-opencode/locales/es/SKILL.md"
-        },
-        {
-          "id": "web-performance-audit",
-          "name": "Auditoria de rendimiento web",
-          "summary": "Identificar cuellos de botella y proponer mejoras medibles de rendimiento web.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "performance",
-            "core-web-vitals",
-            "audit"
-          ],
-          "source": "../../skills/web-development/web-performance-audit/locales/es/SKILL.md"
-        },
-        {
-          "id": "web-project-bootstrap",
-          "name": "Preparación de proyecto web",
-          "summary": "Preparar una base web mantenible con decisiones, estructura y controles iniciales.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "bootstrap",
-            "architecture",
-            "quality"
-          ],
-          "source": "../../skills/web-development/web-project-bootstrap/locales/es/SKILL.md"
-        }
+        {"id":"api-design-review","name":"Revisión de diseño de API","summary":"Evaluar una API por consistencia, seguridad, evolucion y experiencia de consumo.","version":"0.1.0","status":"experimental","riskLevel":"medium","tags":["api","review","security"],"source":"../../skills/web-development/api-design-review/locales/es/SKILL.md"},
+        {"id":"desarrollo-ideavo-opencode","name":"Desarrollo IDEAVO - OpenCode","summary":"Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode.","version":"0.3.0","status":"experimental","riskLevel":"high","tags":["ideavo","opencode","software-development","security","validation"],"source":"../../skills/web-development/desarrollo-ideavo-opencode/locales/es/SKILL.md"},
+        {"id":"web-performance-audit","name":"Auditoria de rendimiento web","summary":"Identificar cuellos de botella y proponer mejoras medibles de rendimiento web.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["performance","core-web-vitals","audit"],"source":"../../skills/web-development/web-performance-audit/locales/es/SKILL.md"},
+        {"id":"web-project-bootstrap","name":"Preparación de proyecto web","summary":"Preparar una base web mantenible con decisiones, estructura y controles iniciales.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["bootstrap","architecture","quality"],"source":"../../skills/web-development/web-project-bootstrap/locales/es/SKILL.md"}
       ]
     },
     {
-      "id": "devops-cloud",
-      "title": "DevOps y cloud",
-      "description": "Entrega continua, infraestructura, contenedores, observabilidad y seguridad cloud.",
-      "skills": [
-        {
-          "id": "ci-cd-pipeline-design",
-          "name": "Diseño de pipeline CI/CD",
-          "summary": "Diseñar una entrega automatizada con controles, trazabilidad y recuperación.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "high",
-          "tags": [
-            "ci-cd",
-            "automation",
-            "release"
-          ],
-          "source": "../../skills/devops-cloud/ci-cd-pipeline-design/locales/es/SKILL.md"
-        },
-        {
-          "id": "cloud-architecture-review",
-          "name": "Revisión de arquitectura cloud",
-          "summary": "Evaluar una arquitectura cloud por fiabilidad, seguridad, rendimiento y coste.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "high",
-          "tags": [
-            "cloud",
-            "architecture",
-            "cost-optimization"
-          ],
-          "source": "../../skills/devops-cloud/cloud-architecture-review/locales/es/SKILL.md"
-        },
-        {
-          "id": "containerize-web-application",
-          "name": "Contenerización de una aplicación web",
-          "summary": "Crear una imagen reproducible, segura y operable para una aplicación web.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "medium",
-          "tags": [
-            "docker",
-            "containers",
-            "deployment"
-          ],
-          "source": "../../skills/devops-cloud/containerize-web-application/locales/es/SKILL.md"
-        }
+      "id":"devops-cloud","title":"DevOps y cloud","description":"Entrega continua, infraestructura, contenedores, observabilidad y seguridad cloud.","skills":[
+        {"id":"ci-cd-pipeline-design","name":"Diseño de pipeline CI/CD","summary":"Diseñar una entrega automatizada con controles, trazabilidad y recuperación.","version":"0.1.0","status":"experimental","riskLevel":"high","tags":["ci-cd","automation","release"],"source":"../../skills/devops-cloud/ci-cd-pipeline-design/locales/es/SKILL.md"},
+        {"id":"cloud-architecture-review","name":"Revisión de arquitectura cloud","summary":"Evaluar una arquitectura cloud por fiabilidad, seguridad, rendimiento y coste.","version":"0.1.0","status":"experimental","riskLevel":"high","tags":["cloud","architecture","cost-optimization"],"source":"../../skills/devops-cloud/cloud-architecture-review/locales/es/SKILL.md"},
+        {"id":"containerize-web-application","name":"Contenerización de una aplicación web","summary":"Crear una imagen reproducible, segura y operable para una aplicación web.","version":"0.1.0","status":"experimental","riskLevel":"medium","tags":["docker","containers","deployment"],"source":"../../skills/devops-cloud/containerize-web-application/locales/es/SKILL.md"},
+        {"id":"dokploy-swarm-stack-deployment","name":"Despliegue Dokploy en modo Stack (Swarm) multi-nodo","summary":"Preparar, promover y diagnosticar stacks Dokploy/Swarm con gates de backup verificable, builds API-only, mantenimiento independiente y bindings site/app.","version":"0.6.1","status":"experimental","riskLevel":"high","tags":["dokploy","docker-swarm","stack-deployment","ghcr","private-registry","api-only-build","native-volume-backup","single-node","promotion","site-app-domains","traefik","rollback","smoke-tests"],"source":"../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/es/SKILL.md"},
+        {"id":"openship-git-compose-deployment","name":"Despliegue Git y Compose en Openship","summary":"Desplegar aplicaciones Git con Dockerfile y Compose multi-servicio en Openship, incluyendo variables, dominios, salud y recuperación.","version":"0.1.0","status":"experimental","riskLevel":"high","tags":["openship","docker-compose","deployment","mcp","environment-variables","observability"],"source":"../../skills/devops-cloud/openship-git-compose-deployment/locales/es/SKILL.md"}
       ]
     },
-    {
-      "id": "hosting-support",
-      "title": "Alojamiento y soporte",
-      "description": "DNS, servidores, migraciónes, copias de seguridad, correo y soporte técnico.",
-      "skills": [
-        {
-          "id": "backup-and-restore",
-          "name": "Copias de seguridad y restauracion",
-          "summary": "Definir y verificar una estrategia de backup basada en objetivos de recuperación.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "high",
-          "tags": [
-            "backup",
-            "disaster-recovery",
-            "operations"
-          ],
-          "source": "../../skills/hosting-support/backup-and-restore/locales/es/SKILL.md"
-        },
-        {
-          "id": "dns-configuration",
-          "name": "Configuración de DNS",
-          "summary": "Planificar y aplicar cambios DNS con validación y recuperación segura.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "high",
-          "tags": [
-            "dns",
-            "hosting",
-            "change-management"
-          ],
-          "source": "../../skills/hosting-support/dns-configuration/locales/es/SKILL.md"
-        },
-        {
-          "id": "website-migration",
-          "name": "Migración de sitio web",
-          "summary": "Mover un sitio entre entornos reduciendo pérdida de datos y tiempo de inactividad.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "high",
-          "tags": [
-            "migration",
-            "hosting",
-            "backup"
-          ],
-          "source": "../../skills/hosting-support/website-migration/locales/es/SKILL.md"
-        }
-      ]
-    },
-    {
-      "id": "digital-marketing",
-      "title": "Marketing digital",
-      "description": "SEO, analítica, contenidos, publicidad, conversión y automatizacion.",
-      "skills": [
-        {
-          "id": "analytics-measurement-plan",
-          "name": "Plan de medición analítica",
-          "summary": "Convertir objetivos de negocio en eventos, dimensiones, KPI y controles de calidad.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "medium",
-          "tags": [
-            "analytics",
-            "measurement",
-            "privacy"
-          ],
-          "source": "../../skills/digital-marketing/analytics-measurement-plan/locales/es/SKILL.md"
-        },
-        {
-          "id": "conversion-rate-audit",
-          "name": "Auditoría de conversión",
-          "summary": "Identificar fricciones de conversión y formular experimentos medibles.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "cro",
-            "experimentation",
-            "user-experience"
-          ],
-          "source": "../../skills/digital-marketing/conversion-rate-audit/locales/es/SKILL.md"
-        },
-        {
-          "id": "technical-seo-audit",
-          "name": "Auditoría SEO técnica",
-          "summary": "Detectar barreras técnicas que afectan rastreo, indexacion y rendimiento orgánico.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "seo",
-            "audit",
-            "indexing"
-          ],
-          "source": "../../skills/digital-marketing/technical-seo-audit/locales/es/SKILL.md"
-        }
-      ]
-    },
-    {
-      "id": "management-quality",
-      "title": "Gestión y calidad",
-      "description": "Discovery, requisitos, estimación, QA, entregas y mejora continua.",
-      "skills": [
-        {
-          "id": "project-discovery",
-          "name": "Discovery de proyecto",
-          "summary": "Alinear problema, resultados, alcance, riesgos y plan de validación antes de ejecutar.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "discovery",
-            "requirements",
-            "planning"
-          ],
-          "source": "../../skills/management-quality/project-discovery/locales/es/SKILL.md"
-        },
-        {
-          "id": "release-readiness-review",
-          "name": "Revisión de preparación para release",
-          "summary": "Decidir si una release puede avanzar mediante evidencia técnica, operativa y de negocio.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "high",
-          "tags": [
-            "release",
-            "quality-assurance",
-            "change-management"
-          ],
-          "source": "../../skills/management-quality/release-readiness-review/locales/es/SKILL.md"
-        },
-        {
-          "id": "software-estimation",
-          "name": "Estimación de software",
-          "summary": "Producir una estimación explicable con rango, supuestos, riesgos y nivel de confianza.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "estimation",
-            "planning",
-            "risk"
-          ],
-          "source": "../../skills/management-quality/software-estimation/locales/es/SKILL.md"
-        }
-      ]
-    },
-    {
-      "id": "ide-instructions",
-      "title": "Instrucciones para IDEs",
-      "description": "Archivos de instrucciones y reglas para IDEs y agentes de codificación como Ideavo, Claude Code y Codex.",
-      "skills": [
-        {
-          "id": "agent-instructions-authoring",
-          "name": "Redacción de instrucciones para agentes",
-          "summary": "Escribir un archivo de instrucciones neutral y reutilizable entre IDEs y agentes de codificación.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "instructions",
-            "agent",
-            "documentation",
-            "conventions"
-          ],
-          "source": "../../skills/ide-instructions/agent-instructions-authoring/locales/es/SKILL.md"
-        },
-        {
-          "id": "ide-instructions-audit",
-          "name": "Auditoría de instrucciones de IDE",
-          "summary": "Revisar archivos de instrucciones existentes para detectar reglas obsoletas, contradictorias o inseguras.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "medium",
-          "tags": [
-            "audit",
-            "instructions",
-            "agent",
-            "maintenance"
-          ],
-          "source": "../../skills/ide-instructions/ide-instructions-audit/locales/es/SKILL.md"
-        },
-        {
-          "id": "ideavo-instructions-setup",
-          "name": "Configuración de instrucciones para Ideavo",
-          "summary": "Crear el archivo de instrucciones de Ideavo con contexto, convenciones y límites del proyecto.",
-          "version": "0.1.0",
-          "status": "experimental",
-          "riskLevel": "low",
-          "tags": [
-            "ideavo",
-            "instructions",
-            "agent",
-            "onboarding"
-          ],
-          "source": "../../skills/ide-instructions/ideavo-instructions-setup/locales/es/SKILL.md"
-        }
-      ]
-    }
+    {"id":"hosting-support","title":"Alojamiento y soporte","description":"DNS, servidores, migraciónes, copias de seguridad, correo y soporte técnico.","skills":[
+      {"id":"backup-and-restore","name":"Copias de seguridad y restauracion","summary":"Definir y verificar una estrategia de backup basada en objetivos de recuperación.","version":"0.1.0","status":"experimental","riskLevel":"high","tags":["backup","disaster-recovery","operations"],"source":"../../skills/hosting-support/backup-and-restore/locales/es/SKILL.md"},
+      {"id":"dns-configuration","name":"Configuración de DNS","summary":"Planificar y aplicar cambios DNS con validación y recuperación segura.","version":"0.1.0","status":"experimental","riskLevel":"high","tags":["dns","hosting","change-management"],"source":"../../skills/hosting-support/dns-configuration/locales/es/SKILL.md"},
+      {"id":"website-migration","name":"Migración de sitio web","summary":"Mover un sitio entre entornos reduciendo pérdida de datos y tiempo de inactividad.","version":"0.1.0","status":"experimental","riskLevel":"high","tags":["migration","hosting","backup"],"source":"../../skills/hosting-support/website-migration/locales/es/SKILL.md"}
+    ]},
+    {"id":"digital-marketing","title":"Marketing digital","description":"SEO, analítica, contenidos, publicidad, conversión y automatizacion.","skills":[
+      {"id":"analytics-measurement-plan","name":"Plan de medición analítica","summary":"Convertir objetivos de negocio en eventos, dimensiones, KPI y controles de calidad.","version":"0.1.0","status":"experimental","riskLevel":"medium","tags":["analytics","measurement","privacy"],"source":"../../skills/digital-marketing/analytics-measurement-plan/locales/es/SKILL.md"},
+      {"id":"conversion-rate-audit","name":"Auditoría de conversión","summary":"Identificar fricciones de conversión y formular experimentos medibles.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["cro","experimentation","user-experience"],"source":"../../skills/digital-marketing/conversion-rate-audit/locales/es/SKILL.md"},
+      {"id":"technical-seo-audit","name":"Auditoría SEO técnica","summary":"Detectar barreras técnicas que afectan rastreo, indexacion y rendimiento orgánico.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["seo","audit","indexing"],"source":"../../skills/digital-marketing/technical-seo-audit/locales/es/SKILL.md"}
+    ]},
+    {"id":"management-quality","title":"Gestión y calidad","description":"Discovery, requisitos, estimación, QA, entregas y mejora continua.","skills":[
+      {"id":"project-discovery","name":"Discovery de proyecto","summary":"Alinear problema, resultados, alcance, riesgos y plan de validación antes de ejecutar.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["discovery","requirements","planning"],"source":"../../skills/management-quality/project-discovery/locales/es/SKILL.md"},
+      {"id":"release-readiness-review","name":"Revisión de preparación para release","summary":"Decidir si una release puede avanzar mediante evidencia técnica, operativa y de negocio.","version":"0.1.0","status":"experimental","riskLevel":"high","tags":["release","quality-assurance","change-management"],"source":"../../skills/management-quality/release-readiness-review/locales/es/SKILL.md"},
+      {"id":"software-estimation","name":"Estimación de software","summary":"Producir una estimación explicable con rango, supuestos, riesgos y nivel de confianza.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["estimation","planning","risk"],"source":"../../skills/management-quality/software-estimation/locales/es/SKILL.md"}
+    ]},
+    {"id":"ide-instructions","title":"Instrucciones para IDEs","description":"Archivos de instrucciones y reglas para IDEs y agentes de codificación como Ideavo, Claude Code y Codex.","skills":[
+      {"id":"agent-instructions-authoring","name":"Redacción de instrucciones para agentes","summary":"Escribir un archivo de instrucciones neutral y reutilizable entre IDEs y agentes de codificación.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["instructions","agent","documentation","conventions"],"source":"../../skills/ide-instructions/agent-instructions-authoring/locales/es/SKILL.md"},
+      {"id":"ide-instructions-audit","name":"Auditoría de instrucciones de IDE","summary":"Revisar archivos de instrucciones existentes para detectar reglas obsoletas, contradictorias o inseguras.","version":"0.1.0","status":"experimental","riskLevel":"medium","tags":["audit","instructions","agent","maintenance"],"source":"../../skills/ide-instructions/ide-instructions-audit/locales/es/SKILL.md"},
+      {"id":"ideavo-instructions-setup","name":"Configuración de instrucciones para Ideavo","summary":"Crear el archivo de instrucciones de Ideavo con contexto, convenciones y límites del proyecto.","version":"0.1.0","status":"experimental","riskLevel":"low","tags":["ideavo","instructions","agent","onboarding"],"source":"../../skills/ide-instructions/ideavo-instructions-setup/locales/es/SKILL.md"}
+    ]}
   ]
 }

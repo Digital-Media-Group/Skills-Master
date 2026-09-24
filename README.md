@@ -35,6 +35,7 @@ Copia el nombre técnico o la URL completa para indicarle a un agente qué skill
 | Revisión de arquitectura cloud | `cloud-architecture-review` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/cloud-architecture-review |
 | Contenerización de una aplicación web | `containerize-web-application` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/containerize-web-application |
 | Despliegue Dokploy en modo Stack (Swarm) multi-nodo | `dokploy-swarm-stack-deployment` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-swarm-stack-deployment |
+| Despliegue Git y Compose en Openship | `openship-git-compose-deployment` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-git-compose-deployment |
 | Plan de medición analítica | `analytics-measurement-plan` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan |
 | Auditoría de conversión | `conversion-rate-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit |
 | Auditoría SEO técnica | `technical-seo-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/technical-seo-audit |

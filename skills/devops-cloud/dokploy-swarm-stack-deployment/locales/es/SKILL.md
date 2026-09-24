@@ -1,8 +1,22 @@
-# Despliegue Dokploy en modo Stack (Swarm)
+# Despliegue Dokploy en modo Stack (Swarm) multi-nodo
 
 ## Propósito
 
 Operar stacks Dokploy/Swarm en Development, Preview y Production con promoción fail-closed, mantenimiento independiente por superficie y diagnóstico verificable. El procedimiento soporta un nodo único y no presenta la disponibilidad local como alta disponibilidad.
+
+## Cuándo utilizarla
+
+- La aplicación debe desplegarse como Stack de Dokploy sobre Docker Swarm.
+
+## Cuándo no utilizarla
+
+- El destino no es Dokploy/Swarm o no existe una estrategia verificable de persistencia y rollback.
+
+## Información necesaria
+
+- Repositorio, Compose, dominios, variables protegidas, registry y accesos autorizados.
+
+## Procedimiento
 
 ## Accesos y secretos
 
@@ -67,6 +81,10 @@ Con `sourceType=raw`, el binding debe usar el nombre completo generado por Swarm
 - `compose.readLogs` requiere `composeId` y `containerId`. Las tareas históricas pueden devolver `No such container`; no infieras la causa de aplicación desde `Error:` genérico. Usa una tarea actual o logs centralizados.
 - Ante timeout, compara IPv4/IPv6, DNS, Cloudflare, TLS, Traefik, binding y backend antes de redeployar. Un timeout en un host y `307` en el host hermano puede ser routing/ingress, no Next.js.
 - Verifica siempre HTTP->HTTPS, TLS, `401/403` esperado, mantenimiento/app y health autorizado.
+
+## Resultado esperado
+
+Stacks Dokploy/Swarm aislados, verificables y promovibles con backup, dominios, diagnóstico y rollback documentados.
 
 ## Validación
 
