@@ -1,0 +1,68 @@
+schemaVersion: 1
+id: openship-project-environments
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: Despliegue OpenShip por proyecto y entornos
+  en: OpenShip Project and Environment Deployment
+summary:
+  es: Operar proyectos OpenShip con Production y Preview, servicios persistentes, migraciones PostgreSQL, backups verificables, promoción y rollback.
+  en: Operate OpenShip projects with Production and Preview, persistent services, PostgreSQL migrations, verifiable backups, promotion, and rollback.
+tags:
+  - openship
+  - self-hosted
+  - project-environments
+  - preview
+  - production
+  - docker-compose
+  - postgres
+  - migration
+  - backup
+  - rollback
+  - cloudflare
+  - atlas
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+  - cloud
+  - credentials
+riskLevel: high
+inputs:
+  es:
+    - Repositorio Git, ramas Production/Preview y Dockerfile o definición de servicios compatible con OpenShip.
+    - Acceso al MCP de OpenShip y workspace/servidor destino.
+    - Proyecto OpenShip único con entornos internos; no crear proyectos duplicados para Preview salvo que OpenShip lo exija.
+    - Inventario de datos, PostgreSQL origen, RPO/RTO, backups, dominios, Cloudflare y aprobación explícita de Production.
+  en:
+    - Git repository, Production/Preview branches, and an OpenShip-compatible Dockerfile or service definition.
+    - OpenShip MCP access and target workspace/server.
+    - One OpenShip project with internal environments; do not create duplicate Preview projects unless OpenShip requires it.
+    - Data inventory, source PostgreSQL, RPO/RTO, backups, domains, Cloudflare, and explicit Production approval.
+outputs:
+  es:
+    - Un proyecto OpenShip con Production y Preview aislados por entorno.
+    - Servicios web, workers/cron y PostgreSQL persistente con volúmenes separados.
+    - Backup completo y restauración de ensayo verificada.
+    - Promoción del mismo candidato validado y rollback documentado.
+    - DNS/TLS cambiado solo después de validar la nueva Production.
+  en:
+    - One OpenShip project with isolated Production and Preview environments.
+    - Web, worker/cron, and persistent PostgreSQL services with environment-specific volumes.
+    - Full backup and verified restore rehearsal.
+    - Promotion of the same validated candidate and documented rollback.
+    - DNS/TLS changed only after the new Production is validated.
+dependencies:
+  - containerize-web-application
+  - ci-cd-pipeline-design
+lastReviewed: 2026-10-01
