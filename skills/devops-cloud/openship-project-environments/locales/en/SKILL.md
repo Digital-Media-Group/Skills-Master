@@ -104,6 +104,10 @@ Keep variables separate per environment. Do not copy the old provider's `DATABAS
 
 Do not change DNS before a verifiable Preview/health URL exists. Protect Preview with Basic Auth/noindex and Production with maintenance during cutover. Change only approved web records; preserve mail and API records unless explicitly migrating them. Verify DNS, TLS, redirects, health, auth, admin, forms, catalog, prices, WHMCS, and cron.
 
+## Continuous Integration
+
+To run CI validation on the instance itself (independent workflows in `.openship/workflows/` or GitHub workflows on self-hosted runners registered on OpenShip destinations) use the `openship-actions-ci` skill. CI never replaces this skill's gates: restorable backup, validated Preview, and human approval before Production.
+
 ## Validation
 
 - One project and correct internal Production/Preview IDs.
