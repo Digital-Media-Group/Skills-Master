@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "locale": "en",
-  "generatedAt": "2026-09-16T00:00:00.000Z",
+  "generatedAt": "2026-10-24T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
@@ -114,6 +114,93 @@
             "deployment"
           ],
           "source": "../../skills/devops-cloud/containerize-web-application/locales/en/SKILL.md"
+        },
+        {
+          "id": "dokploy-compose-deployment",
+          "name": "Dokploy Compose Deployment",
+          "summary": "Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, domains, and a master -> production flow.",
+          "version": "0.7.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "dokploy",
+            "docker-compose",
+            "compose-deployment",
+            "explicit-app-name",
+            "environment-promotion",
+            "traefik",
+            "domains",
+            "postgres",
+            "rollback",
+            "smoke-tests"
+          ],
+          "source": "../../skills/devops-cloud/dokploy-compose-deployment/locales/en/SKILL.md"
+        },
+        {
+          "id": "dokploy-swarm-stack-deployment",
+          "name": "Dokploy Swarm Stack Deployment",
+          "summary": "Prepare, promote, and diagnose Dokploy/Swarm stacks with verifiable backup gates, API-only builds, independent maintenance, and site/app bindings.",
+          "version": "0.6.2",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "dokploy",
+            "docker-swarm",
+            "stack-deployment",
+            "ghcr",
+            "private-registry",
+            "api-only-build",
+            "native-volume-backup",
+            "single-node",
+            "promotion",
+            "site-app-domains",
+            "traefik",
+            "rollback",
+            "smoke-tests"
+          ],
+          "source": "../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/en/SKILL.md"
+        },
+        {
+          "id": "openship-actions-ci",
+          "name": "CI with OpenShip Actions and Self-Hosted Runners",
+          "summary": "Run CI validation on own infrastructure with OpenShip Actions, in independent mode or with self-hosted runners for GitHub workflows, with a hardened Dokploy alternative.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "openship",
+            "actions",
+            "ci-cd",
+            "self-hosted-runner",
+            "github-actions",
+            "dokploy",
+            "validation",
+            "hardening"
+          ],
+          "source": "../../skills/devops-cloud/openship-actions-ci/locales/en/SKILL.md"
+        },
+        {
+          "id": "openship-project-environments",
+          "name": "OpenShip Project and Environment Deployment",
+          "summary": "Operate OpenShip projects with Production and Preview, persistent services, PostgreSQL migrations, verifiable backups, promotion, and rollback.",
+          "version": "0.1.1",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "openship",
+            "self-hosted",
+            "project-environments",
+            "preview",
+            "production",
+            "docker-compose",
+            "postgres",
+            "migration",
+            "backup",
+            "rollback",
+            "cloudflare",
+            "atlas"
+          ],
+          "source": "../../skills/devops-cloud/openship-project-environments/locales/en/SKILL.md"
         }
       ]
     },
