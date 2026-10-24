@@ -1,27 +1,30 @@
 schemaVersion: 1
-id: dokploy-compose-deployment
-version: 0.7.0
+id: dokploy-swarm-stack-deployment
+version: 0.6.2
 status: experimental
 category: devops-cloud
 name:
-  es: Despliegue Dokploy en modo Compose multi-entorno
-  en: Dokploy Compose Deployment
+  es: Despliegue Dokploy en modo Stack (Swarm)
+  en: Dokploy Swarm Stack Deployment
 summary:
-  es: Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios y flujo master -> production.
-  en: Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, domains, and a master -> production flow.
+  es: Preparar, promover y diagnosticar stacks Dokploy/Swarm con gates de backup verificable, builds API-only, mantenimiento independiente y bindings site/app.
+  en: Prepare, promote, and diagnose Dokploy/Swarm stacks with verifiable backup gates, API-only builds, independent maintenance, and site/app bindings.
 tags:
   - dokploy
-  - docker-compose
-  - compose-deployment
-  - explicit-app-name
-  - environment-promotion
+  - docker-swarm
+  - stack-deployment
+  - ghcr
+  - private-registry
+  - api-only-build
+  - native-volume-backup
+  - single-node
+  - promotion
+  - site-app-domains
   - traefik
-  - domains
-  - postgres
   - rollback
   - smoke-tests
 maintainers:
-  - Digital-Media-Group
+  - community
 license: Apache-2.0
 locales:
   - es
@@ -38,38 +41,28 @@ capabilities:
 riskLevel: high
 inputs:
   es:
-    - Repositorio Git, docker-compose.yml y Dockerfile compatibles.
-    - "Acceso a la API/panel Dokploy y al proyecto/entorno correctos."
-    - "Dominios, variables protegidas, decisión de persistencia y autorización explícita para Production."
-    - "Ramas master (validación) y production (live), con PR de promoción."
+    - Repositorio Git o snapshot ZIP saneado, Compose Stack y workflow compatibles.
+    - "Acceso a la API/panel Dokploy, stacks aislados, dominios site/app y variables protegidas."
+    - "Registry privado opcional; permisos de publicación y lectura deben comprobarse por separado."
+    - "Decisiones de persistencia, backup/restore, seeds, smoke tests, promoción y aprobación de Production."
   en:
-    - Git repository, docker-compose.yml, and compatible Dockerfile.
-    - "Dokploy API/panel access and the correct project/environment."
-    - "Domains, protected variables, persistence decision, and explicit Production approval."
-    - "master (validation) and production (live) branches, with a promotion PR."
+    - Git repository or sanitized ZIP snapshot, compatible Stack Compose, and workflow.
+    - "Dokploy API/panel access, isolated stacks, site/app domains, and protected variables."
+    - "Optional private registry; push and pull permissions must be verified separately."
+    - "Persistence, backup/restore, seed, smoke-test, promotion, and Production approval decisions."
 outputs:
   es:
-    - Recursos Dokploy Docker Compose identificables y aislados por entorno.
-    - Variables guardadas con quoting dotenv seguro y sin secretos en Git.
-    - Dominios HTTPS enlazados al servicio web correcto.
-    - Smoke tests, healthchecks, logs y rollback documentados.
+    - Stacks Dokploy/Swarm aislados y promovibles Development -> Preview -> Production.
+    - Builds reproducibles por registry digest o snapshot API-only explícitamente acotado.
+    - Backup nativo de volumen/backup remoto con evidencia de finalización o restore rehearsal.
+    - Dos superficies site/app por entorno, enlazadas al servicio completo Swarm.
+    - Smoke tests, diagnóstico de tareas/logs y rollback documentado.
   en:
-    - Identifiable Dokploy Docker Compose resources isolated by environment.
-    - Variables stored with safe dotenv quoting and no secrets committed to Git.
-    - HTTPS domains bound to the correct web service.
-    - Documented smoke tests, healthchecks, logs, and rollback.
+    - Isolated Dokploy/Swarm stacks promotable from Development -> Preview -> Production.
+    - Reproducible registry-digest builds or explicitly scoped API-only snapshot builds.
+    - Native volume or remote backups with completion evidence or restore rehearsal.
+    - Separate site/app surfaces per environment, bound to the full Swarm service.
+    - Smoke tests, task/log diagnosis, and documented rollback.
 dependencies:
   - containerize-web-application
-lastReviewed: 2026-10-05
-
-# Operational invariants
-# - Use composeType: docker-compose. Never silently convert this workflow to Stack/Swarm or Nixpacks.
-# - Set appName explicitly in compose.create, for example firma-documentos and firma-documentos-master.
-# - Set randomize: false when supported. Dokploy versions may still append a suffix; verify the returned appName and record it.
-# - compose.update is not a reliable appName rename operation. If the technical name is wrong, create a new Compose with the desired appName, validate it, move the domain, then delete the old Compose with deleteVolumes: false unless volume deletion is explicitly approved.
-# - Keep project and Compose display names neutral: Firma de Documentos. Branches/environments express master versus production.
-# - Preserve PostgreSQL volumes by default. Never pass deleteVolumes: true or freshVolumes: true without explicit approval.
-# - Save the complete environment before deployment. Verify POSTGRES_PASSWORD is available to Compose interpolation and matches DATABASE_URL.
-# - Normal flow: master -> validation -> PR -> explicit approval -> production.
-# - Verify db, web, worker, DNS, TLS, and repeated public /api/health HTTP 200 before declaring success.
-# - If Dokploy API/TLS is unstable, stop destructive actions and wait for a stable read-back.
+lastReviewed: 2026-10-24

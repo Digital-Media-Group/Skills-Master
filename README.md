@@ -34,7 +34,10 @@ Copia el nombre técnico o la URL completa para indicarle a un agente qué skill
 | Diseño de pipeline CI/CD | `ci-cd-pipeline-design` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/ci-cd-pipeline-design |
 | Revisión de arquitectura cloud | `cloud-architecture-review` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/cloud-architecture-review |
 | Contenerización de una aplicación web | `containerize-web-application` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/containerize-web-application |
-| Despliegue Dokploy en modo Stack (Swarm) multi-nodo | `dokploy-swarm-stack-deployment` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-swarm-stack-deployment |
+| Despliegue Dokploy en modo Compose multi-entorno | `dokploy-compose-deployment` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-compose-deployment |
+| Despliegue Dokploy en modo Stack (Swarm) | `dokploy-swarm-stack-deployment` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-swarm-stack-deployment |
+| CI con OpenShip Actions y runners propios | `openship-actions-ci` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-actions-ci |
+| Despliegue OpenShip por proyecto y entornos | `openship-project-environments` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-project-environments |
 | Plan de medición analítica | `analytics-measurement-plan` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan |
 | Auditoría de conversión | `conversion-rate-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit |
 | Auditoría SEO técnica | `technical-seo-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/technical-seo-audit |

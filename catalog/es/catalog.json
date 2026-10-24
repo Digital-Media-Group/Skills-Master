@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "locale": "es",
-  "generatedAt": "2026-09-16T00:00:00.000Z",
+  "generatedAt": "2026-10-24T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
@@ -114,6 +114,93 @@
             "deployment"
           ],
           "source": "../../skills/devops-cloud/containerize-web-application/locales/es/SKILL.md"
+        },
+        {
+          "id": "dokploy-compose-deployment",
+          "name": "Despliegue Dokploy en modo Compose multi-entorno",
+          "summary": "Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios y flujo master -> production.",
+          "version": "0.7.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "dokploy",
+            "docker-compose",
+            "compose-deployment",
+            "explicit-app-name",
+            "environment-promotion",
+            "traefik",
+            "domains",
+            "postgres",
+            "rollback",
+            "smoke-tests"
+          ],
+          "source": "../../skills/devops-cloud/dokploy-compose-deployment/locales/es/SKILL.md"
+        },
+        {
+          "id": "dokploy-swarm-stack-deployment",
+          "name": "Despliegue Dokploy en modo Stack (Swarm)",
+          "summary": "Preparar, promover y diagnosticar stacks Dokploy/Swarm con gates de backup verificable, builds API-only, mantenimiento independiente y bindings site/app.",
+          "version": "0.6.2",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "dokploy",
+            "docker-swarm",
+            "stack-deployment",
+            "ghcr",
+            "private-registry",
+            "api-only-build",
+            "native-volume-backup",
+            "single-node",
+            "promotion",
+            "site-app-domains",
+            "traefik",
+            "rollback",
+            "smoke-tests"
+          ],
+          "source": "../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/es/SKILL.md"
+        },
+        {
+          "id": "openship-actions-ci",
+          "name": "CI con OpenShip Actions y runners propios",
+          "summary": "Ejecutar validaciones CI en infraestructura propia con OpenShip Actions, en modo independiente o con runners self-hosted para workflows de GitHub, con alternativa endurecida en Dokploy.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "openship",
+            "actions",
+            "ci-cd",
+            "self-hosted-runner",
+            "github-actions",
+            "dokploy",
+            "validation",
+            "hardening"
+          ],
+          "source": "../../skills/devops-cloud/openship-actions-ci/locales/es/SKILL.md"
+        },
+        {
+          "id": "openship-project-environments",
+          "name": "Despliegue OpenShip por proyecto y entornos",
+          "summary": "Operar proyectos OpenShip con Production y Preview, servicios persistentes, migraciones PostgreSQL, backups verificables, promoción y rollback.",
+          "version": "0.1.1",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "openship",
+            "self-hosted",
+            "project-environments",
+            "preview",
+            "production",
+            "docker-compose",
+            "postgres",
+            "migration",
+            "backup",
+            "rollback",
+            "cloudflare",
+            "atlas"
+          ],
+          "source": "../../skills/devops-cloud/openship-project-environments/locales/es/SKILL.md"
         }
       ]
     },

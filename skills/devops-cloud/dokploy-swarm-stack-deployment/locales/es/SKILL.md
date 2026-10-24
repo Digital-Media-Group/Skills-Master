@@ -4,6 +4,34 @@
 
 Operar stacks Dokploy/Swarm en Development, Preview y Production con promoción fail-closed, mantenimiento independiente por superficie y diagnóstico verificable. El procedimiento soporta un nodo único y no presenta la disponibilidad local como alta disponibilidad.
 
+## Cuándo utilizarla
+
+- El servicio se despliega como Stack de Dokploy/Swarm (`composeType: stack`), no como Compose simple ni Nixpacks.
+- Hay entornos Development, Preview y Production con promoción fail-closed.
+- Se necesitan bindings site/app por entorno, backups nativos verificables y diagnóstico de tareas Swarm.
+
+## Cuándo no utilizarla
+
+- El destino es Docker Compose de Dokploy: usa la skill `dokploy-compose-deployment`.
+- El destino es OpenShip/Atlas: usa la skill `openship-project-environments`.
+- No existe backup restaurable para un despliegue con estado, ni autorización explícita para Production.
+
+## Información necesaria
+
+- Repositorio Git o snapshot ZIP saneado, Compose Stack y workflow compatibles.
+- Acceso a la API/panel de Dokploy, stacks aislados por entorno y variables protegidas.
+- Dominios site/app por entorno, decisión de persistencia y aprobación humana para Production.
+
+## Procedimiento
+
+1. Protege accesos y secretos según «Accesos y secretos».
+2. Resuelve el build y la identidad de imagen según «Build e identidad de imagen».
+3. Aplica la estrategia de actualización de nodo único.
+4. Ejecuta los gates de backup y persistencia antes de mutar Preview o Production.
+5. Promueve Development -> Preview -> Production con el mismo candidato validado.
+6. Configura los bindings de dominios y Traefik por entorno.
+7. Diagnostica y valida con las comprobaciones de «Diagnóstico» y «Validación».
+
 ## Accesos y secretos
 
 - Usa la API REST de Dokploy con variables locales protegidas; no aceptes tokens, PAT o claves pegados en el chat.
@@ -80,6 +108,10 @@ curl -I https://app.example.com/
 ```
 
 Valida Compose, typecheck, tests, tareas Swarm, imágenes/digests, backups, dos hostnames por entorno y rollback. No declares HA con un único nodo o volumen local.
+
+## Resultado esperado
+
+Stacks Dokploy/Swarm aislados por entorno, backups verificados antes de cada mutación, promoción fail-closed del mismo candidato, bindings site/app correctos, diagnóstico con evidencia y rollback practicable, sin presentar un único nodo como alta disponibilidad.
 
 ## Seguridad
 

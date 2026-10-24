@@ -4,6 +4,34 @@
 
 Operate Dokploy/Swarm stacks across Development, Preview, and Production with fail-closed promotion, independent site/app maintenance, and verifiable diagnosis. The procedure supports a single node but never presents local storage as high availability.
 
+## When to Use
+
+- The service deploys as a Dokploy/Swarm Stack (`composeType: stack`), not plain Compose or Nixpacks.
+- Development, Preview, and Production environments promote fail-closed.
+- Per-environment site/app bindings, verifiable native backups, and Swarm task diagnosis are required.
+
+## When Not to Use
+
+- The destination is Dokploy Docker Compose: use the `dokploy-compose-deployment` skill.
+- The destination is OpenShip/Atlas: use the `openship-project-environments` skill.
+- No restorable backup exists for a stateful deployment, or Production approval is missing.
+
+## Required Information
+
+- Git repository or sanitized ZIP snapshot, compatible Compose Stack and workflow.
+- Dokploy API/panel access, per-environment isolated stacks, and protected variables.
+- Per-environment site/app domains, persistence decision, and human approval for Production.
+
+## Procedure
+
+1. Protect access and secrets per "Access and secrets".
+2. Resolve build and image identity per "Build and image identity".
+3. Apply the single-node update strategy.
+4. Run the backup and persistence gates before mutating Preview or Production.
+5. Promote Development -> Preview -> Production with the same validated candidate.
+6. Configure per-environment domain bindings and Traefik.
+7. Diagnose and validate with the checks in "Diagnosis" and "Validation".
+
 ## Access and secrets
 
 - Use Dokploy REST API with protected local environment variables; never accept tokens, PATs, or private keys pasted into chat.
@@ -81,6 +109,10 @@ curl -I https://app.example.com/
 
 Validate Compose, typecheck, tests, Swarm tasks, images/digests, backups, both hosts per environment, and rollback. Do not declare HA with one node or a local data volume.
 
-## Security
+## Expected Result
+
+Dokploy/Swarm stacks isolated per environment, backups verified before each mutation, fail-closed promotion of the same candidate, correct site/app bindings, evidence-based diagnosis, and a practicable rollback, without presenting a single node as high availability.
+
+## Safety
 
 Risk level: **high**. Never store secrets in Git, Compose, dumps, images, logs, or chat. Do not confuse a configured integration with publication permissions. Do not remove Basic Auth, maintenance, killswitches, or provider disablement as part of domain setup.

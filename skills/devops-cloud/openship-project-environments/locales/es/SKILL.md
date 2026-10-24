@@ -113,6 +113,10 @@ Mantén variables separadas. No copies `DATABASE_URL` del proveedor anterior: ap
 
 No cambies DNS antes de una URL/health verificable. Protege Preview con Basic Auth/noindex y Production con mantenimiento durante el corte. Cambia solo registros web; conserva MX, SPF, DKIM, DMARC, SES y `api` salvo aprobación explícita. Verifica DNS, TLS, redirects, health, auth, admin, formularios, catálogo, precios, WHMCS y cron.
 
+## Integración continua
+
+Para ejecutar validaciones CI en la propia instancia (workflows independientes en `.openship/workflows/` o workflows de GitHub en runners self-hosted registrados en destinos OpenShip) usa la skill `openship-actions-ci`. La CI nunca sustituye los gates de esta skill: backup restaurable, Preview validada y aprobación humana antes de Production.
+
 ## Validación
 
 - Proyecto único e IDs internos de Production/Preview correctos.

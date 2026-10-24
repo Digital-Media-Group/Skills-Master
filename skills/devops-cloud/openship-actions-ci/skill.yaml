@@ -1,0 +1,66 @@
+schemaVersion: 1
+id: openship-actions-ci
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: CI con OpenShip Actions y runners propios
+  en: CI with OpenShip Actions and Self-Hosted Runners
+summary:
+  es: Ejecutar validaciones CI en infraestructura propia con OpenShip Actions, en modo independiente o con runners self-hosted para workflows de GitHub, con alternativa endurecida en Dokploy.
+  en: Run CI validation on own infrastructure with OpenShip Actions, in independent mode or with self-hosted runners for GitHub workflows, with a hardened Dokploy alternative.
+tags:
+  - openship
+  - actions
+  - ci-cd
+  - self-hosted-runner
+  - github-actions
+  - dokploy
+  - validation
+  - hardening
+maintainers:
+  - Digital-Media-Group
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - cloud
+  - credentials
+riskLevel: high
+inputs:
+  es:
+    - Instancia OpenShip con Actions (v0.9.0 o superior) verificada en su panel.
+    - Destino de ejecución con SO, arquitectura y herramientas conocidas.
+    - Conexión GitHub de la instancia para importar workflows y publicar Checks.
+    - Política de acceso y aprobaciones por intento de ejecución.
+  en:
+    - An OpenShip instance with Actions (v0.9.0 or later) verified in its dashboard.
+    - An execution destination with known OS, architecture, and tooling.
+    - The instance's GitHub connection for importing workflows and publishing Checks.
+    - An access policy with per-attempt approvals.
+outputs:
+  es:
+    - Validaciones ejecutadas en infraestructura propia con Checks publicados en GitHub.
+    - Runners registrados, etiquetados y en estado Ready/Idle.
+    - Acceso por workflow limitado y aprobaciones registradas.
+  en:
+    - Validation running on own infrastructure with Checks published to GitHub.
+    - Registered, labeled runners in Ready/Idle state.
+    - Per-workflow limited access and recorded approvals.
+dependencies:
+  - ci-cd-pipeline-design
+lastReviewed: 2026-10-24
+
+# Operational invariants
+# - Verify the Actions section and a Ready runner in the instance before promising CI on it; a compatible version does not prove the feature is configured.
+# - GitHub-coordinated mode: workflows in .github/workflows/ keep GitHub orchestration, secrets, environments and Checks; jobs targeting GitHub-hosted labels still run on GitHub.
+# - Independent mode: workflows in .openship/workflows/ run on OpenShip destinations; GitHub provides source, events and commit Checks without running anything.
+# - Fork code is blocked by default; keep it that way unless there is explicit approval and disposable runners without privileged secrets.
+# - A fresh independent run does not resume or replace a failed GitHub run.
+# - Never weaken runner isolation: no host Docker socket, no privileged mode, no shared networks with production applications.
