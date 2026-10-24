@@ -50,7 +50,7 @@ When OpenShip Actions does not apply, a GitHub Actions self-hosted runner can be
 - Runner registered and Ready/Idle in the OpenShip dashboard or under GitHub Settings -> Actions -> Runners.
 - A diagnostic run executes all its steps on the own destination and publishes the Check on the commit.
 - Logs contain no secrets and approvals are recorded.
-- Application deployment does not depend on CI: the deployment build follows its own path.
+- The CI-to-deployment relationship is verified project by project (Auto Deploy/webhook enabled or manual deployment); do not assume it from the CI side.
 
 ## Expected Result
 

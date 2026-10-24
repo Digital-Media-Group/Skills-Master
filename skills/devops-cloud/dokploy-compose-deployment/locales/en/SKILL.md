@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, HTTPS domains bound to the correct service, and a master -> production promotion flow with human approval. Dokploy builds the image when the configured branch receives a push; deployment does not depend on external CI.
+Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, HTTPS domains bound to the correct service, and a master -> production promotion flow with human approval. If Auto Deploy or the webhook is enabled, Dokploy builds the image when the configured branch receives a push; with both disabled, deployment is manual. Verify the real state of those toggles in each project. The deployment build is Dokploy's responsibility, not external CI's.
 
 ## When to Use
 
@@ -27,7 +27,7 @@ Create, promote, and diagnose Dokploy Docker Compose resources with explicit tec
 
 1. Create the Compose resource with `composeType: docker-compose` and an explicit per-environment `appName` (for example `firma-documentos` and `firma-documentos-master`). Use `randomize: false` when supported; some Dokploy versions still append a suffix, so verify and record the returned `appName`.
 2. Keep project and Compose display names neutral; branches and environments already express master versus production.
-3. Connect the repository and the environment branch. Dokploy builds on push; never silently convert the flow to Stack/Swarm or Nixpacks.
+3. Connect the repository and the environment branch and set the trigger explicitly: Auto Deploy/webhook enabled (build on push) or manual deployment when disabled. Do not infer one project's state from another. Never silently convert the flow to Stack/Swarm or Nixpacks.
 4. Save the complete environment before deploying, with safe dotenv quoting and no secrets in Git. Verify `POSTGRES_PASSWORD` is available to Compose interpolation and matches `DATABASE_URL`.
 5. Bind HTTPS domains to the correct web service: real internal port and the correct edge network in Traefik.
 6. Deploy `master` first, run smoke tests and healthchecks, and promote to `production` through a PR with explicit approval. Promote the same validated candidate.
