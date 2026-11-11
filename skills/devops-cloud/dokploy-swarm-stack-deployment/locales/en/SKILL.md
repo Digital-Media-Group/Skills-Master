@@ -70,7 +70,7 @@ Keep `freshVolumes=false`. Do not delete stacks, volumes, or data to fix an imag
 
 ## Maintenance and promotion
 
-- Set `GESCODI_SITE_URL` and `GESCODI_APP_URL` independently; do not use `NEXT_PUBLIC_*` for server-side routing.
+- Set `SITE_URL` and `APP_URL` independently; do not use `NEXT_PUBLIC_*` for server-side routing.
 - Keep Basic Auth on Development and Preview; keep Production in maintenance until approval.
 - Production is migrations-only and never receives seed/fixtures.
 - Promote the exact candidate that passed: Development -> Preview -> Production.

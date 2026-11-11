@@ -70,7 +70,7 @@ Conserva `freshVolumes=false`. No borres stacks, volúmenes o datos para resolve
 
 ## Mantenimiento y promoción
 
-- Define `GESCODI_SITE_URL` y `GESCODI_APP_URL` por separado; no dependas de `NEXT_PUBLIC_*` para routing server-side.
+- Define `SITE_URL` y `APP_URL` por separado; no dependas de `NEXT_PUBLIC_*` para routing server-side.
 - Development y Preview mantienen Basic Auth; Production conserva mantenimiento hasta aprobación.
 - Production es migrations-only y nunca recibe seed/fixtures.
 - Promueve el mismo candidato comprobado: Development -> Preview -> Production.

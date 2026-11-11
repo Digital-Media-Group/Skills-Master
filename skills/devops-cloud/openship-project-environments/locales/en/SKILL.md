@@ -32,7 +32,7 @@ OpenShip is not Dokploy. Do not use Dokploy endpoints, resource names, or assump
 ## Required model
 
 ```text
-EmprenRed
+EjemploApp
 ├── Production -> Production branch
 └── Preview    -> Preview branch
 ```

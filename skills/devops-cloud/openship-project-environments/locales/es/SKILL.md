@@ -34,7 +34,7 @@ OpenShip no es Dokploy. No se deben usar endpoints, nombres de recursos ni supue
 Usa un proyecto único:
 
 ```text
-EmprenRed
+EjemploApp
 ├── Production → rama Production
 └── Preview    → rama Preview
 ```
@@ -74,8 +74,8 @@ Solo crea proyectos separados si el contrato de OpenShip exige explícitamente q
 Un deployment puede contener `web`, `worker`/`cron` y `postgres`, además de Redis u object storage cuando estén documentados. Cada entorno debe tener volúmenes separados, por ejemplo:
 
 ```text
-emprenred-preview-postgres-data
-emprenred-production-postgres-data
+ejemploapp-preview-postgres-data
+ejemploapp-production-postgres-data
 ```
 
 No compartas `DATABASE_URL`, volúmenes, contraseñas, backups restaurados ni datos. En un único servidor no declares alta disponibilidad; compensa el punto único de fallo con backups externos y restore rehearsal.
