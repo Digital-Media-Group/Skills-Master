@@ -2,12 +2,12 @@
 
 ## Propósito
 
-Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios HTTPS enlazados al servicio correcto y un flujo de promoción master -> production con aprobación humana. Si Auto Deploy o el webhook están activados, Dokploy construye la imagen al recibir el push en la rama configurada; con ambos desactivados el despliegue es manual. Verifica el estado real de esos toggles en cada proyecto. El build de despliegue es responsabilidad de Dokploy, no de una CI externa.
+Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios HTTPS enlazados al servicio correcto y un flujo de promoción master -> preview -> production con aprobación humana. Si Auto Deploy o el webhook están activados, Dokploy construye la imagen al recibir el push en la rama configurada; con ambos desactivados el despliegue es manual. Verifica el estado real de esos toggles en cada proyecto. El build de despliegue es responsabilidad de Dokploy, no de una CI externa.
 
 ## Cuándo utilizarla
 
 - El servicio se despliega como Docker Compose en Dokploy (`composeType: docker-compose`), con Dockerfile y `docker-compose.yml` compatibles.
-- Se trabaja con ramas `master` (validación) y `production` (live) y PR de promoción.
+- Se trabaja con ramas `master` (desarrollo), `preview` (validación) y `production` (live), y PR de promoción.
 - Se necesitan recursos identificables por entorno y dominios Traefik enlazados al servicio web.
 
 ## Cuándo no utilizarla
@@ -21,7 +21,7 @@ Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres t�
 - Repositorio Git, `docker-compose.yml` y Dockerfile compatibles.
 - Acceso a la API/panel de Dokploy y al proyecto y entorno correctos (la organización activa de sesión determina qué proyectos son visibles).
 - Dominios, variables protegidas, decisión de persistencia y autorización explícita para Production.
-- Ramas `master` (validación) y `production` (live), con PR de promoción.
+- Ramas `master` (desarrollo), `preview` (validación) y `production` (live), con PR de promoción.
 
 ## Procedimiento
 
@@ -30,13 +30,13 @@ Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres t�
 3. Conecta el repositorio y la rama del entorno y fija el disparador de forma explícita: Auto Deploy/webhook activados (build al recibir push) o despliegue manual si están desactivados. No inferir el estado de un proyecto a partir de otro. No conviertas el flujo a Stack/Swarm o Nixpacks de forma silenciosa.
 4. Guarda el entorno completo antes de desplegar, con quoting dotenv seguro y sin secretos en Git. Verifica que `POSTGRES_PASSWORD` está disponible para la interpolación de Compose y coincide con `DATABASE_URL`.
 5. Enlaza los dominios HTTPS al servicio web correcto: puerto interno real y red edge adecuada en Traefik.
-6. Despliega primero `master`, ejecuta smoke tests y healthchecks, y promueve a `production` mediante PR con aprobación explícita. Promueve el mismo candidato validado.
+6. Despliega primero `master` y promueve a `preview`; ejecuta smoke tests y healthchecks, y promueve a `production` mediante PR con aprobación explícita. Promueve el mismo candidato validado.
 7. Si el nombre técnico quedó mal, no uses `compose.update` como renombrado: crea un Compose nuevo con el `appName` deseado, valídalo, mueve el dominio y solo después borra el antiguo con `deleteVolumes: false`, salvo aprobación explícita de borrado de volúmenes.
 
 ## Persistencia y backups
 
 - Preserva los volúmenes de PostgreSQL por defecto. Nunca pases `deleteVolumes: true` ni `freshVolumes: true` sin aprobación explícita.
-- Antes de mutar `production`, verifica configuración, destino y evidencia de finalización del backup; una respuesta 200 o una tarea encolada no demuestran que el backup sea restaurable.
+- Antes de mutar `preview` o `production`, verifica configuración, destino S3 (Backblaze B2) y evidencia de finalización y restauración del backup; una respuesta 200 o una tarea encolada no demuestran que el backup sea restaurable.
 
 ## Diagnóstico
 

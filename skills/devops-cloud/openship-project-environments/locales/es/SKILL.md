@@ -22,7 +22,7 @@ OpenShip no es Dokploy. No se deben usar endpoints, nombres de recursos ni supue
 
 ## Información necesaria
 
-- Repositorio, ramas `Preview`/`Production` y candidato a promover.
+- Repositorio, ramas `master`/`preview`/`production` y candidato a promover.
 - Workspace, servidor Atlas y permisos del MCP OpenShip.
 - Proyecto OpenShip único e IDs internos de sus entornos.
 - Variables separadas por entorno y secretos cargados por canal seguro.
@@ -35,9 +35,11 @@ Usa un proyecto único:
 
 ```text
 EjemploApp
-├── Production → rama Production
-└── Preview    → rama Preview
+├── Production → rama production
+└── Preview    → rama preview
 ```
+
+La rama `master` es el desarrollo y vive en el entorno de desarrollo (por ejemplo, Ideavo), no en OpenShip: el servidor aloja Preview y Production. La promoción sigue `master` → `preview` → `production` con el mismo candidato validado.
 
 Un proyecto OpenShip puede tener varios entornos. Cada entorno tiene su propio identificador interno, variables, deployments, dominios y estado. Al desplegar, usa siempre el identificador interno que devuelve OpenShip; no uses el ID del proyecto Production para enviar `environment: preview`.
 
@@ -63,8 +65,8 @@ Solo crea proyectos separados si el contrato de OpenShip exige explícitamente q
 
 ## Ramas y promoción
 
-- `Preview` se despliega desde la rama `Preview`.
-- `Production` se despliega desde la rama `Production`.
+- `preview` se despliega desde la rama `preview`.
+- `production` se despliega desde la rama `production`.
 - Promueve el mismo candidato validado; no reconstruyas una versión distinta para Production.
 - Orden: validación → build/artifact → Preview → smoke tests → aprobación humana → Production.
 - Conserva deployment, datos y configuración anteriores para rollback.
@@ -99,7 +101,7 @@ Nunca uses `--force`, borres volúmenes o destruyas el origen para resolver erro
 
 ## Backups
 
-- Usa destino externo cifrado con retención.
+- Usa destino externo cifrado con retención; por defecto S3 (Backblaze B2).
 - Ejecuta backup manual antes de Preview y Production.
 - Registra ID, origen, entorno, tamaño, checksum/estado, retención y hora.
 - Realiza restore rehearsal aislado.
