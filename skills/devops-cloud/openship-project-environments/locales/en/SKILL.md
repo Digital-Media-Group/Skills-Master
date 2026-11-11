@@ -22,7 +22,7 @@ OpenShip is not Dokploy. Do not use Dokploy endpoints, resource names, or assump
 
 ## Required Information
 
-- Repository, `Preview`/`Production` branches, and candidate commit.
+- Repository, `master`/`preview`/`production` branches, and candidate commit.
 - OpenShip workspace, Atlas server, and MCP permissions.
 - One OpenShip project and the internal IDs of its environments.
 - Per-environment variables and securely loaded secrets.
@@ -33,9 +33,11 @@ OpenShip is not Dokploy. Do not use Dokploy endpoints, resource names, or assump
 
 ```text
 EjemploApp
-├── Production -> Production branch
-└── Preview    -> Preview branch
+├── Production -> production branch
+└── Preview    -> preview branch
 ```
+
+The `master` branch is development and lives in the development environment (for example, Ideavo), not in OpenShip: the server hosts Preview and Production. Promotion follows `master` -> `preview` -> `production` with the same validated candidate.
 
 An OpenShip project may have multiple environments. Each has its own internal ID, variables, deployments, domains, and state. Always deploy using the internal identifier returned by OpenShip; never send `environment: preview` with a Production project ID.
 
@@ -61,8 +63,8 @@ Create separate projects only when OpenShip explicitly requires a non-production
 
 ## Branches and Promotion
 
-- Deploy Preview from `Preview`.
-- Deploy Production from `Production`.
+- Deploy preview from the `preview` branch.
+- Deploy production from the `production` branch.
 - Promote the same validated candidate; do not rebuild a different Production version.
 - Order: validation -> build/artifact -> Preview -> smoke tests -> human approval -> Production.
 - Keep the previous deployment, data, and configuration for rollback.
@@ -94,7 +96,7 @@ Never use `--force`, delete volumes, or destroy the source database to solve a m
 
 ## Backups
 
-Use an encrypted external destination with retention. Run backups before Preview and Production, record IDs/source/environment/size/checksum/status/retention/time, and perform an isolated restore rehearsal. If restoration cannot be evidenced, block stateful deployment.
+Use an encrypted external destination with retention, S3 (Backblaze B2) by default. Run backups before Preview and Production, record IDs/source/environment/size/checksum/status/retention/time, and perform an isolated restore rehearsal. If restoration cannot be evidenced, block stateful deployment.
 
 ## Variables and Secrets
 

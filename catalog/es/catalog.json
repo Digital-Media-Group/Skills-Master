@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "locale": "es",
-  "generatedAt": "2026-10-24T00:00:00.000Z",
+  "generatedAt": "2026-11-11T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
@@ -26,7 +26,7 @@
           "id": "desarrollo-ideavo-opencode",
           "name": "Desarrollo IDEAVO - OpenCode",
           "summary": "Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode.",
-          "version": "0.3.0",
+          "version": "0.4.0",
           "status": "experimental",
           "riskLevel": "high",
           "tags": [
@@ -118,8 +118,8 @@
         {
           "id": "dokploy-compose-deployment",
           "name": "Despliegue Dokploy en modo Compose multi-entorno",
-          "summary": "Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios y flujo master -> production.",
-          "version": "0.7.0",
+          "summary": "Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios y flujo master -> preview -> production.",
+          "version": "0.8.0",
           "status": "experimental",
           "riskLevel": "high",
           "tags": [
@@ -183,7 +183,7 @@
           "id": "openship-project-environments",
           "name": "Despliegue OpenShip por proyecto y entornos",
           "summary": "Operar proyectos OpenShip con Production y Preview, servicios persistentes, migraciones PostgreSQL, backups verificables, promoción y rollback.",
-          "version": "0.1.1",
+          "version": "0.2.0",
           "status": "experimental",
           "riskLevel": "high",
           "tags": [

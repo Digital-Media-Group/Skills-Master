@@ -1,14 +1,14 @@
 schemaVersion: 1
 id: dokploy-compose-deployment
-version: 0.7.0
+version: 0.8.0
 status: experimental
 category: devops-cloud
 name:
   es: Despliegue Dokploy en modo Compose multi-entorno
   en: Dokploy Compose Deployment
 summary:
-  es: Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios y flujo master -> production.
-  en: Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, domains, and a master -> production flow.
+  es: Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios y flujo master -> preview -> production.
+  en: Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, domains, and a master -> preview -> production flow.
 tags:
   - dokploy
   - docker-compose
@@ -60,7 +60,7 @@ outputs:
     - Documented smoke tests, healthchecks, logs, and rollback.
 dependencies:
   - containerize-web-application
-lastReviewed: 2026-10-24
+lastReviewed: 2026-11-11
 
 # Operational invariants
 # - Use composeType: docker-compose. Never silently convert this workflow to Stack/Swarm or Nixpacks.

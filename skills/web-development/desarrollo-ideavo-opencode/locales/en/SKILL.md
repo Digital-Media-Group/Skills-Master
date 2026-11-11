@@ -23,7 +23,7 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - `AGENTS.md`, `CONTRIBUTING.md`, runbooks, and release documentation.
 - Framework, language, package manager, architecture, scripts, and configuration.
 - External integrations, environment variables, required access, and definition of done.
-- CI/CD and deployment platform: Dokploy; GitHub Actions, Neon, and Vercel must not provide pipeline or test-environment compute unless explicitly approved.
+- CI/CD and deployment platform: OpenShip/Atlas Actions as the preferred route and hardened Dokploy as the fallback (see the `openship-actions-ci` skill); hosted GitHub Actions, Neon, and Vercel must not provide pipeline or test-environment compute unless explicitly approved.
 - Configuration management: environment variables are not required during development unless a real dependency requires them before Preview.
 
 ### Required MCPs
@@ -31,11 +31,13 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 Verify that the agent environment has these MCPs enabled before starting tasks that depend on their capabilities:
 
 - **Playwright**: browser automation, visual verification, E2E testing, and safe smoke tests.
-- **Neon**: controlled administration and querying of Neon projects, branches, databases, migrations, and observability.
+- **Dokploy MCP**: authorized operations on Dokploy projects, environments, deployments, variables, and logs.
+- **OpenShip MCP**: authorized operations on OpenShip/Atlas projects, environments, deployments, and Actions runners.
 - **Context7**: current documentation and library or framework examples.
 - **Firecrawl**: web scraping and data extraction when required by the task.
 - **MCP GitHub**: repository, branch, issue, PR, review, and check operations through `https://api.githubcopilot.com/mcp/`.
-- **Vercel MCP**: authorized queries and operations for Vercel projects, deployments, logs, and analytics through `https://mcp.vercel.com`.
+- **Neon MCP** (only when the project uses Neon by explicit decision): controlled administration and querying of projects, branches, databases, migrations, and observability.
+- **Vercel MCP** (only when the user authorizes it for a specific purpose): authorized queries and operations for Vercel projects, deployments, logs, and analytics through `https://mcp.vercel.com`.
 - **Cloudflare MCP**: authorized queries and operations for Workers, DNS, security, and other Cloudflare services through `https://mcp.cloudflare.com/mcp`.
 
 These MCPs are environment dependencies, not implicit authorization to act. Verify availability, scope, and credentials before using them; never request secrets in chat or enable paid resources automatically. Vercel MCP may be used to query or manage authorized resources, but Vercel is not used as CI/CD or test-environment compute.
@@ -89,9 +91,17 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 - The final response must explicitly state SHA, branch, PR, signature/acceptance, deployment, environment, and the status of each gate, separating `Confirmed`, `Inferred`, and `Pending`.
 - For production, never state `production-ready` if signing, PR acceptance, or SHA verification was not closed before the final message.
 
+### Branch and Environment Model
+
+- Branches: `master` (development) -> `preview` -> `production`, one project with three environments and a separate database per environment. No extra development branches: Ideavo auto-commits every session on `master`.
+- Development happens on `master` (for example in Ideavo); Preview and Production live on the server (OpenShip/Atlas or Dokploy). Preview exists to validate and promote; it is not a permanent environment.
+- Every change is pushed to GitHub. PRs stay open and unmerged without Carlos's numbered OK: every merge to `master` carries its numbered OK per PR, and the production promotion carries its own numbered OK.
+- Before mutating Preview or Production: a backup to an S3 destination (Backblaze B2) with restore-rehearsal evidence. A 200 response or a queued task does not prove the backup is restorable.
+- Never test in development or production: tests run in Preview or in disposable isolated environments, and the agent runs them, not the user.
+
 ### CI/CD and Deployments
 
-- Run CI/CD and test environments through Docker on Dokploy, using Dokploy compute for builds, tests, integration, and validation.
+- Run CI/CD and test environments through OpenShip/Atlas Actions when the instance supports it (see the `openship-actions-ci` skill) or, as a hardened fallback, through Docker on Dokploy, reusing its compute for builds, tests, integration, and validation.
 - Do not use paid resources or GitHub Actions compute for pipelines, builds, or test environments. GitHub may host the repository and PR, but must not execute the pipeline without explicit authorization.
 - Do not use Neon or Vercel compute for CI, builds, or test environments. Use Neon for isolated per-environment persistence, and use Vercel only when the user explicitly authorizes a specific purpose.
 - Do not create automatic previews or automatic deployments from a branch, PR, or commit. A deployment to Preview or any non-production branch requires the user to accept the PR before it runs.
@@ -100,28 +110,50 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 
 ### Mandatory Isolation of Test Compute
 
-Critical note: any migration test, test run, gate, or validation executed through CI/CD must always run in an isolated external environment such as Dokploy, usually connected through MCP.
+Critical note: any migration test, test run, gate, or validation executed through CI/CD must always run in an isolated external environment (an OpenShip Actions runner or Docker on Dokploy), usually connected through MCP.
 
-- During development, no migration test or CI/CD run happens directly on Vercel, Neon, or any other external compute. Always route it to the isolated Dokploy environment.
-- In Preview, even when the database is wired directly to Neon, tests, migrations, and gates run in an isolated Dokploy environment against a disposable data copy or branch; never against the service serving traffic.
-- Cross-environment migrations, gate tests, and deployment verifications are also isolated in Dokploy before touching the target environment.
-- The goal is to save Neon, Vercel, and any other deployment operator's compute: their compute is reserved for serving real authorized traffic, not for running tests.
-- Manage this routing automatically according to the active workflow: detect the current phase (development, Preview, production) and direct every test to the isolated Dokploy environment without asking for routine confirmation. Only ask when Dokploy is unavailable or the workflow does not allow isolation.
+- During development, no migration test or CI/CD run happens directly on Vercel, Neon, or any other external compute. Always route it to the isolated OpenShip Actions or Dokploy environment.
+- In Preview, even when the database lives on an external provider, tests, migrations, and gates run in an isolated environment (OpenShip Actions or Dokploy) against a disposable data copy or branch; never against the service serving traffic.
+- Cross-environment migrations, gate tests, and deployment verifications are also isolated in OpenShip Actions or Dokploy before touching the target environment.
+- The goal is to save external providers' compute (Neon, Vercel, or any other deployment operator): their compute is reserved for serving real authorized traffic, not for running tests.
+- Manage this routing automatically according to the active workflow: detect the current phase (development, Preview, production) and direct every test to the isolated OpenShip Actions or Dokploy environment without asking for routine confirmation. Only ask when neither is available or the workflow does not allow isolation.
 
-### Neon Branches
+### Per-Environment Persistence
 
-- For every real branch in the software flow, create and maintain three Neon branches: `dev`, `preview`, and `production`.
-- Isolate credentials, test data, and migrations for each Neon branch; never use production data for development, Preview, or tests.
-- Create each Neon branch in the available region closest to Europe, recording the selected region and the reason when no suitable European option exists.
-- Use `dev` for development and integrated local tests; use `preview` only after PR acceptance; reserve `production` for production and approved migrations.
-- Before creating branches or applying remote migrations, verify the project, region, owner, database name, and parent branch. Never delete or reset branches without explicit authorization.
+- By default, each environment uses its own PostgreSQL on the project's server (Atlas or Dokploy), with separate databases and credentials for development, preview, and production.
+- Neon is used as persistence only by explicit user decision; in that case, create and maintain `dev`, `preview`, and `production` branches in the available region closest to Europe, recording the chosen region.
+- Isolate credentials, test data, and migrations per environment; never use production data for development, Preview, or tests.
+- The development environment serves development and integrated local tests; `preview` is used only after PR acceptance; `production` is reserved for production and its approved migrations.
+- Before creating databases or applying remote migrations, verify the project, region, owner, database name, and source. Never delete or reset databases without explicit authorization.
 
 ### Environment Variables
 
 - During development, do not request or configure environment variables by default. Prefer mocks, stubs, fixtures, and safe defaults that allow work without secrets.
 - If a dependency requires a variable before Preview, identify it, explain why it is needed, and use only a local, test, or sandbox value with least-privilege access.
 - Prepare real variables needed during the Preview phase, separated by environment and managed in Dokploy or the authorized secret system; never paste them into chat, commits, or versioned files.
-- Never reuse production variables in development or Preview. Neon `dev`, `preview`, and `production` credentials must remain isolated.
+- Never reuse production variables in development or Preview. Development, preview, and production credentials must remain isolated.
+
+### Development-Only Role Autologin
+
+When the project has role-based login, implement role autologin ONLY for the development environment (for example inside Ideavo), to exercise each role's login and dashboard without typing credentials:
+
+- Fail-closed double condition: require `APP_ENV=development` (or the framework equivalent) AND an explicit `DEV_AUTOLOGIN=true` flag. With any other value, or if either is missing, autologin does not exist.
+- Impossible in preview/production: the code checks the environment at runtime and aborts startup if the flag appears outside development; the flag is never defined in Preview/Production variables; add a build or CI guard that fails if autologin code is included in a preview or production build.
+- Only the structural role accounts from the development seed (one per relevant role, created through the CRUD); never real user credentials or data.
+- Offer a role switcher visible only in development to change roles while testing.
+- Add a regression test verifying that autologin is absent in preview/production and that protected routes require real authentication.
+- Never expose autologin on public routes or use it to bypass per-operation authorization outside development.
+
+### Development Seed Data
+
+- General rule: NEVER example, mock, placeholder, or "test" fixture data in any environment (no lorem ipsum, no "test/demo" records that must later be found and cleaned up): removing them afterwards costs more than creating them properly. Everything is created through the application's real CRUD, as functional data from the start.
+- The development database is always seeded with real, structural data: roles and their permission matrix, catalogs, base configuration, and the structural per-role accounts. An idempotent script (on environment start or through a documented command) leaves it ready to test new work on the `master` branch (for example in Ideavo) without manual setup.
+- The seed is deterministic and resettable; it regenerates from scratch with no manual steps and leaves no annotations to clean up afterwards.
+- Seeding goes through the application's CRUD or services, never through SQL that bypasses its validations: every seeded record is valid and functional.
+- Additional functional records are created through the CRUD with realistic, valid content, never marked as disposable.
+- Never personal data or data copied from production; generated structural and functional data only.
+- The development seed never runs in preview or production: the same fail-closed guard as autologin. Production is migrations-only and never receives seed or fixtures.
+- Preview keeps its own full seed for pre-production testing; Stripe (or the payment provider) always stays in test mode in Preview.
 
 ## Validation
 
@@ -131,10 +163,14 @@ Critical note: any migration test, test run, gate, or validation executed throug
 - Remote surfaces are checked with read-only smoke tests; metrics, logs, tests, and deployments are never invented.
 - The diff contains no secrets, tokens, PII, or unrelated changes; `git diff --check` passes when applicable.
 - The definition of done and every external blocker are documented.
-- CI/CD validation runs on Dokploy and does not consume paid compute from GitHub Actions, Neon, or Vercel.
-- Every migration test, gate, or validation ran in the isolated Dokploy environment, even in Preview and with the database on Neon.
+- CI/CD validation runs on OpenShip Actions or Dokploy and does not consume paid compute from GitHub Actions, Neon, or Vercel.
+- Every migration test, gate, or validation ran in the isolated environment (OpenShip Actions or Dokploy), even in Preview and with an external database.
 - Preview and non-production branch deployments do not run automatically; recorded PR acceptance exists before execution.
-- Every real branch has its `dev`, `preview`, and `production` Neon branches in a region close to Europe.
+- Every environment has separate databases and credentials (development, preview, production); Neon is used only by explicit decision.
+- Role autologin works only with `APP_ENV=development` and `DEV_AUTOLOGIN=true`, is absent from preview/production, and its regression guard passes.
+- The development seed is idempotent, structural, and resettable, with no mock or example data; production never receives seed data.
+- No change introduces example, mock, or placeholder data; records are created through the real CRUD.
+- An S3/B2 backup with a restore rehearsal exists before mutating Preview or Production, and Carlos's numbered OK is on record for every merge to `master` and for the production promotion.
 - Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.
 - A complete plan exists, tasks are self-contained, and human attention was requested only for a blocker or required approval.
 - Development progresses without environment variables unless a demonstrated technical need exists; real variables are configured in Preview and remain isolated per environment.
@@ -147,4 +183,4 @@ Functional software with minimal changes, risk-proportional validation, reviewed
 
 ## Safety
 
-Risk level: **high**. Never paste secrets into responses, logs, commits, issues, or documentation. Do not request passwords, cookies, API keys, or tokens in chat. Require explicit approval for production, billing, credentials, destructive migrations, payments, deletes, role changes, external compute usage, and force pushes. Do not use production data for testing or remove user changes.
+Risk level: **high**. Never paste secrets into responses, logs, commits, issues, or documentation. Do not request passwords, cookies, API keys, or tokens in chat. Require explicit approval for production, billing, credentials, destructive migrations, payments, deletes, role changes, external compute usage, and force pushes. Do not use production data for testing or remove user changes. Role autologin and the development seed are never enabled outside the development environment; if a preview or production deployment exposes them, treat it as an incident and remove it immediately.
