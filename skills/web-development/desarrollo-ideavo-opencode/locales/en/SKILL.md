@@ -97,7 +97,7 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 - Development happens on `master` (for example in Ideavo); Preview and Production live on the server (OpenShip/Atlas or Dokploy). Preview exists to validate and promote; it is not a permanent environment.
 - Every change is pushed to GitHub. PRs stay open and unmerged without Carlos's numbered OK: every merge to `master` carries its numbered OK per PR, and the production promotion carries its own numbered OK.
 - Before mutating Preview or Production: a backup to an S3 destination (Backblaze B2) with restore-rehearsal evidence. A 200 response or a queued task does not prove the backup is restorable.
-- Never test in development or production: tests run in Preview or in disposable isolated environments, and the agent runs them, not the user.
+- Migrations are always designed and tested in development with isolated databases. Preview validates promotion of the already rehearsed candidate; production is not a test environment. The agent runs the checks, not the user.
 
 ### CI/CD and Deployments
 
@@ -117,6 +117,18 @@ Critical note: any migration test, test run, gate, or validation executed throug
 - Cross-environment migrations, gate tests, and deployment verifications are also isolated in OpenShip Actions or Dokploy before touching the target environment.
 - The goal is to save external providers' compute (Neon, Vercel, or any other deployment operator): their compute is reserved for serving real authorized traffic, not for running tests.
 - Manage this routing automatically according to the active workflow: detect the current phase (development, Preview, production) and direct every test to the isolated OpenShip Actions or Dokploy environment without asking for routine confirmation. Only ask when neither is available or the workflow does not allow isolation.
+
+### Migrations: development first and automatic application
+
+- Design, fix, and test migrations in development, using an isolated database and structural data. Do not use Preview or production to discover or repair a migration for the first time.
+- Version SQL, journal/manifest, dependencies, and tests with the functional change. Rehearse both a clean installation and an upgrade from the previous schema; compare the ledger and effective schema, not just file counts. Verify a no-change second pass, permissions, integrity, cross-version compatibility, and recovery from partial failure.
+- Prepare the pipeline migration step in development. During an authorized promotion to Preview or production, the pipeline automatically applies only pending migrations from the same validated candidate, without manual SQL or new questions for each routine step.
+- Automatic application does not authorize a merge, promotion, or out-of-scope change. Preserve the numbered PR OK and authorization for the version and environment; a destructive migration or new risk needs its specific decision. This procedure does not run or enable deployments by itself.
+- Before applying: identify the target database and environment, lock concurrent runs, verify the ledger, pin the approved SHA/digest, and create an S3/B2 backup with checksum, timestamp, and verifiable isolated restore evidence. If any precondition is missing, stop the pipeline before changing data or traffic.
+- Separate initial installation or data relocation from incremental schema migration. Do not restore a copy over an active database as a routine release step, and never run development seeds in production.
+- Preserve a rehearsed rollback path for application and data. Prefer expand/contract migrations compatible with the previous version. Do not assume reverting an image reverses the schema or that every DDL operation is transactional; when data restoration is necessary, protect later writes and respect the approved RPO/RTO. Do not run an untested destructive down migration automatically.
+- On failure: stop promotion and new traffic, preserve logs and ledger, run only the rehearsed and authorized recovery, and verify health and integrity. If automatic recovery is unsafe, leave the environment in a controlled stopped state and escalate; do not improvise SQL in Preview or production.
+- Close the pipeline with evidence: environment and database, SHA/digest, expected/applied migrations, verified backup and restore, smoke-test results, rollback status, and blockers. Successful migration application alone is not functional acceptance of Preview or production.
 
 ### Per-Environment Persistence
 
