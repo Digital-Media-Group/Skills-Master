@@ -148,6 +148,8 @@ Cuando el proyecto tenga login con roles, implementa autologin por rol SOLO para
 
 - Regla general: NUNCA datos de ejemplo, mock, placeholders ni fixtures "de prueba" en ningún entorno (nada de lorem ipsum ni registros "test/demo" que luego haya que localizar y limpiar): retirarlos después cuesta más que crearlos bien. Todo se crea a través del CRUD real de la aplicación, como datos funcionales desde el primer momento.
 - La base de datos de desarrollo se siembra siempre con datos reales y estructurales: roles y su matriz de permisos, catálogos, configuración base y las cuentas estructurales por rol. Un script idempotente (al arrancar el entorno o con un comando documentado) la deja lista para probar las novedades de la rama `master` (por ejemplo, en Ideavo) sin preparación manual.
+- Cada función nueva o cambio de API o esquema de base de datos debe incluir en `master` las ampliaciones o ajustes de semillas necesarios para probar sus casos, relaciones y permisos. No se da por completo el cambio hasta que las semillas cubran la nueva función.
+- Actualizar el código de semillas no autoriza su ejecución sobre una base de datos real: las escrituras mantienen su aprobación propia. Las semillas de desarrollo y preview siguen separadas y nunca se cargan en producción.
 - La seed es determinista y reseteable; se regenera desde cero sin pasos manuales y no deja anotaciones que limpiar después.
 - El sembrado pasa por el CRUD o los servicios de la aplicación, nunca por SQL que se salte sus validaciones: cada registro sembrado es válido y funcional.
 - Los registros funcionales adicionales se crean por el CRUD con contenido realista y válido, nunca marcados como desechables.

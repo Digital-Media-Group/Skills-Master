@@ -148,6 +148,8 @@ When the project has role-based login, implement role autologin ONLY for the dev
 
 - General rule: NEVER example, mock, placeholder, or "test" fixture data in any environment (no lorem ipsum, no "test/demo" records that must later be found and cleaned up): removing them afterwards costs more than creating them properly. Everything is created through the application's real CRUD, as functional data from the start.
 - The development database is always seeded with real, structural data: roles and their permission matrix, catalogs, base configuration, and the structural per-role accounts. An idempotent script (on environment start or through a documented command) leaves it ready to test new work on the `master` branch (for example in Ideavo) without manual setup.
+- Every new feature or API or database schema change must include in `master` the seed additions or updates needed to test its cases, relationships, and permissions. The change is not complete until the seeds cover the new feature.
+- Updating seed code does not authorize running it against a real database: writes still require their own approval. Development and preview seeds remain separate and are never loaded into production.
 - The seed is deterministic and resettable; it regenerates from scratch with no manual steps and leaves no annotations to clean up afterwards.
 - Seeding goes through the application's CRUD or services, never through SQL that bypasses its validations: every seeded record is valid and functional.
 - Additional functional records are created through the CRUD with realistic, valid content, never marked as disposable.
