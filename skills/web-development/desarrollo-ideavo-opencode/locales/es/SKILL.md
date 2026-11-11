@@ -97,7 +97,7 @@ IDEAVO puede ejecutar un `autocomment` al terminar la respuesta y comentar, subi
 - El desarrollo ocurre en `master` (por ejemplo, en Ideavo); Preview y Production viven en el servidor (OpenShip/Atlas o Dokploy). Preview existe para validar y promocionar; no es un entorno permanente.
 - Todo cambio se sube a GitHub. Los PR quedan abiertos sin fusionar salvo OK numerado de Carlos: cada merge a `master` lleva su OK numerado por PR, y la promoción a producción lleva su propio OK numerado.
 - Antes de mutar Preview o Production: backup en destino S3 (Backblaze B2) con evidencia de restauración ensayada. Una respuesta 200 o una tarea encolada no demuestran que el backup sea restaurable.
-- Nunca se prueba en desarrollo ni en producción: las pruebas se hacen en Preview o en entornos aislados desechables, y las ejecuta el agente, no el usuario.
+- Las migraciones se diseñan y prueban siempre en desarrollo con bases aisladas. Preview valida la promoción del candidato ya ensayado; producción no es un entorno de pruebas. Las comprobaciones las ejecuta el agente, no el usuario.
 
 ### CI/CD y despliegues
 
@@ -117,6 +117,18 @@ Anotación crítica: cualquier prueba de migración, test, gate o validación ej
 - Las migraciones entre entornos, las pruebas de gates y las verificaciones de despliegue también se aíslan en OpenShip Actions o Dokploy antes de tocar el entorno de destino.
 - La finalidad es ahorrar cómputo de proveedores externos (Neon, Vercel u otros operadores de despliegue): su cómputo queda reservado para servir tráfico real autorizado, no para ejecutar pruebas.
 - Gestiona este enrutamiento de forma automática según el workflow activo: detecta la fase actual (desarrollo, Preview, producción) y dirige cada prueba al entorno aislado de OpenShip Actions o Dokploy sin pedir confirmación rutinaria. Solo pregunta si ninguno de los dos está disponible o el workflow no permite el aislamiento.
+
+### Migraciones: desarrollo primero y aplicación automática
+
+- Diseña, corrige y prueba las migraciones siempre en desarrollo, con una base aislada y datos estructurales. No utilices Preview ni producción para descubrir o reparar por primera vez una migración.
+- Versiona SQL, journal/manifest, dependencias y pruebas con el cambio funcional. Ensaya tanto instalación desde cero como actualización desde el esquema anterior; compara el ledger y el esquema efectivo, no solo el número de archivos. Comprueba el segundo pase sin cambios, permisos, integridad, compatibilidad entre versiones y recuperación ante fallo parcial.
+- Prepara en desarrollo el paso de migración del pipeline. En una promoción autorizada a Preview o producción, el pipeline aplica automáticamente solo las migraciones pendientes del mismo candidato validado, sin SQL manual ni nuevas preguntas por cada paso rutinario.
+- La automatización de la aplicación no autoriza un merge, una promoción ni cambios fuera de alcance. Mantén el OK numerado del PR y la autorización de la versión y entorno; una migración destructiva o un riesgo nuevo exige su decisión específica. Este procedimiento no ejecuta ni habilita despliegues por sí mismo.
+- Antes de aplicar: identifica la base de destino y su entorno, bloquea ejecuciones concurrentes, verifica el ledger, fija el SHA/digest aprobado y genera un backup en S3/B2 con checksum, fecha y prueba de restauración aislada verificable. Si falta una precondición, detén el pipeline antes de cambiar datos o tráfico.
+- Separa instalación inicial o traslado de datos de la migración incremental de esquema. No restaures una copia sobre una base activa como paso rutinario de release y nunca ejecutes semillas de desarrollo en producción.
+- Conserva una vía de rollback ensayada para aplicación y datos. Prioriza migraciones expand/contract compatibles con la versión anterior. No asumas que bajar la imagen revierte el esquema ni que todo DDL es transaccional; si hace falta restaurar datos, protege las escrituras posteriores y respeta el RPO/RTO aprobado. No hagas un down destructivo automático no ensayado.
+- Ante fallo: corta la promoción y el tráfico nuevo, conserva logs y ledger, ejecuta únicamente la recuperación ya ensayada y autorizada y verifica salud e integridad. Si la recuperación automática no es segura, deja el entorno detenido de forma controlada y escala; no improvises SQL en Preview o producción.
+- Cierra el pipeline con evidencia: entorno y base, SHA/digest, migraciones previstas/aplicadas, backup y restore verificados, resultado de smoke tests, estado del rollback y bloqueos. Una aplicación correcta de migraciones no equivale por sí sola a aceptación funcional de Preview o producción.
 
 ### Persistencia por entorno
 
