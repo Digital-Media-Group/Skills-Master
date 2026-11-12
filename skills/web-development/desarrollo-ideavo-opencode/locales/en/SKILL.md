@@ -145,6 +145,14 @@ Critical note: any migration test, test run, gate, or validation executed throug
 - Prepare real variables needed during the Preview phase, separated by environment and managed in Dokploy or the authorized secret system; never paste them into chat, commits, or versioned files.
 - Never reuse production variables in development or Preview. Development, preview, and production credentials must remain isolated.
 
+### Ideavo Sandbox Provisioning and Public URL
+
+- On every provisioning or recreation, use the HTTPS origin and port published by the current Ideavo sandbox as the public development URL. Never use localhost, a private IP, or another environment's host as the browser destination. The process may bind locally: that is not its public URL.
+- Obtain the origin from platform configuration rather than hardcoding temporary IDs or hosts in this skill. Check the canonical origin, auth, callbacks, trusted origins, cookies, HMR, and sandbox iframe policy separately. This development configuration does not require production secrets.
+- Do not blindly trust X-Forwarded-Host or relax CORS, CSP, or iframe protection for every origin. If the embedded preview needs an exception, scope it to development and the authorized Ideavo origin; retain Preview and Production protections.
+- Development gate: record the outer URL and redirect chain; both must stay within the expected sandbox without redirecting to localhost. Visually inspect the embedded preview and verify login/callback when applicable. Repeat after sandbox recreation or origin configuration changes.
+- If the gate fails, mark BLOCKED, separate verified causes from hypotheses, and do not call the environment ready. In a documentation-only task, record the finding and pending fix only: changing code, variables, headers, ports, or restarting requires separate approval.
+
 ### Development-Only Role Autologin
 
 When the project has role-based login, implement role autologin ONLY for the development environment (for example inside Ideavo), to exercise each role's login and dashboard without typing credentials:
