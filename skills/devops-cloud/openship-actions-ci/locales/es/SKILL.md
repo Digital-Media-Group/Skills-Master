@@ -2,59 +2,62 @@
 
 ## Propósito
 
-Preparar y verificar CI independiente en infraestructura propia. Usa workflows nativos de OpenShip/Atlas como vía preferente y un ejecutor independiente aislado en Dokploy solo cuando esté disponible y validado. GitHub aloja código, PRs, eventos y Checks; no orquesta ni ejecuta los jobs. GitHub Actions alojado y self-hosted quedan fuera de este procedimiento.
+Preparar y verificar CI en infraestructura propia. GitHub Actions orquesta los workflows; runners propios gestionados por Dokploy ejecutan los jobs en un VPS separado de producción. GitHub aloja código, PRs, eventos, logs y Checks. Este procedimiento sustituye la antigua preferencia por CI independiente de GitHub. El identificador de la skill se conserva por compatibilidad, no define la plataforma que debe orquestar.
 
 ## Cuándo utilizarla
 
 - Se necesitan typecheck, lint, tests, build o ensayos de migración en infraestructura propia.
-- Hay que documentar o validar un workflow nativo de OpenShip y su relación con la promoción.
-- Se evalúa una alternativa independiente en Dokploy sin registrar runners de GitHub.
+- Hay que inventariar, diseñar o verificar workflows de GitHub Actions con runners propios.
+- Se prepara la promoción a Preview sin lanzar CI con cada push de desarrollo.
 
 ## Cuándo no utilizarla
 
-- Se pretende registrar un runner de GitHub Actions o ejecutar un workflow coordinado por GitHub.
-- No existe un destino aislado o no se ha autorizado el consumo de cómputo remoto.
-- El código procede de forks sin revisar o requiere secretos de producción para ejecutar tests.
+- No existe un destino aislado o falta autorización para crear recursos, activar Actions o consumir cómputo remoto.
+- El código procede de forks sin revisar o los tests requieren secretos de producción.
+- Se pretende que una aprobación documental autorice despliegues, gasto o migraciones.
 
 ## Información necesaria
 
-- Capacidades actuales de la instancia, versión, SO, arquitectura y herramientas verificadas. La versión o un runner Ready no demuestran que el pipeline del producto funcione.
-- Repositorio, rama de trabajo, SHA exacto, workflow nativo, destino y evidencia del último run de ese producto.
-- Identidad de publicación de Checks con permisos mínimos; no usar credenciales de despliegue en jobs de pruebas.
-- Política de aprobación por intento, concurrencia, límites de tiempo y recursos, artefactos y retención.
-- Relación explícita entre PR, CI y despliegue; estado real de Auto Deploy, webhook y reglas de promoción.
+- Repositorio, visibilidad, rama, SHA exacto, workflows, triggers y último run del producto.
+- Hosts de CI y producción identificados y distintos; versión, SO, arquitectura, recursos, redes, montajes y herramientas verificados.
+- Inventario de runners, labels, grupos y repositorios permitidos. Ready no demuestra que un pipeline funcione.
+- Permisos mínimos de GITHUB_TOKEN y credenciales, por job; aprobaciones de Environment y controles de rama.
+- Concurrencia, límites de tiempo y recursos, costes de servidor y servicios, artefactos, retención y limpieza.
+- Relación explícita entre PR, CI y despliegue; Auto Deploy, webhooks, proveedor real de despliegue y gates por entorno.
 
 ## Procedimiento
 
-1. En lectura, inventaría workflows asociados al producto, runners, capacidades, ejecuciones y controles de despliegue. Distingue disponible, configurado y validado. Si no hay workflow enlazado o run verificable, registra pendiente; no declares CI operativo.
-2. Prepara un workflow nativo independiente en `.openship/workflows/` o en la configuración nativa de la instancia, según sus capacidades verificadas. La sintaxis YAML similar a GitHub no cambia quién orquesta los jobs. No reutilices `.github/workflows/` como ejecución de GitHub ni actives runners self-hosted de GitHub.
-3. Documenta etapas y dependencias: preflight de rama/SHA -> validaciones locales del candidato -> tests e integración aislados -> build -> evidencia. La promoción es un paso separado sujeto a aceptación del PR y autorización de entorno.
-4. Usa bases desechables sin datos de producción para instalación inicial, upgrade y segundo pase de migraciones. Conserva logs y ledger sin secretos. No ejecutes el ensayo contra la base que sirve tráfico.
-5. Limita acceso y aprobaciones por actor, SHA, intento y destino; usa cola y bloqueo para impedir promociones concurrentes. Un Check de un SHA anterior, un run omitido o una cola pendiente no es un gate verde.
-6. Solo tras autorización ejecuta el diagnóstico o pipeline. Registra plataforma que orquesta y destino que ejecuta, SHA, run, artefacto/digest, resultados y límites. Detén la promoción ante fallo; no cambies código para ocultar fallos de infraestructura.
-7. Publica Checks como evidencia cuando exista una integración autorizada. Publicar un Check no requiere ejecutar GitHub Actions. No habilites Auto Deploy ni webhooks como efecto de configurar CI.
+1. En lectura, inventaría workflows, triggers, runners, destinos, permisos, secretos referenciados sin mostrar valores, runs y controles de despliegue. Distingue disponible, configurado y validado. No presupongas que otro proyecto replica este modelo.
+2. Prepara cambios en `.github/workflows/` en rama de trabajo. Los disparadores automáticos de validación son `pull_request` hacia `preview` y `push` a `preview`, ajustando el nombre real de la rama mediante evidencia. No añadas push genérico de desarrollo ni PR a main/master como disparador automático de CI. Un PR abierto hacia Preview se vuelve a validar con `synchronize`; explícalo, no prometas una sola ejecución. Los gates manuales de producción son separados.
+3. Documenta etapas: preflight de rama/SHA -> validación del candidato -> tests e integración aislados -> build -> evidencia. Usa concurrencia por PR/ref, cancelación de runs obsoletos solo donde sea segura, filtros de paths justificados y timeouts. No debilites gates por ahorrar ejecuciones.
+4. Diseña un dominio candidato sin secretos ni acceso de Preview/Production. Prefiere runners efímeros de un job con workspace y volúmenes nuevos; verifica borrado y retirada del registro. Un listener persistente o un contenedor reiniciado no equivale a efímero. El controlador de registro no expone sus credenciales al job.
+5. Separa el dominio de producción: host o VM y credenciales distintos del candidato, labels/grupos y repositorios restringidos, Environment protegido y aprobación explícita. Labels distintos en el mismo runner persistente no aíslan confianza. Ejecuta herramientas revisadas y un artefacto/digest del SHA autorizado, no scripts candidatos arbitrarios con secretos de producción. No cambies esta ruta solo por actualizar documentación.
+6. Usa bases desechables sin datos de producción para instalación inicial, upgrade y segundo pase. Conserva logs y ledger sin secretos. Nunca ensayes contra la base que sirve tráfico.
+7. Antes de activar Actions, registrar runners, crear VPS o ejecutar jobs remotos, presenta host, coste, aislamiento, workflows y rollback y recupera el OK correspondiente. Una autorización de lectura o documentación no basta. No habilites Auto Deploy ni webhooks como efecto lateral.
+8. Tras autorización, ejecuta un diagnóstico del SHA exacto y registra orquestador, destino, runner, run, artefacto/digest, resultados, recursos y limpieza. Un Check de otro SHA, un run omitido o en cola no es verde. El fallo bloquea la promoción; no lo ocultes cambiando código o tests.
 
-## Alternativa endurecida en Dokploy
+## Aislamiento en Dokploy
 
-No presupongas que existe un servicio de CI porque existe un proyecto con ese nombre. Verifica un ejecutor independiente, sin coordinación de GitHub Actions, su cola, contrato de jobs, aislamiento, permisos, límites y evidencia de diagnóstico. Si falta, documenta el gap y pide aprobación de implementación; no inventes endpoints ni registres un runner de GitHub.
-
-- Contenedores desechables, sin `privileged`, red host, socket Docker del host, redes de aplicaciones ni volúmenes externos al job. Si un build requiere otra capacidad, detente y presenta un diseño de aislamiento aprobado; no amplíes permisos silenciosamente.
-- Credenciales y bases de CI efímeras, sin secretos de Preview/Production ni acceso a despliegues.
-- Un job activo por recurso limitado, timeout, limpieza verificable y logs sin secretos.
-- La guía documental no crea el ejecutor, no activa triggers y no autoriza cómputo remoto.
+- VPS de CI separado de producción; sin redes de apps, modo privilegiado, red host, socket Docker real del host ni montajes fuera del job. Si el build necesita otra capacidad, presenta un diseño aprobado antes de ampliar permisos.
+- Sin secretos de producción ni credenciales de despliegue en jobs candidatos. Permisos de token mínimos y dependencias de workflows fijadas y revisadas.
+- Egress limitado a destinos necesarios; una red bridge no es aislamiento total ni prueba de firewall. Verifica reglas reales, no solo el compose.
+- Cola y un job por recurso limitado al inicio, timeout, límites CPU/RAM/disco, retención acotada y logs sin secretos.
+- El código de PR puede comprometer un runner propio. Bloquea forks sin revisar y verifica la política según visibilidad y actores permitidos antes de activarlo.
+- GitHub no cobra ejecución de runner propio según su política aplicable, pero VPS, almacenamiento, artefactos, caché y servicios externos pueden costar dinero. Verifica precio y condiciones actuales; no describas todo el sistema como gratis.
 
 ## Validación
 
-- La plataforma de orquestación es nativa OpenShip o independiente Dokploy, nunca GitHub Actions.
-- El workflow está asociado al producto y un run autorizado del SHA exacto terminó con todos los gates aplicables, sin confundir Ready con probado.
-- Los tests de migración usan datos y base aislados; las aprobaciones, artefactos y resultados quedan registrados.
-- Auto Deploy, webhooks y gates de promoción se comprueban por entorno; no se modifican sin autorización.
-- Si falta acceso o un ejecutor validado, el resultado queda pendiente y no se promueve.
+- GitHub Actions orquesta; el runner propio gestionado por Dokploy y el host separado están comprobados.
+- Los triggers reales cumplen la política aprobada; las diferencias de un proyecto existente quedan registradas sin cambiarlas por inferencia.
+- El run autorizado del SHA exacto completa todos los gates; Ready no significa probado.
+- Datos, bases, permisos y dominios candidato/producción están separados y la limpieza está verificada.
+- Artefactos, resultados, aprobación, copia y rollback se comprueban antes de cada promoción que los requiera.
+- Si faltan acceso, ejecutor validado o autorización, el estado es pendiente y no se promueve.
 
 ## Resultado esperado
 
-Plan de CI o CI verificado, claramente diferenciados, con trazabilidad de SHA, run, resultados, artefactos y aprobaciones. La documentación no equivale a un pipeline instalado o ejecutado.
+Plan de CI o CI verificado, claramente diferenciados, con SHA, host, runner, run, resultados, artefactos, coste, aprobaciones y límites. La documentación no equivale a un pipeline instalado o ejecutado.
 
 ## Seguridad
 
-Nivel de riesgo: **high**. No ejecutes jobs remotos, despliegues ni migraciones por una aprobación documental. Mantén forks sin revisar bloqueados. No amplíes permisos, expongas secretos ni uses datos de producción para tests. Una prueba fallida bloquea la promoción, no justifica eludir el control.
+Nivel de riesgo: **high**. Mantén forks sin revisar bloqueados. No amplíes permisos, expongas secretos ni uses datos de producción para tests. Los cambios de servidores, gasto, merge y producción necesitan su autorización. Una prueba fallida bloquea la promoción y nunca justifica eludir el control.

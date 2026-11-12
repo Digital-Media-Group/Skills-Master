@@ -23,7 +23,7 @@ Actuar como un agente de desarrollo orientado a entregar cambios seguros, verifi
 - `AGENTS.md`, `CONTRIBUTING.md`, runbooks y documentación de release.
 - Framework, lenguaje, gestor de paquetes, arquitectura, scripts y configuración.
 - Integraciones externas, variables de entorno, accesos requeridos y criterio de terminado.
-- Plataforma de CI/CD y despliegue: OpenShip/Atlas Actions como vía preferente y Dokploy endurecido como alternativa (skill `openship-actions-ci`); GitHub Actions hospedado, Neon y Vercel no deben aportar cómputo de pipelines o entornos de prueba salvo una decisión explícita.
+- Plataforma de CI/CD: GitHub como orquestador y runners propios gestionados por Dokploy, con host separado de producción y disparadores limitados a promoción a Preview. Identificar por separado la plataforma de despliegue ya autorizada.
 - Gestión de configuración: durante desarrollo no se requieren variables de entorno salvo que una dependencia real las exija antes de Preview.
 
 ### MCP requeridos
@@ -101,22 +101,28 @@ IDEAVO puede ejecutar un `autocomment` al terminar la respuesta y comentar, subi
 
 ### CI/CD y despliegues
 
-- Ejecuta CI/CD y los entornos de prueba mediante OpenShip/Atlas Actions cuando la instancia lo soporte (skill `openship-actions-ci`) o, como alternativa endurecida, mediante Docker en Dokploy, reutilizando su cómputo para builds, tests, integración y validaciones.
-- No uses GitHub Actions, ni alojado ni self-hosted, para pipelines, builds o entornos de prueba. GitHub puede alojar repositorios, PRs y Checks, pero no orquesta ni ejecuta jobs. No registres runners de GitHub como alternativa a CI independiente.
-- No uses cómputo de Neon ni Vercel para CI, builds o entornos de prueba. Neon solo se utiliza si se eligió expresamente como persistencia aislada por entorno y Vercel solo si el usuario lo autoriza expresamente para una finalidad concreta.
-- No crees previews automáticas ni despliegues automáticos desde una rama, PR o commit. Un despliegue a Preview o a cualquier rama distinta de producción requiere que el usuario acepte el PR antes de ejecutarse.
-- No promociones directamente desde una rama de trabajo a producción. Tras la aceptación del PR y la autorización del entorno, usa el destino real aprobado: OpenShip/Atlas para la aplicación o Dokploy para servicios vinculados. No migres una aplicación de plataforma como efecto de actualizar esta guía.
-- Antes de consumir cómputo remoto, verifica que el job, entorno o deployment corresponde a la acción aprobada y evita duplicar ejecuciones pendientes.
+- Modelo estándar: GitHub orquesta eventos, checks ligados al SHA, protección de ramas y aprobaciones; runners propios gestionados por Dokploy ejecutan los trabajos. No usar runners alojados por GitHub sin una decisión explícita de coste y alcance.
+- Disparadores automáticos de validación: PR cuyo destino sea `preview` y push a `preview`. No ejecutar CI remoto por cada push a una rama de desarrollo ni añadir PR a `main`/`master` como disparador ordinario sin una excepción aprobada. Los eventos `synchronize` de un PR abierto a `preview` sí vuelven a validar ese candidato: documentarlo para no prometer una sola ejecución al abrir el PR.
+- El desarrollo conserva tests puros locales sin disparar el pipeline remoto. La certificación completa acompaña la promoción a Preview. Los trabajos manuales de diagnóstico y las puertas protegidas de producción son categorías separadas, no un permiso para lanzar CI en desarrollo.
+- Inventariar primero el modelo real de cada proyecto. No afirmar que una referencia ya cumple el estándar: algunos proyectos pueden tener además PR a integración, comprobaciones de genealogía y puertas de producción. Copiar su propósito y controles, no sus excepciones ni sus secretos.
+- Cada proyecto mantiene runners y credenciales en su propio workspace. Registrar host real, identidad, etiquetas, workflow, SHA, redes, montajes, límites y último diagnóstico verificable. Dokploy es el gestor; Atlas u otro VPS es la máquina. No son plataformas intercambiables por el nombre.
+- Los runners de código candidato usan un VPS separado de producción y recursos desechables, con límites de CPU, RAM, disco, procesos, tiempo y concurrencia. Sin `privileged`, red host, socket Docker real, redes de aplicaciones, volúmenes operativos ni secretos de Preview/producción. Preferir un ejecutor nuevo por job; si el runner persiste, no llamarlo efímero y documentar limpieza, cachés y riesgo residual.
+- Separar runner candidato, certificación con integraciones y runner protegido de migración/despliegue productivo. No reutilizar etiquetas que permitan a código candidato obtener secretos o permisos de producción. Las credenciales de registro del runner no quedan disponibles a los jobs.
+- Migración/despliegue productivo requiere aprobación del propietario, SHA/digest inmutable, entorno protegido, backup verificado y rollback ensayado. No crear runners, contratar servidores, reactivar Actions, cambiar triggers, habilitar Auto Deploy ni mover aplicaciones como efecto de actualizar esta guía.
+- GitHub no factura minutos de ejecución self-hosted según su política vigente; verificarla al decidir. La máquina, almacenamiento de artefactos/cachés y servicios externos pueden tener coste. Presentar host, coste y aislamiento para aprobación antes de crear capacidad.
+- No usar cómputo de Neon ni Vercel para CI o entornos de prueba salvo elección explícita. Respetar las plataformas de persistencia y despliegue ya autorizadas; este estándar no migra una aplicación.
+- Publicar resultados del SHA exacto con comandos, logs, artefactos y limpieza. Un fixture puro no certifica un receptor real, E2E, la cadena completa de migraciones ni el esquema productivo. Un job pendiente, omitido o un Check anterior no es PASS.
+- No crear previews ni despliegues automáticos desde una rama, PR o commit. La aceptación del PR y la autorización de promoción siguen siendo condiciones separadas de tener CI verde.
 
 ### Aislamiento obligatorio del cómputo de pruebas
 
-Anotación crítica: cualquier prueba de migración, test, gate o validación ejecutada vía CI/CD debe ejecutarse siempre en un entorno externo aislado (runner de OpenShip Actions o Docker en Dokploy), habitualmente conectado mediante MCP.
+Anotación crítica: cualquier prueba de migración, test, gate o validación ejecutada vía CI/CD debe ejecutarse siempre en un entorno externo aislado (runner propio aislado gestionado por Dokploy), habitualmente conectado mediante MCP.
 
-- En desarrollo, ninguna prueba de migración ni ejecución de CI/CD se hace directamente desde Vercel, Neon ni cualquier otro cómputo exterior. Siempre se enruta al entorno aislado de OpenShip Actions o Dokploy.
-- En Preview, aunque la base de datos esté en un proveedor externo, las pruebas, migraciones y gates se ejecutan en un entorno aislado (OpenShip Actions o Dokploy) contra una copia o rama de datos desechable; nunca contra el servicio que sirve el tráfico.
-- Las migraciones entre entornos, las pruebas de gates y las verificaciones de despliegue también se aíslan en OpenShip Actions o Dokploy antes de tocar el entorno de destino.
+- En desarrollo, ninguna prueba de migración ni ejecución de CI/CD se hace directamente desde Vercel, Neon ni cualquier otro cómputo exterior. Siempre se enruta al entorno aislado de runners propios gestionados por Dokploy.
+- En Preview, aunque la base de datos esté en un proveedor externo, las pruebas, migraciones y gates se ejecutan en un entorno aislado (runners propios gestionados por Dokploy) contra una copia o rama de datos desechable; nunca contra el servicio que sirve el tráfico.
+- Las migraciones entre entornos, las pruebas de gates y las verificaciones de despliegue también se aíslan en runners propios gestionados por Dokploy antes de tocar el entorno de destino.
 - La finalidad es ahorrar cómputo de proveedores externos (Neon, Vercel u otros operadores de despliegue): su cómputo queda reservado para servir tráfico real autorizado, no para ejecutar pruebas.
-- Gestiona este enrutamiento de forma automática según el workflow activo: detecta la fase actual (desarrollo, Preview, producción) y dirige cada prueba al entorno aislado de OpenShip Actions o Dokploy sin pedir confirmación rutinaria. Solo pregunta si ninguno de los dos está disponible o el workflow no permite el aislamiento.
+- Gestiona este enrutamiento de forma automática según el workflow activo: detecta la fase actual (desarrollo, Preview, producción) y dirige cada prueba al entorno aislado de runners propios gestionados por Dokploy sin pedir confirmación rutinaria. Si no hay un ejecutor validado o el workflow no permite el aislamiento, registra el bloqueo y presenta una alternativa sin activar recursos por inferencia.
 
 ### Migraciones: desarrollo primero y aplicación automática
 
@@ -185,8 +191,8 @@ Cuando el proyecto tenga login con roles, implementa autologin por rol SOLO para
 - Las superficies remotas se comprueban con smoke tests read-only; no se inventan métricas, logs, tests ni deployments.
 - El diff no contiene secretos, tokens, PII ni cambios ajenos; `git diff --check` pasa cuando corresponde.
 - El criterio de terminado y todo bloqueo externo quedan documentados.
-- La validación de CI/CD se ejecuta en OpenShip Actions o Dokploy y no consume cómputo de pago de GitHub Actions, Neon o Vercel.
-- Toda prueba de migración, gate o validación se ejecutó en el entorno aislado (OpenShip Actions o Dokploy), incluso en Preview y con base de datos externa.
+- La validación de CI/CD se ejecuta en runners propios gestionados por Dokploy y no consume cómputo de pago de GitHub Actions, Neon o Vercel.
+- Toda prueba de migración, gate o validación se ejecutó en el entorno aislado (runners propios gestionados por Dokploy), incluso en Preview y con base de datos externa.
 - Los despliegues de Preview y de ramas no se ejecutan automáticamente; existe aceptación del PR registrada antes de ejecutarlos.
 - Cada entorno tiene su base y credenciales separadas (desarrollo, preview, production); Neon solo si se decidió expresamente.
 - El autologin por rol funciona solo con `APP_ENV=development` y `DEV_AUTOLOGIN=true`, está ausente en preview/production y su guarda de regresión pasa.
