@@ -93,19 +93,19 @@ IDEAVO puede ejecutar un `autocomment` al terminar la respuesta y comentar, subi
 
 ### Modelo de ramas y entornos
 
-- Ramas: `master` (desarrollo) -> `preview` -> `production`, un proyecto con tres entornos y base de datos separada por entorno. Sin ramas de desarrollo extra: Ideavo autocommite cada sesión sobre `master`.
-- El desarrollo ocurre en `master` (por ejemplo, en Ideavo); Preview y Production viven en el servidor (OpenShip/Atlas o Dokploy). Preview existe para validar y promocionar; no es un entorno permanente.
-- Todo cambio se sube a GitHub. Los PR quedan abiertos sin fusionar salvo OK numerado de Carlos: cada merge a `master` lleva su OK numerado por PR, y la promoción a producción lleva su propio OK numerado.
+- Detecta la rama de integración real (`main` o `master`) y sus protecciones; no la renombres ni cambies el default. Trabaja en una rama por cambio y abre PR hacia esa integración. Nunca desarrolles ni autocommitees directamente en integración, `preview` o `production`. Antes de enviar un prompt en Ideavo, verifica rama activa, SHA local/remoto, árbol limpio y divergencia; si no puedes impedir un autocommit en una rama protegida, detente sin enviar el prompt.
+- Flujo: rama de trabajo -> PR aceptado hacia integración (`main`/`master`) -> candidato autorizado en `preview` -> aprobación de promoción a `production`. Cada entorno tiene base, secretos y volúmenes separados. El desarrollo ocurre en Ideavo; el servidor aloja Preview y Production. Preview existe para validar la promoción, no como entorno permanente.
+- Publica cambios solo en la rama autorizada. Cada PR queda abierto sin fusionar hasta el OK numerado del propietario para ese PR; la promoción a cada entorno requiere su aprobación propia. Un OK documental no autoriza pipelines, migraciones, despliegues ni cambios de topología.
 - Antes de mutar Preview o Production: backup en destino S3 (Backblaze B2) con evidencia de restauración ensayada. Una respuesta 200 o una tarea encolada no demuestran que el backup sea restaurable.
 - Las migraciones se diseñan y prueban siempre en desarrollo con bases aisladas. Preview valida la promoción del candidato ya ensayado; producción no es un entorno de pruebas. Las comprobaciones las ejecuta el agente, no el usuario.
 
 ### CI/CD y despliegues
 
 - Ejecuta CI/CD y los entornos de prueba mediante OpenShip/Atlas Actions cuando la instancia lo soporte (skill `openship-actions-ci`) o, como alternativa endurecida, mediante Docker en Dokploy, reutilizando su cómputo para builds, tests, integración y validaciones.
-- No uses recursos de pago ni cómputo de GitHub Actions para pipelines, builds o entornos de prueba. GitHub puede alojar el repositorio y el PR, pero no debe ejecutar el pipeline salvo autorización explícita.
-- No uses cómputo de Neon ni Vercel para CI, builds o entornos de prueba. Neon se utiliza como persistencia aislada por entorno y Vercel solo si el usuario lo autoriza expresamente para una finalidad concreta.
+- No uses GitHub Actions, ni alojado ni self-hosted, para pipelines, builds o entornos de prueba. GitHub puede alojar repositorios, PRs y Checks, pero no orquesta ni ejecuta jobs. No registres runners de GitHub como alternativa a CI independiente.
+- No uses cómputo de Neon ni Vercel para CI, builds o entornos de prueba. Neon solo se utiliza si se eligió expresamente como persistencia aislada por entorno y Vercel solo si el usuario lo autoriza expresamente para una finalidad concreta.
 - No crees previews automáticas ni despliegues automáticos desde una rama, PR o commit. Un despliegue a Preview o a cualquier rama distinta de producción requiere que el usuario acepte el PR antes de ejecutarse.
-- No promociones directamente desde una rama de trabajo a producción. Tras la aceptación del PR, despliega desde Dokploy siguiendo la rama y el orden aprobados.
+- No promociones directamente desde una rama de trabajo a producción. Tras la aceptación del PR y la autorización del entorno, usa el destino real aprobado: OpenShip/Atlas para la aplicación o Dokploy para servicios vinculados. No migres una aplicación de plataforma como efecto de actualizar esta guía.
 - Antes de consumir cómputo remoto, verifica que el job, entorno o deployment corresponde a la acción aprobada y evita duplicar ejecuciones pendientes.
 
 ### Aislamiento obligatorio del cómputo de pruebas
@@ -145,6 +145,14 @@ Anotación crítica: cualquier prueba de migración, test, gate o validación ej
 - Prepara las variables reales necesarias durante la fase de Preview, separadas por entorno y gestionadas en Dokploy o el sistema autorizado de secretos; nunca las pegues en el chat, commits o archivos versionados.
 - Nunca reutilices variables de producción en desarrollo o Preview. Las credenciales de desarrollo, preview y production deben permanecer aisladas.
 
+### Aprovisionamiento y URL pública del sandbox Ideavo
+
+- En cada aprovisionamiento o recreación, usa como URL pública de desarrollo el origen HTTPS y puerto publicados por el sandbox vigente de Ideavo. No uses localhost, una IP privada ni el host de otro entorno como destino del navegador. El bind interno del proceso puede ser local: no es su URL pública.
+- Obtén el origen desde la configuración de la plataforma, sin fijar IDs o hosts efímeros en la skill. Comprueba por separado el origen canónico, auth, callbacks, trusted origins, cookies, HMR y la política de iframe del sandbox. Esta configuración de desarrollo no requiere secretos de producción.
+- No confíes ciegamente en X-Forwarded-Host ni relajes CORS, CSP o protección de iframe para todos los orígenes. Si hace falta permitir la vista integrada, limita la excepción al entorno de desarrollo y al origen autorizado de Ideavo; conserva las protecciones de Preview y Producción.
+- Gate de desarrollo: registra URL exterior y cadena de redirecciones; ambas deben permanecer en el sandbox esperado, sin salto a localhost. Inspecciona visualmente la vista integrada y verifica login/callback cuando corresponda. Repite la comprobación tras recrear el sandbox o cambiar configuración de origen.
+- Si falla, marca BLOQUEADO, separa causa verificada de hipótesis y no declares el entorno listo. En un encargo documental solo registra el hallazgo y la corrección pendiente: cambiar código, variables, cabeceras, puertos o reiniciar requiere autorización aparte.
+
 ### Autologin por rol solo en desarrollo
 
 Cuando el proyecto tenga login con roles, implementa autologin por rol SOLO para el entorno de desarrollo (por ejemplo, dentro de Ideavo), para probar el login y el dashboard de cada rol sin escribir credenciales:
@@ -159,8 +167,8 @@ Cuando el proyecto tenga login con roles, implementa autologin por rol SOLO para
 ### Datos semilla en desarrollo
 
 - Regla general: NUNCA datos de ejemplo, mock, placeholders ni fixtures "de prueba" en ningún entorno (nada de lorem ipsum ni registros "test/demo" que luego haya que localizar y limpiar): retirarlos después cuesta más que crearlos bien. Todo se crea a través del CRUD real de la aplicación, como datos funcionales desde el primer momento.
-- La base de datos de desarrollo se siembra siempre con datos reales y estructurales: roles y su matriz de permisos, catálogos, configuración base y las cuentas estructurales por rol. Un script idempotente (al arrancar el entorno o con un comando documentado) la deja lista para probar las novedades de la rama `master` (por ejemplo, en Ideavo) sin preparación manual.
-- Cada función nueva o cambio de API o esquema de base de datos debe incluir en `master` las ampliaciones o ajustes de semillas necesarios para probar sus casos, relaciones y permisos. No se da por completo el cambio hasta que las semillas cubran la nueva función.
+- La base de datos de desarrollo se siembra siempre con datos reales y estructurales: roles y su matriz de permisos, catálogos, configuración base y las cuentas estructurales por rol. Un script idempotente (al arrancar el entorno o con un comando documentado) la deja lista para probar las novedades de la rama de trabajo (por ejemplo, en Ideavo) sin preparación manual.
+- Cada función nueva o cambio de API o esquema de base de datos debe incluir en la rama de trabajo las ampliaciones o ajustes de semillas necesarios para probar sus casos, relaciones y permisos. No se da por completo el cambio hasta que las semillas cubran la nueva función.
 - Actualizar el código de semillas no autoriza su ejecución sobre una base de datos real: las escrituras mantienen su aprobación propia. Las semillas de desarrollo y preview siguen separadas y nunca se cargan en producción.
 - La seed es determinista y reseteable; se regenera desde cero sin pasos manuales y no deja anotaciones que limpiar después.
 - El sembrado pasa por el CRUD o los servicios de la aplicación, nunca por SQL que se salte sus validaciones: cada registro sembrado es válido y funcional.
@@ -184,7 +192,7 @@ Cuando el proyecto tenga login con roles, implementa autologin por rol SOLO para
 - El autologin por rol funciona solo con `APP_ENV=development` y `DEV_AUTOLOGIN=true`, está ausente en preview/production y su guarda de regresión pasa.
 - La seed de desarrollo es idempotente, estructural y reseteable, sin datos mock ni de ejemplo; production no recibe seed.
 - Ningún cambio introduce datos de ejemplo, mock ni placeholders; los datos se crean por el CRUD real.
-- Existe backup en S3/B2 con restauración ensayada antes de mutar Preview o Production, y consta el OK numerado de Carlos para cada merge a `master` y para la promoción a producción.
+- Existe backup en S3/B2 con restauración ensayada antes de mutar Preview o Production, y consta el OK numerado del propietario para cada PR hacia integración y para la promoción de entorno.
 - Los MCP necesarios están disponibles y sus permisos son suficientes, mínimos y verificables para la tarea.
 - Existe una planificación completa, las tareas son autocontenidas y la atención humana se solicitó solo por un bloqueo o aprobación necesaria.
 - El desarrollo avanza sin variables de entorno salvo necesidad técnica demostrada; las variables reales se configuran en Preview y permanecen separadas por entorno.
