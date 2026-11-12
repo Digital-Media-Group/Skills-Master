@@ -145,6 +145,14 @@ Anotación crítica: cualquier prueba de migración, test, gate o validación ej
 - Prepara las variables reales necesarias durante la fase de Preview, separadas por entorno y gestionadas en Dokploy o el sistema autorizado de secretos; nunca las pegues en el chat, commits o archivos versionados.
 - Nunca reutilices variables de producción en desarrollo o Preview. Las credenciales de desarrollo, preview y production deben permanecer aisladas.
 
+### Aprovisionamiento y URL pública del sandbox Ideavo
+
+- En cada aprovisionamiento o recreación, usa como URL pública de desarrollo el origen HTTPS y puerto publicados por el sandbox vigente de Ideavo. No uses localhost, una IP privada ni el host de otro entorno como destino del navegador. El bind interno del proceso puede ser local: no es su URL pública.
+- Obtén el origen desde la configuración de la plataforma, sin fijar IDs o hosts efímeros en la skill. Comprueba por separado el origen canónico, auth, callbacks, trusted origins, cookies, HMR y la política de iframe del sandbox. Esta configuración de desarrollo no requiere secretos de producción.
+- No confíes ciegamente en X-Forwarded-Host ni relajes CORS, CSP o protección de iframe para todos los orígenes. Si hace falta permitir la vista integrada, limita la excepción al entorno de desarrollo y al origen autorizado de Ideavo; conserva las protecciones de Preview y Producción.
+- Gate de desarrollo: registra URL exterior y cadena de redirecciones; ambas deben permanecer en el sandbox esperado, sin salto a localhost. Inspecciona visualmente la vista integrada y verifica login/callback cuando corresponda. Repite la comprobación tras recrear el sandbox o cambiar configuración de origen.
+- Si falla, marca BLOQUEADO, separa causa verificada de hipótesis y no declares el entorno listo. En un encargo documental solo registra el hallazgo y la corrección pendiente: cambiar código, variables, cabeceras, puertos o reiniciar requiere autorización aparte.
+
 ### Autologin por rol solo en desarrollo
 
 Cuando el proyecto tenga login con roles, implementa autologin por rol SOLO para el entorno de desarrollo (por ejemplo, dentro de Ideavo), para probar el login y el dashboard de cada rol sin escribir credenciales:
