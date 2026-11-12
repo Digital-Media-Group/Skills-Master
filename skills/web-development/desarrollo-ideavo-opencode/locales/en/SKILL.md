@@ -93,19 +93,19 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 
 ### Branch and Environment Model
 
-- Branches: `master` (development) -> `preview` -> `production`, one project with three environments and a separate database per environment. No extra development branches: Ideavo auto-commits every session on `master`.
-- Development happens on `master` (for example in Ideavo); Preview and Production live on the server (OpenShip/Atlas or Dokploy). Preview exists to validate and promote; it is not a permanent environment.
-- Every change is pushed to GitHub. PRs stay open and unmerged without Carlos's numbered OK: every merge to `master` carries its numbered OK per PR, and the production promotion carries its own numbered OK.
+- Detect the actual integration branch (`main` or `master`) and its protections; do not rename it or change the default. Use one work branch per change and open a PR toward integration. Never develop or auto-commit directly on integration, `preview`, or `production`. Before sending an Ideavo prompt, verify the active branch, local/remote SHA, clean tree, and divergence; if an automatic commit on a protected branch cannot be prevented, stop without sending the prompt.
+- Flow: work branch -> accepted integration PR (`main`/`master`) -> authorized candidate in `preview` -> approved promotion to `production`. Each environment has separate databases, secrets, and volumes. Development happens in Ideavo; the server hosts Preview and Production. Preview validates promotion rather than acting as a permanent environment.
+- Publish changes only on the authorized work branch. Every PR remains open and unmerged until the owner gives a numbered OK for that PR; promotion to each environment needs its own approval. Documentation approval does not authorize pipelines, migrations, deployments, or topology changes.
 - Before mutating Preview or Production: a backup to an S3 destination (Backblaze B2) with restore-rehearsal evidence. A 200 response or a queued task does not prove the backup is restorable.
 - Migrations are always designed and tested in development with isolated databases. Preview validates promotion of the already rehearsed candidate; production is not a test environment. The agent runs the checks, not the user.
 
 ### CI/CD and Deployments
 
 - Run CI/CD and test environments through OpenShip/Atlas Actions when the instance supports it (see the `openship-actions-ci` skill) or, as a hardened fallback, through Docker on Dokploy, reusing its compute for builds, tests, integration, and validation.
-- Do not use paid resources or GitHub Actions compute for pipelines, builds, or test environments. GitHub may host the repository and PR, but must not execute the pipeline without explicit authorization.
-- Do not use Neon or Vercel compute for CI, builds, or test environments. Use Neon for isolated per-environment persistence, and use Vercel only when the user explicitly authorizes a specific purpose.
+- Do not use GitHub Actions, hosted or self-hosted, for pipelines, builds, or test environments. GitHub may host repositories, PRs, and Checks, but must not orchestrate or execute jobs. Do not register GitHub runners as a fallback for independent CI.
+- Do not use Neon or Vercel compute for CI, builds, or test environments. Use Neon only when explicitly selected for persistence, and Vercel only for an explicitly authorized purpose.
 - Do not create automatic previews or automatic deployments from a branch, PR, or commit. A deployment to Preview or any non-production branch requires the user to accept the PR before it runs.
-- Do not promote a work branch directly to production. After PR acceptance, deploy from Dokploy using the approved branch and order.
+- Do not promote a work branch directly to production. After PR acceptance and environment authorization, use the approved actual destination: OpenShip/Atlas for the application or Dokploy for linked services. Updating this guide does not migrate an application between platforms.
 - Before consuming remote compute, verify that the job, environment, or deployment matches the approved action and avoid duplicating pending executions.
 
 ### Mandatory Isolation of Test Compute
@@ -159,8 +159,8 @@ When the project has role-based login, implement role autologin ONLY for the dev
 ### Development Seed Data
 
 - General rule: NEVER example, mock, placeholder, or "test" fixture data in any environment (no lorem ipsum, no "test/demo" records that must later be found and cleaned up): removing them afterwards costs more than creating them properly. Everything is created through the application's real CRUD, as functional data from the start.
-- The development database is always seeded with real, structural data: roles and their permission matrix, catalogs, base configuration, and the structural per-role accounts. An idempotent script (on environment start or through a documented command) leaves it ready to test new work on the `master` branch (for example in Ideavo) without manual setup.
-- Every new feature or API or database schema change must include in `master` the seed additions or updates needed to test its cases, relationships, and permissions. The change is not complete until the seeds cover the new feature.
+- The development database is always seeded with real, structural data: roles and their permission matrix, catalogs, base configuration, and the structural per-role accounts. An idempotent script (on environment start or through a documented command) leaves it ready to test new work on the work branch (for example in Ideavo) without manual setup.
+- Every new feature or API or database schema change must include on the work branch the seed additions or updates needed to test its cases, relationships, and permissions. The change is not complete until the seeds cover the new feature.
 - Updating seed code does not authorize running it against a real database: writes still require their own approval. Development and preview seeds remain separate and are never loaded into production.
 - The seed is deterministic and resettable; it regenerates from scratch with no manual steps and leaves no annotations to clean up afterwards.
 - Seeding goes through the application's CRUD or services, never through SQL that bypasses its validations: every seeded record is valid and functional.
@@ -184,7 +184,7 @@ When the project has role-based login, implement role autologin ONLY for the dev
 - Role autologin works only with `APP_ENV=development` and `DEV_AUTOLOGIN=true`, is absent from preview/production, and its regression guard passes.
 - The development seed is idempotent, structural, and resettable, with no mock or example data; production never receives seed data.
 - No change introduces example, mock, or placeholder data; records are created through the real CRUD.
-- An S3/B2 backup with a restore rehearsal exists before mutating Preview or Production, and Carlos's numbered OK is on record for every merge to `master` and for the production promotion.
+- An S3/B2 backup with a restore rehearsal exists before mutating Preview or Production, and the owner's numbered OK is on record for each integration PR and environment promotion.
 - Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.
 - A complete plan exists, tasks are self-contained, and human attention was requested only for a blocker or required approval.
 - Development progresses without environment variables unless a demonstrated technical need exists; real variables are configured in Preview and remain isolated per environment.
