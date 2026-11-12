@@ -23,7 +23,7 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - `AGENTS.md`, `CONTRIBUTING.md`, runbooks, and release documentation.
 - Framework, language, package manager, architecture, scripts, and configuration.
 - External integrations, environment variables, required access, and definition of done.
-- CI/CD and deployment platform: OpenShip/Atlas Actions as the preferred route and hardened Dokploy as the fallback (see the `openship-actions-ci` skill); hosted GitHub Actions, Neon, and Vercel must not provide pipeline or test-environment compute unless explicitly approved.
+- CI/CD platform: GitHub orchestration and self-hosted runners managed by Dokploy, on a host separate from production and with triggers limited to Preview promotion. Identify the already-authorized deployment platform separately.
 - Configuration management: environment variables are not required during development unless a real dependency requires them before Preview.
 
 ### Required MCPs
@@ -99,24 +99,30 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 - Before mutating Preview or Production: a backup to an S3 destination (Backblaze B2) with restore-rehearsal evidence. A 200 response or a queued task does not prove the backup is restorable.
 - Migrations are always designed and tested in development with isolated databases. Preview validates promotion of the already rehearsed candidate; production is not a test environment. The agent runs the checks, not the user.
 
-### CI/CD and Deployments
+### CI/CD and deployments
 
-- Run CI/CD and test environments through OpenShip/Atlas Actions when the instance supports it (see the `openship-actions-ci` skill) or, as a hardened fallback, through Docker on Dokploy, reusing its compute for builds, tests, integration, and validation.
-- Do not use GitHub Actions, hosted or self-hosted, for pipelines, builds, or test environments. GitHub may host repositories, PRs, and Checks, but must not orchestrate or execute jobs. Do not register GitHub runners as a fallback for independent CI.
-- Do not use Neon or Vercel compute for CI, builds, or test environments. Use Neon only when explicitly selected for persistence, and Vercel only for an explicitly authorized purpose.
-- Do not create automatic previews or automatic deployments from a branch, PR, or commit. A deployment to Preview or any non-production branch requires the user to accept the PR before it runs.
-- Do not promote a work branch directly to production. After PR acceptance and environment authorization, use the approved actual destination: OpenShip/Atlas for the application or Dokploy for linked services. Updating this guide does not migrate an application between platforms.
-- Before consuming remote compute, verify that the job, environment, or deployment matches the approved action and avoid duplicating pending executions.
+- Standard model: GitHub orchestrates events, SHA-bound checks, branch protection, and approvals; self-hosted runners managed by Dokploy execute jobs. Do not use GitHub-hosted runners without an explicit cost and scope decision.
+- Automatic validation triggers: PRs targeting `preview` and pushes to `preview`. Do not run remote CI for every development-branch push or add PRs targeting `main`/`master` as ordinary triggers without an approved exception. An open Preview PR also runs on `synchronize`: document this rather than promising one run when the PR opens.
+- Development keeps local pure tests without triggering the remote pipeline. Full certification accompanies promotion to Preview. Manual diagnostics and protected production gates are separate categories, not permission to trigger development CI.
+- Inventory each project's actual model first. Do not claim a reference already matches the standard: it may also have integration PR checks, genealogy checks, and production gates. Reuse its purpose and controls, not its exceptions or secrets.
+- Each project keeps runners and credentials in its own workspace. Record the actual host, identity, labels, workflow, SHA, networks, mounts, limits, and last verifiable diagnostic. Dokploy is the manager; Atlas or another VPS is the machine. Their names do not make them interchangeable.
+- Candidate-code runners use a VPS separate from production and disposable resources, with CPU, RAM, disk, process, time, and concurrency limits. No privileged mode, host networking, real Docker socket, application networks, operational volumes, or Preview/production secrets. Prefer a fresh executor per job; if a runner persists, do not call it ephemeral and document cleanup, caches, and residual risk.
+- Separate candidate runners, external-integration certification, and protected production migration/deployment runners. Do not reuse labels that let candidate code receive production secrets or privileges. Runner-registration credentials must not remain available to jobs.
+- Production migration/deployment requires owner approval, an immutable SHA/digest, protected environment, verified backup, and rehearsed rollback. Updating this guide does not create runners, purchase servers, re-enable Actions, change triggers, enable Auto Deploy, or move applications.
+- GitHub does not charge execution minutes for self-hosted runners under its current policy; verify that policy when deciding. Machines, artifact/cache storage, and external services may cost money. Present the host, cost, and isolation for approval before creating capacity.
+- Do not use Neon or Vercel compute for CI or test environments unless explicitly selected. Preserve the authorized persistence and deployment platforms; this standard does not migrate applications.
+- Publish exact-SHA results with commands, logs, artifacts, and cleanup. A pure fixture does not certify a real receiver, E2E, the full migration chain, or the production schema. A pending/skipped job or an older Check is not PASS.
+- Do not create automatic previews or deployments from a branch, PR, or commit. PR acceptance and promotion approval remain separate from green CI.
 
 ### Mandatory Isolation of Test Compute
 
-Critical note: any migration test, test run, gate, or validation executed through CI/CD must always run in an isolated external environment (an OpenShip Actions runner or Docker on Dokploy), usually connected through MCP.
+Critical note: any migration test, test run, gate, or validation executed through CI/CD must always run in an isolated external environment (an isolated self-hosted runner managed by Dokploy), usually connected through MCP.
 
-- During development, no migration test or CI/CD run happens directly on Vercel, Neon, or any other external compute. Always route it to the isolated OpenShip Actions or Dokploy environment.
-- In Preview, even when the database lives on an external provider, tests, migrations, and gates run in an isolated environment (OpenShip Actions or Dokploy) against a disposable data copy or branch; never against the service serving traffic.
-- Cross-environment migrations, gate tests, and deployment verifications are also isolated in OpenShip Actions or Dokploy before touching the target environment.
+- During development, no migration test or CI/CD run happens directly on Vercel, Neon, or any other external compute. Always route it to the isolated self-hosted runners managed by Dokploy environment.
+- In Preview, even when the database lives on an external provider, tests, migrations, and gates run in an isolated environment (self-hosted runners managed by Dokploy) against a disposable data copy or branch; never against the service serving traffic.
+- Cross-environment migrations, gate tests, and deployment verifications are also isolated in self-hosted runners managed by Dokploy before touching the target environment.
 - The goal is to save external providers' compute (Neon, Vercel, or any other deployment operator): their compute is reserved for serving real authorized traffic, not for running tests.
-- Manage this routing automatically according to the active workflow: detect the current phase (development, Preview, production) and direct every test to the isolated OpenShip Actions or Dokploy environment without asking for routine confirmation. Only ask when neither is available or the workflow does not allow isolation.
+- Manage this routing automatically according to the active workflow: detect the current phase (development, Preview, production) and direct every test to the isolated self-hosted runners managed by Dokploy environment without asking for routine confirmation. If no validated executor is available or the workflow does not allow isolation, record the blocker and present an alternative without activating resources by inference.
 
 ### Migrations: development first and automatic application
 
@@ -185,8 +191,8 @@ When the project has role-based login, implement role autologin ONLY for the dev
 - Remote surfaces are checked with read-only smoke tests; metrics, logs, tests, and deployments are never invented.
 - The diff contains no secrets, tokens, PII, or unrelated changes; `git diff --check` passes when applicable.
 - The definition of done and every external blocker are documented.
-- CI/CD validation runs on OpenShip Actions or Dokploy and does not consume paid compute from GitHub Actions, Neon, or Vercel.
-- Every migration test, gate, or validation ran in the isolated environment (OpenShip Actions or Dokploy), even in Preview and with an external database.
+- CI/CD validation runs on self-hosted runners managed by Dokploy and does not consume paid compute from GitHub Actions, Neon, or Vercel.
+- Every migration test, gate, or validation ran in the isolated environment (self-hosted runners managed by Dokploy), even in Preview and with an external database.
 - Preview and non-production branch deployments do not run automatically; recorded PR acceptance exists before execution.
 - Every environment has separate databases and credentials (development, preview, production); Neon is used only by explicit decision.
 - Role autologin works only with `APP_ENV=development` and `DEV_AUTOLOGIN=true`, is absent from preview/production, and its regression guard passes.
