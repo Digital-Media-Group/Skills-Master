@@ -22,7 +22,7 @@ OpenShip is not Dokploy. Do not use Dokploy endpoints, resource names, or assump
 
 ## Required Information
 
-- Repository, `master`/`preview`/`production` branches, and candidate commit.
+- Repository, actual integration branch (`main` or `master`), work branch/PR, `preview`/`production` branches, and candidate commit.
 - OpenShip workspace, Atlas server, and MCP permissions.
 - One OpenShip project and the internal IDs of its environments.
 - Per-environment variables and securely loaded secrets.
@@ -37,7 +37,7 @@ EjemploApp
 └── Preview    -> preview branch
 ```
 
-The `master` branch is development and lives in the development environment (for example, Ideavo), not in OpenShip: the server hosts Preview and Production. Promotion follows `master` -> `preview` -> `production` with the same validated candidate.
+Development happens on a work branch in Ideavo. Never write directly on integration (`main` or `master`), `preview`, or `production`. Promote through an accepted PR to the actual integration branch and separate Preview/Production authorization. Do not rename branches or change the default to match a recipe. The server hosts Preview and Production; the model itself creates no environments.
 
 An OpenShip project may have multiple environments. Each has its own internal ID, variables, deployments, domains, and state. Always deploy using the internal identifier returned by OpenShip; never send `environment: preview` with a Production project ID.
 
@@ -50,8 +50,8 @@ Create separate projects only when OpenShip explicitly requires a non-production
 3. Verify branches, candidate commit, build configuration, and health check.
 4. Configure web, cron/worker, and PostgreSQL services with separate volumes.
 5. Create a complete independent backup and prove restoration.
-6. Restore and migrate Preview; verify counts, relations, services, and smoke tests.
-7. Obtain human approval and repeat restoration in Production.
+6. For an authorized initial transfer, restore into an isolated Preview destination; for an incremental release, apply only pending rehearsed migrations. Verify schema, ledger, integrity, and smoke tests.
+7. Obtain candidate and Production environment approval. Never restore over the active database for an incremental release; an initial transfer follows the authorized cutover, final backup, and independent-volume restore.
 8. Promote the same validated candidate, verify services, then change DNS.
 
 ## Access and Safety
@@ -65,7 +65,7 @@ Create separate projects only when OpenShip explicitly requires a non-production
 
 - Deploy preview from the `preview` branch.
 - Deploy production from the `production` branch.
-- Promote the same validated candidate; do not rebuild a different Production version.
+- Promote the same validated code candidate. Reuse the immutable artifact when configuration permits. With environment-baked public variables, build per-environment images from the same SHA, lockfile, and recipe; record both digests and validate equivalence. Never reuse an image containing another environment's URLs or public keys.
 - Order: validation -> build/artifact -> Preview -> smoke tests -> human approval -> Production.
 - Keep the previous deployment, data, and configuration for rollback.
 
@@ -108,7 +108,23 @@ Do not change DNS before a verifiable Preview/health URL exists. Protect Preview
 
 ## Continuous Integration
 
-To run CI validation on the instance itself (independent workflows in `.openship/workflows/` or GitHub workflows on self-hosted runners registered on OpenShip destinations) use the `openship-actions-ci` skill. CI never replaces this skill's gates: restorable backup, validated Preview, and human approval before Production.
+Use independent native OpenShip workflows or a validated independent Dokploy executor as described in `openship-actions-ci`. Never use GitHub Actions, including GitHub-coordinated self-hosted runners. CI never replaces this skill's gates: restorable backup, validated Preview, and human approval before Production.
+
+## Application in Atlas with Linked Services in Dokploy
+
+This is a configurable pattern, not a migration instruction. Document actual state and approved target separately. If the application currently lives in Dokploy, moving it to Atlas requires its own migration plan and authorization; never delete or stop the source as a documentation side effect.
+
+Keep the per-environment inventory in private project documents: repository/branch/SHA, application, workers, agent runtime, PostgreSQL/Redis, volumes, logical endpoint, version/contract and digest, owners, backup/restore, CI and triggers, evidence, and gaps. Public guides contain only generic examples, never project-specific internal hosts, IDs, accounts, or secrets.
+
+Coordinate application/service compatibility before promotion: verify the real endpoint without printing secrets, test observable capabilities, pin image digests, and record stop/migrate/start order. Matching version labels do not prove identity or compatibility; mutable tags do not replace digests.
+
+## Incremental Migrations and Phase Closeout
+
+- Reuse the migration protocol in `desarrollo-ideavo-opencode`: fresh install and upgrade rehearsal, ledger and actual schema, no-change second pass, concurrency lock, and partial-failure recovery.
+- Before authorized promotion: external backup with checksum and verifiable isolated restore; unambiguous candidate, database, and environment. Apply only the approved candidate's pending migrations before traffic. Never improvise SQL or load development seeds in production.
+- Irreversible migrations may prevent older binaries from restarting. Document expand/contract compatibility or coordinated data/application recovery, protection of later writes, RPO/RTO, and approval. Reverting an image does not revert a database.
+- Close each phase with Git state, PR/approval, SHA/digests, observed and pending checks, ledger/migrations, backup/restore, actual deployment or not executed, blockers, and exact next action. A report is not evidence or authorization for the next phase.
+- Reviewing or writing this guide does not execute CI, create services, migrate data, change triggers/DNS, or deploy.
 
 ## Validation
 
