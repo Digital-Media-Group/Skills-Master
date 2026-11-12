@@ -2,60 +2,59 @@
 
 ## Propósito
 
-Ejecutar las validaciones de CI en infraestructura propia cuando GitHub Actions alojado no está disponible (por ejemplo, bloqueo de facturación de la organización) o cuando se prefieren runners propios. OpenShip Actions, disponible desde OpenShip v0.9.0, ofrece dos modos: workflows independientes en `.openship/workflows/` ejecutados por OpenShip, y workflows existentes de GitHub ejecutados en runners self-hosted oficiales registrados en destinos OpenShip.
+Preparar y verificar CI independiente en infraestructura propia. Usa workflows nativos de OpenShip/Atlas como vía preferente y un ejecutor independiente aislado en Dokploy solo cuando esté disponible y validado. GitHub aloja código, PRs, eventos y Checks; no orquesta ni ejecuta los jobs. GitHub Actions alojado y self-hosted quedan fuera de este procedimiento.
 
 ## Cuándo utilizarla
 
-- La organización tiene GitHub Actions alojado bloqueado o limitado y hay una instancia OpenShip (por ejemplo Atlas) con la sección Actions.
-- Se quieren ejecutar validaciones (typecheck, lint, tests, build) en servidores propios con Checks publicados en GitHub.
-- Ya existe un workflow de GitHub y basta con apuntarlo a un runner self-hosted.
+- Se necesitan typecheck, lint, tests, build o ensayos de migración en infraestructura propia.
+- Hay que documentar o validar un workflow nativo de OpenShip y su relación con la promoción.
+- Se evalúa una alternativa independiente en Dokploy sin registrar runners de GitHub.
 
 ## Cuándo no utilizarla
 
-- El repositorio necesita runners Windows o GitHub Enterprise Server: no soportados.
-- Se depende de protected environments o attestations de GitHub: la ejecución independiente no los implementa.
-- El código viene de forks sin revisar: los forks se bloquean por defecto y solo se admiten con aprobación explícita y runners desechables sin secretos privilegiados.
-- Un run independiente nuevo no reanuda ni sustituye un run fallido de GitHub; si se exige continuidad exacta, repite el mismo SHA y documéntalo.
+- Se pretende registrar un runner de GitHub Actions o ejecutar un workflow coordinado por GitHub.
+- No existe un destino aislado o no se ha autorizado el consumo de cómputo remoto.
+- El código procede de forks sin revisar o requiere secretos de producción para ejecutar tests.
 
 ## Información necesaria
 
-- Versión de la instancia (Actions requiere v0.9.0 o superior) verificada en el panel: una versión compatible no demuestra que la función esté configurada y operativa.
-- Destino de ejecución con SO, arquitectura y herramientas reportadas por capacidades verificadas; los runners Linux soportan imágenes de contenedor y los macOS usan herramientas nativas.
-- Conexión GitHub de la instancia (token o App) para importar workflows y publicar Checks de commit.
-- Etiquetas de runner, política de acceso por workflow y regla de aprobaciones (actor, commit, intento y destinos).
-- Inventario de workflows afectados y qué etiquetas `runs-on` deben cambiar a self-hosted.
+- Capacidades actuales de la instancia, versión, SO, arquitectura y herramientas verificadas. La versión o un runner Ready no demuestran que el pipeline del producto funcione.
+- Repositorio, rama de trabajo, SHA exacto, workflow nativo, destino y evidencia del último run de ese producto.
+- Identidad de publicación de Checks con permisos mínimos; no usar credenciales de despliegue en jobs de pruebas.
+- Política de aprobación por intento, concurrencia, límites de tiempo y recursos, artefactos y retención.
+- Relación explícita entre PR, CI y despliegue; estado real de Auto Deploy, webhook y reglas de promoción.
 
 ## Procedimiento
 
-1. Verifica la capacidad en la instancia: sección Actions en el panel, al menos un runner en estado Ready y la conexión GitHub activa en Settings.
-2. Elige el modo por repositorio:
-   - Coordinado con GitHub: registra un runner self-hosted oficial en un destino OpenShip y apunta `runs-on` a sus etiquetas self-hosted. GitHub conserva orquestación, secretos, environments y Checks; los jobs con etiquetas alojadas en GitHub siguen ejecutándose en GitHub. Importar un workflow no cambia su plataforma de ejecución por sí solo.
-   - Independiente: crea o importa workflows en `.openship/workflows/` con YAML estilo GitHub; ejecútalos manualmente, por push/PR, en schedule, por dispatch autenticado o desde Jobs. GitHub aporta fuente, eventos y Checks de commit sin ejecutar nada.
-3. Edita el workflow con el editor único (vistas Topology, List y YAML sobre el mismo borrador), conecta jobs y dependencias, y define reglas de trigger por archivo y por rama.
-4. Limita el acceso del workflow a la cuenta o a usuarios seleccionados del repositorio, con aprobación requerida por intento; la aprobación vincula actor, commit, intento y destinos.
-5. Ejecuta y sigue los runs: logs enmascarados junto a jobs y pasos, vista de topología y pestaña de approvals separada. Los runs independientes usan artifacts/caches con almacenamiento de alcance limitado; los jobs con `id-token: write` reciben tokens OIDC de la propia instancia, no de GitHub.
-6. Ante un fallo, distingue causa de aplicación (exit code del job) de causa de infraestructura (runner no Ready, imagen no disponible) antes de cambiar código o runners.
+1. En lectura, inventaría workflows asociados al producto, runners, capacidades, ejecuciones y controles de despliegue. Distingue disponible, configurado y validado. Si no hay workflow enlazado o run verificable, registra pendiente; no declares CI operativo.
+2. Prepara un workflow nativo independiente en `.openship/workflows/` o en la configuración nativa de la instancia, según sus capacidades verificadas. La sintaxis YAML similar a GitHub no cambia quién orquesta los jobs. No reutilices `.github/workflows/` como ejecución de GitHub ni actives runners self-hosted de GitHub.
+3. Documenta etapas y dependencias: preflight de rama/SHA -> validaciones locales del candidato -> tests e integración aislados -> build -> evidencia. La promoción es un paso separado sujeto a aceptación del PR y autorización de entorno.
+4. Usa bases desechables sin datos de producción para instalación inicial, upgrade y segundo pase de migraciones. Conserva logs y ledger sin secretos. No ejecutes el ensayo contra la base que sirve tráfico.
+5. Limita acceso y aprobaciones por actor, SHA, intento y destino; usa cola y bloqueo para impedir promociones concurrentes. Un Check de un SHA anterior, un run omitido o una cola pendiente no es un gate verde.
+6. Solo tras autorización ejecuta el diagnóstico o pipeline. Registra plataforma que orquesta y destino que ejecuta, SHA, run, artefacto/digest, resultados y límites. Detén la promoción ante fallo; no cambies código para ocultar fallos de infraestructura.
+7. Publica Checks como evidencia cuando exista una integración autorizada. Publicar un Check no requiere ejecutar GitHub Actions. No habilites Auto Deploy ni webhooks como efecto de configurar CI.
 
 ## Alternativa endurecida en Dokploy
 
-Cuando OpenShip Actions no aplique, un runner self-hosted de GitHub Actions puede desplegarse como servicio Docker Compose en Dokploy:
+No presupongas que existe un servicio de CI porque existe un proyecto con ese nombre. Verifica un ejecutor independiente, sin coordinación de GitHub Actions, su cola, contrato de jobs, aislamiento, permisos, límites y evidencia de diagnóstico. Si falta, documenta el gap y pide aprobación de implementación; no inventes endpoints ni registres un runner de GitHub.
 
-- Token fine-grained limitado al repositorio, guardado como secreto de Dokploy; el proceso que ejecuta jobs no conserva el token de registro.
-- Sin montar `/var/run/docker.sock` (enmascararlo con `/dev/null`), sin `privileged` ni `network_mode: host`, sin unir redes de otras aplicaciones y sin volúmenes externos al proyecto.
-- Credenciales y bases de datos de CI desechables; nunca secretos de Preview o Production en el runner.
-- Verificación: el runner aparece Idle en Settings -> Actions -> Runners del repositorio y un workflow de diagnóstico ejecuta sus pasos en él.
+- Contenedores desechables, sin `privileged`, red host, socket Docker del host, redes de aplicaciones ni volúmenes externos al job. Si un build requiere otra capacidad, detente y presenta un diseño de aislamiento aprobado; no amplíes permisos silenciosamente.
+- Credenciales y bases de CI efímeras, sin secretos de Preview/Production ni acceso a despliegues.
+- Un job activo por recurso limitado, timeout, limpieza verificable y logs sin secretos.
+- La guía documental no crea el ejecutor, no activa triggers y no autoriza cómputo remoto.
 
 ## Validación
 
-- Runner registrado y Ready/Idle en el panel de OpenShip o en Settings -> Actions -> Runners de GitHub.
-- Un run de diagnóstico ejecuta todos sus pasos en el destino propio y publica el Check en el commit.
-- Los logs no contienen secretos y las aprobaciones quedan registradas.
-- La relación entre CI y despliegue se verifica proyecto a proyecto (Auto Deploy/webhook activos o despliegue manual); no la asumas desde la CI.
+- La plataforma de orquestación es nativa OpenShip o independiente Dokploy, nunca GitHub Actions.
+- El workflow está asociado al producto y un run autorizado del SHA exacto terminó con todos los gates aplicables, sin confundir Ready con probado.
+- Los tests de migración usan datos y base aislados; las aprobaciones, artefactos y resultados quedan registrados.
+- Auto Deploy, webhooks y gates de promoción se comprueban por entorno; no se modifican sin autorización.
+- Si falta acceso o un ejecutor validado, el resultado queda pendiente y no se promueve.
 
 ## Resultado esperado
 
-Validaciones ejecutándose en infraestructura propia, con Checks visibles en GitHub, runners etiquetados y listos, acceso por workflow restringido con aprobaciones, y una alternativa Dokploy endurecida documentada para los repositorios donde OpenShip Actions no aplique.
+Plan de CI o CI verificado, claramente diferenciados, con trazabilidad de SHA, run, resultados, artefactos y aprobaciones. La documentación no equivale a un pipeline instalado o ejecutado.
 
 ## Seguridad
 
-Nivel de riesgo: **high**. Los runners nativos o con socket Docker del host ejecutan código con el acceso de ese usuario del servidor: resérvalos para código confiable y usa runners desechables para mayor aislamiento. Mantén los forks bloqueados por defecto. No desactives aprobaciones ni amplíes el alcance de tokens sin autorización explícita. Nunca guardes secretos en Git, workflows, logs o chat.
+Nivel de riesgo: **high**. No ejecutes jobs remotos, despliegues ni migraciones por una aprobación documental. Mantén forks sin revisar bloqueados. No amplíes permisos, expongas secretos ni uses datos de producción para tests. Una prueba fallida bloquea la promoción, no justifica eludir el control.
