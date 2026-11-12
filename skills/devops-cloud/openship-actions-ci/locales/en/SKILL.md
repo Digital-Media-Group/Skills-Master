@@ -2,60 +2,59 @@
 
 ## Purpose
 
-Run CI validation on your own infrastructure when hosted GitHub Actions is unavailable (for example, an organization billing block) or when self-hosted runners are preferred. OpenShip Actions, available since OpenShip v0.9.0, offers two modes: independent workflows in `.openship/workflows/` executed by OpenShip, and existing GitHub workflows executed on official self-hosted runners registered on OpenShip destinations.
+Prepare and verify independent CI on owned infrastructure. Prefer native OpenShip/Atlas workflows; use an isolated independent executor in Dokploy only when available and validated. GitHub hosts code, PRs, events, and Checks; it does not orchestrate or execute jobs. Hosted and self-hosted GitHub Actions are outside this procedure.
 
 ## When to Use
 
-- Hosted GitHub Actions is blocked or limited for the organization and an OpenShip instance (for example Atlas) exposes the Actions section.
-- Validation (typecheck, lint, tests, build) should run on own servers with Checks published to GitHub.
-- A GitHub workflow already exists and only needs to target a self-hosted runner.
+- Typecheck, lint, tests, builds, or migration rehearsals need owned infrastructure.
+- A native OpenShip workflow and its promotion gates need documentation or validation.
+- An independent Dokploy fallback is being assessed without registering GitHub runners.
 
 ## When Not to Use
 
-- The repository needs Windows runners or GitHub Enterprise Server: not supported.
-- GitHub protected environments or attestations are required: independent execution does not implement them.
-- Code comes from unreviewed forks: forks are blocked by default and only allowed with explicit approval and disposable runners without privileged secrets.
-- A fresh independent run does not resume or replace a failed GitHub run; if exact continuity is required, re-run the same SHA and document it.
+- The intended action registers a GitHub Actions runner or runs GitHub-coordinated workflows.
+- No isolated destination exists or remote compute has not been authorized.
+- Code comes from unreviewed forks or tests require production secrets.
 
 ## Required Information
 
-- Instance version (Actions requires v0.9.0 or later) verified in the dashboard: a compatible version does not prove the feature is configured and operational.
-- An execution destination with OS, architecture, and tooling reported by verified capabilities; Linux runners support container images and macOS runners use native tools.
-- The instance's GitHub connection (token or App) for importing workflows and publishing commit Checks.
-- Runner labels, per-workflow access policy, and the approval rule (actor, commit, attempt, and destinations).
-- An inventory of affected workflows and which `runs-on` labels must switch to self-hosted.
+- Current verified instance capabilities, version, OS, architecture, and tools. A version or Ready runner does not prove the product pipeline works.
+- Repository, work branch, exact SHA, native workflow, destination, and evidence from that product's last run.
+- Least-privilege identity for publishing Checks; test jobs must not hold deployment credentials.
+- Per-attempt approvals, concurrency, time/resource limits, artifacts, and retention.
+- Explicit PR/CI/deployment relationship; actual Auto Deploy, webhook, and promotion settings.
 
 ## Procedure
 
-1. Verify capability on the instance: the Actions section in the dashboard, at least one Ready runner, and an active GitHub connection in Settings.
-2. Choose the mode per repository:
-   - GitHub-coordinated: register an official self-hosted runner on an OpenShip destination and point `runs-on` to its self-hosted labels. GitHub keeps orchestration, secrets, environments, and Checks; jobs targeting GitHub-hosted labels still run on GitHub. Importing a workflow does not silently change its execution platform.
-   - Independent: create or import workflows in `.openship/workflows/` with GitHub-style YAML; trigger them manually, on push/PR, on schedules, through authenticated dispatch, or from Jobs. GitHub provides source, events, and commit Checks without running anything.
-3. Edit the workflow with the single editor (Topology, List, and YAML views over the same draft), connect jobs and dependencies, and define per-file and per-branch trigger rules.
-4. Limit workflow access to the account or selected repository users, requiring approval per attempt; approvals bind actor, commit, attempt, and destinations.
-5. Run and follow executions: masked logs beside jobs and steps, a topology view, and a separate approvals tab. Independent runs use artifacts/caches with scoped storage; jobs with `id-token: write` receive OIDC tokens from the instance itself, not from GitHub.
-6. On failure, distinguish application cause (job exit code) from infrastructure cause (runner not Ready, unavailable image) before changing code or runners.
+1. Read the product's linked workflows, runners, capabilities, runs, and deployment controls. Distinguish available, configured, and validated. Without a linked workflow or verifiable run, record pending rather than operational CI.
+2. Prepare an independent native workflow in `.openship/workflows/` or native instance configuration according to verified capabilities. GitHub-like YAML syntax does not change the orchestrator. Do not reuse `.github/workflows/` as GitHub execution or enable GitHub self-hosted runners.
+3. Document stages and dependencies: branch/SHA preflight -> candidate validation -> isolated tests and integration -> build -> evidence. Promotion is separate and requires PR acceptance and environment authorization.
+4. Use disposable databases without production data for fresh installation, upgrade, and a second migration pass. Keep sanitized logs and ledger. Never rehearse against the database serving traffic.
+5. Bind access and approvals to actor, SHA, attempt, and destination; use queueing and locks to prevent concurrent promotions. A Check for an older SHA, skipped run, or queued job is not a green gate.
+6. Run diagnostics or pipelines only after authorization. Record orchestrator, execution destination, SHA, run, artifact/digest, results, and limits. Stop promotion on failure; do not change code to hide infrastructure failures.
+7. Publish Checks as evidence only through an authorized integration. Publishing a Check does not require GitHub Actions. Do not enable Auto Deploy or webhooks as a side effect of CI configuration.
 
-## Hardened Dokploy alternative
+## Hardened Dokploy Alternative
 
-When OpenShip Actions does not apply, a GitHub Actions self-hosted runner can be deployed as a Docker Compose service in Dokploy:
+A project named CI is not evidence of an executor. Verify an independent executor without GitHub Actions coordination, its queue, job contract, isolation, permissions, limits, and diagnostic evidence. If absent, record the gap and request implementation approval; do not invent endpoints or register a GitHub runner.
 
-- A fine-grained token limited to the repository, stored as a Dokploy secret; the process running jobs does not keep the registration token.
-- No `/var/run/docker.sock` mount (mask it with `/dev/null`), no `privileged` or `network_mode: host`, no joining other applications' networks, and no volumes outside the project.
-- Disposable CI credentials and databases; never Preview or Production secrets on the runner.
-- Verification: the runner shows as Idle under Settings -> Actions -> Runners of the repository and a diagnostic workflow executes its steps on it.
+- Disposable containers without privileged mode, host networking, host Docker socket, application networks, or volumes outside the job. If builds need more capabilities, stop and present an approved isolation design; never silently widen access.
+- Ephemeral CI credentials and databases, no Preview/Production secrets or deployment access.
+- One active job per constrained resource, timeout, verified cleanup, and sanitized logs.
+- Documentation does not create an executor, activate triggers, or authorize remote compute.
 
 ## Validation
 
-- Runner registered and Ready/Idle in the OpenShip dashboard or under GitHub Settings -> Actions -> Runners.
-- A diagnostic run executes all its steps on the own destination and publishes the Check on the commit.
-- Logs contain no secrets and approvals are recorded.
-- The CI-to-deployment relationship is verified project by project (Auto Deploy/webhook enabled or manual deployment); do not assume it from the CI side.
+- Orchestration is native OpenShip or independent Dokploy, never GitHub Actions.
+- The workflow is linked to the product and an authorized run for the exact SHA completed every applicable gate; Ready is not tested.
+- Migration tests use isolated data and databases; approvals, artifacts, and results are recorded.
+- Auto Deploy, webhooks, and promotion gates are checked per environment and not changed without authorization.
+- Missing access or a validated executor means pending, not promotion.
 
 ## Expected Result
 
-Validation running on own infrastructure with Checks visible in GitHub, labeled and ready runners, per-workflow restricted access with approvals, and a documented hardened Dokploy alternative for repositories where OpenShip Actions does not apply.
+A CI plan or verified CI, clearly distinguished, with traceable SHA, run, results, artifacts, and approvals. Documentation is not an installed or executed pipeline.
 
 ## Safety
 
-Risk level: **high**. Native runners or runners with the host Docker socket execute code with that server user's access: reserve them for trusted code and use disposable runners for stronger isolation. Keep forks blocked by default. Do not disable approvals or widen token scope without explicit authorization. Never store secrets in Git, workflows, logs, or chat.
+Risk level: **high**. Documentation approval does not authorize remote jobs, deployments, or migrations. Keep unreviewed forks blocked. Do not widen permissions, expose secrets, or use production data for tests. A failed test blocks promotion and never justifies evading a control.
