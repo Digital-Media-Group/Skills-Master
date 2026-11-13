@@ -93,11 +93,21 @@ IDEAVO may run an `autocomment` when the response ends and comment, upload, or c
 
 ### Branch and Environment Model
 
-- Detect the actual integration branch (`main` or `master`) and its protections; do not rename it or change the default. Use one work branch per change and open a PR toward integration. Never develop or auto-commit directly on integration, `preview`, or `production`. Before sending an Ideavo prompt, verify the active branch, local/remote SHA, clean tree, and divergence; if an automatic commit on a protected branch cannot be prevented, stop without sending the prompt.
-- Flow: work branch -> accepted integration PR (`main`/`master`) -> authorized candidate in `preview` -> approved promotion to `production`. Each environment has separate databases, secrets, and volumes. Development happens in Ideavo; the server hosts Preview and Production. Preview validates promotion rather than acting as a permanent environment.
-- Publish changes only on the authorized work branch. Every PR remains open and unmerged until the owner gives a numbered OK for that PR; promotion to each environment needs its own approval. Documentation approval does not authorize pipelines, migrations, deployments, or topology changes.
+Generic convention. First adopter: GESCODI. Do not apply it to other projects without an inventory and an explicit owner decision.
+
+- Detect the actual integration branch (`desarrollo` when the project adopts this model; otherwise `main`/`master`) and its protections; do not rename it or change the default. Use one work branch per change and open a PR toward that integration. Never develop or auto-commit directly on integration, `preview`, or `production`. Before sending an Ideavo prompt, verify the active branch, local/remote SHA, clean tree, and divergence; if an automatic commit on a protected branch cannot be prevented, stop without sending the prompt.
+- **`desarrollo`** is the long-lived product integration branch when this model is adopted. Every feature branch starts from `desarrollo` and returns via PR to `desarrollo`. Never commit directly on `desarrollo`.
+- **The real `master`/`main`** is stable integration. Promotion from `desarrollo` goes through a PR to the real integration branch, never a direct commit or automatic merge.
+- Flow: work branch -> accepted integration PR -> authorized candidate in `preview` -> approved promotion to `production`. Each environment has separate databases, secrets, and volumes. Development happens in Ideavo; the server hosts Preview and Production. Preview validates promotion rather than acting as a permanent environment.
+- Publish changes only on the authorized branch. Every PR remains open and unmerged until the owner gives a numbered OK for that PR; promotion to each environment needs its own approval. Documentation approval does not authorize pipelines, migrations, deployments, or topology changes.
 - Before mutating Preview or Production: a backup to an S3 destination (Backblaze B2) with restore-rehearsal evidence. A 200 response or a queued task does not prove the backup is restorable.
-- Migrations are always designed and tested in development with isolated databases. Preview validates promotion of the already rehearsed candidate; production is not a test environment. The agent runs the checks, not the user.
+- Migrations are always designed and tested in development (`desarrollo`) with isolated databases. Preview validates promotion of the already rehearsed candidate; production is not a test environment. The agent runs the checks, not the user.
+- **`preview` and `production` only promote.** They receive only the approved SHA/digest from integration; never feature branches. Integration is not production.
+- **Gates and permissions:** every promotion requires preflight, gates, a numbered OK, backup, rehearsed restore, and verified rollback. `preview` and `production` are not for development.
+- **Traceability:** record origin (branch/PR), integration (SHA on the real `master`/`main`), candidate (SHA/digest), and promoted digest. Promote the approved SHA/digest. Any merge, rebase, or autosave that changes the SHA requires repeating preflight, gates, and signature on the final SHA. Never confuse a new SHA with the approved one.
+- **Migrations and isolation:** they are designed and tested in `desarrollo` with isolated databases; `preview` validates the approved candidate; `production` is not a test environment.
+
+Do not activate automations, previews, or deployments by updating this text. Do not change the default branch, protections, CI destinations, or servers. Existing projects require an inventory and the owner's decision before adopting this flow; GESCODI is first and the rest remain unchanged for now.
 
 ### CI/CD and Deployments
 

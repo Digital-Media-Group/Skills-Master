@@ -93,11 +93,21 @@ IDEAVO puede ejecutar un `autocomment` al terminar la respuesta y comentar, subi
 
 ### Modelo de ramas y entornos
 
-- Detecta la rama de integración real (`main` o `master`) y sus protecciones; no la renombres ni cambies el default. Trabaja en una rama por cambio y abre PR hacia esa integración. Nunca desarrolles ni autocommitees directamente en integración, `preview` o `production`. Antes de enviar un prompt en Ideavo, verifica rama activa, SHA local/remoto, árbol limpio y divergencia; si no puedes impedir un autocommit en una rama protegida, detente sin enviar el prompt.
-- Flujo: rama de trabajo -> PR aceptado hacia integración (`main`/`master`) -> candidato autorizado en `preview` -> aprobación de promoción a `production`. Cada entorno tiene base, secretos y volúmenes separados. El desarrollo ocurre en Ideavo; el servidor aloja Preview y Production. Preview existe para validar la promoción, no como entorno permanente.
+Convención genérica. Primer adoptante: GESCODI. No se aplica a otros proyectos sin inventario y decisión explícita de su propietario.
+
+- Detecta la rama de integración real (`desarrollo` cuando el proyecto adopte este modelo; si no, `main`/`master`) y sus protecciones; no la renombres ni cambies el default. Trabaja en una rama por cambio y abre PR hacia esa integración. Nunca desarrolles ni autocommitees directamente en integración, `preview` o `production`. Antes de enviar un prompt en Ideavo, verifica rama activa, SHA local/remoto, árbol limpio y divergencia; si no puedes impedir un autocommit en una rama protegida, detente sin enviar el prompt.
+- **`desarrollo`** es la rama de integración de producto y de larga vida cuando se adopta este modelo. Toda rama feature nace de `desarrollo` y vuelve por PR a `desarrollo`. No se commitea directamente en `desarrollo`.
+- **`master`/`main` real** es la integración estable. La promoción desde `desarrollo` se hace por PR a la rama de integración real, nunca por commit directo ni merge automático.
+- Flujo: rama de trabajo -> PR aceptado hacia la integración -> candidato autorizado en `preview` -> aprobación de promoción a `production`. Cada entorno tiene base de datos, secretos y volúmenes separados. El desarrollo ocurre en Ideavo; el servidor aloja Preview y Production. Preview existe para validar la promoción, no como entorno permanente.
 - Publica cambios solo en la rama autorizada. Cada PR queda abierto sin fusionar hasta el OK numerado del propietario para ese PR; la promoción a cada entorno requiere su aprobación propia. Un OK documental no autoriza pipelines, migraciones, despliegues ni cambios de topología.
 - Antes de mutar Preview o Production: backup en destino S3 (Backblaze B2) con evidencia de restauración ensayada. Una respuesta 200 o una tarea encolada no demuestran que el backup sea restaurable.
-- Las migraciones se diseñan y prueban siempre en desarrollo con bases aisladas. Preview valida la promoción del candidato ya ensayado; producción no es un entorno de pruebas. Las comprobaciones las ejecuta el agente, no el usuario.
+- Las migraciones se diseñan y prueban siempre en desarrollo (`desarrollo`) con bases aisladas. Preview valida la promoción del candidato ya ensayado; producción no es un entorno de pruebas. Las comprobaciones las ejecuta el agente, no el usuario.
+- **`preview` y `production` solo promocionan.** Reciben únicamente el SHA/digest aprobado desde la integración; nunca ramas feature. La integración no es producción.
+- **Gates y permisos:** cada promoción exige preflight, gates, OK numerado, copia de seguridad, restauración ensayada y rollback verificado. `preview` y `production` no se usan para desarrollar.
+- **Trazabilidad:** registra origen (rama/PR), integración (SHA en `master`/`main` real), candidato (SHA/digest) y digest promocionado. Se promueve el SHA/digest aprobado. Cualquier merge, rebase o autosave que cambie el SHA obliga a repetir preflight, gates y firma sobre el SHA final. No se confunde un SHA nuevo con el aprobado.
+- **Migraciones y aislamiento:** se diseñan y prueban en `desarrollo` con bases aisladas; `preview` valida el candidato aprobado; `production` no es entorno de pruebas.
+
+No actives automatismos, previews ni despliegues por actualizar este texto. No cambies la rama por defecto, protecciones, destinos de CI ni servidores. Los proyectos existentes requieren inventario y decisión del propietario antes de adoptar este flujo; GESCODI es el primero y el resto queda sin cambios ahora.
 
 ### CI/CD y despliegues
 
