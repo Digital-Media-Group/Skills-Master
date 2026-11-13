@@ -99,7 +99,7 @@ Generic convention. First adopter: GESCODI. Do not apply it to other projects wi
 - **The real `master`/`main`** is stable integration. Promotion from `desarrollo` goes through a PR to the real integration branch, never a direct commit or automatic merge.
 - **`preview` and `production` only promote.** They receive only the approved SHA/digest from integration; never feature branches. Integration is not production.
 - **Gates and permissions:** every promotion requires preflight, gates, a numbered OK, backup, rehearsed restore, and verified rollback. `preview` and `production` are not for development.
-- **Traceability:** promote an approved SHA/digest. Any merge, rebase, or autosave that changes the SHA requires repeating preflight, gates, and signature on the final SHA. Never confuse a new SHA with the approved one.
+- **Traceability:** record origin (branch/PR), integration (SHA on the real `master`/`main`), candidate (SHA/digest), and promoted digest. Promote the approved SHA/digest. Any merge, rebase, or autosave that changes the SHA requires repeating preflight, gates, and signature on the final SHA. Never confuse a new SHA with the approved one.
 - **Migrations and isolation:** they are designed and tested in `desarrollo` with isolated databases; `preview` validates the approved candidate; `production` is not a test environment.
 
 Do not activate automations, previews, or deployments by updating this text. Do not change the default branch, protections, CI destinations, or servers. Existing projects require an inventory and the owner's decision before adopting this flow; GESCODI is first and the rest remain unchanged for now.

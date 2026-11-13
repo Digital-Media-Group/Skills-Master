@@ -99,7 +99,7 @@ Convención genérica. Primer adoptante: GESCODI. No se aplica a otros proyectos
 - **`master`/`main` real** es la integración estable. La promoción desde `desarrollo` se hace por PR a la rama de integración real, nunca por commit directo ni merge automático.
 - **`preview` y `production` solo promocionan.** Reciben únicamente el SHA/digest aprobado desde la integración; nunca ramas feature. La integración no es producción.
 - **Gates y permisos:** cada promoción exige preflight, gates, OK numerado, copia de seguridad, restauración ensayada y rollback verificado. `preview` y `production` no se usan para desarrollar.
-- **Trazabilidad:** se promueve un SHA/digest aprobado. Cualquier merge, rebase o autosave que cambie el SHA obliga a repetir preflight, gates y firma sobre el SHA final. No se confunde un SHA nuevo con el aprobado.
+- **Trazabilidad:** registra origen (rama/PR), integración (SHA en `master`/`main` real), candidato (SHA/digest) y digest promocionado. Se promueve el SHA/digest aprobado. Cualquier merge, rebase o autosave que cambie el SHA obliga a repetir preflight, gates y firma sobre el SHA final. No se confunde un SHA nuevo con el aprobado.
 - **Migraciones y aislamiento:** se diseñan y prueban en `desarrollo` con bases aisladas; `preview` valida el candidato aprobado; `production` no es entorno de pruebas.
 
 No actives automatismos, previews ni despliegues por actualizar este texto. No cambies la rama por defecto, protecciones, destinos de CI ni servidores. Los proyectos existentes requieren inventario y decisión del propietario antes de adoptar este flujo; GESCODI es el primero y el resto queda sin cambios ahora.
