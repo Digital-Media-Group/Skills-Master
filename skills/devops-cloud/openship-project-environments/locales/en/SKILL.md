@@ -37,7 +37,7 @@ EjemploApp
 └── Preview    -> preview branch
 ```
 
-Development happens on a work branch in Ideavo. Never write directly on integration (`main` or `master`), `preview`, or `production`. Promote through an accepted PR to the actual integration branch and separate Preview/Production authorization. Do not rename branches or change the default to match a recipe. The server hosts Preview and Production; the model itself creates no environments.
+Development happens on a work branch in Ideavo. Never write directly on integration (`main` or `master`), `preview`, or `production`. Promote through an accepted PR to the actual integration branch and separate Preview/Production authorization. Do not rename branches or change the default to match a recipe. The server hosts Preview and Production; the model itself creates no environments. Stable environment branches (`preview`, `production`) are promotion targets only: never repoint them to work or configuration branches. Every change, including deployment configuration, lands through a feature branch and a pull request into the real integration branch, with no CI bypass. QA the exact SHA in preview and promote that same SHA to production; freeze the release as an immutable tag/SHA plus image digest, not a `release/*` branch; if the promotion mechanism produces a new merge SHA, revalidate the final SHA before production and do not claim it is the same commit.
 
 An OpenShip project may have multiple environments. Each has its own internal ID, variables, deployments, domains, and state. Always deploy using the internal identifier returned by OpenShip; never send `environment: preview` with a Production project ID.
 

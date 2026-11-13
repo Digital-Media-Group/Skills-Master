@@ -39,7 +39,7 @@ EjemploApp
 └── Preview    → rama preview
 ```
 
-El desarrollo ocurre en una rama de trabajo en Ideavo. No escribas directamente en integración (`main` o `master`), `preview` o `production`. Promueve mediante PR aceptado hacia la integración real y autorización separada para Preview y Production. No renombres ramas ni cambies el default para ajustarlos a una receta. El servidor aloja Preview y Production; el modelo no crea entornos por sí mismo.
+El desarrollo ocurre en una rama de trabajo en Ideavo. No escribas directamente en integración (`main` o `master`), `preview` o `production`. Promueve mediante PR aceptado hacia la integración real y autorización separada para Preview y Production. No renombres ramas ni cambies el default para ajustarlos a una receta. El servidor aloja Preview y Production; el modelo no crea entornos por sí mismo. Las ramas de entorno estables (`preview`, `production`) solo son destinos de promoción: nunca se reapuntan a ramas de trabajo o configuración. Todo cambio, incluida la configuración de despliegue, entra por rama de funcionalidad y PR hacia la integración real, sin saltarse CI. QA el SHA exacto en preview y promueve ese mismo SHA a producción; congela la release como etiqueta/SHA inmutable más digest de imagen, no como rama `release/*`; si el método de promoción genera un merge nuevo SHA, revalida el SHA final antes de producción y no afirmes que es el mismo commit.
 
 Un proyecto OpenShip puede tener varios entornos. Cada entorno tiene su propio identificador interno, variables, deployments, dominios y estado. Al desplegar, usa siempre el identificador interno que devuelve OpenShip; no uses el ID del proyecto Production para enviar `environment: preview`.
 
