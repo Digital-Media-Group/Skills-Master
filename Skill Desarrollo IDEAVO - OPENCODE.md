@@ -351,10 +351,10 @@ Después:
 Cuando el repositorio tenga ramas gobernadas, respeta su ruta exacta. Un patrón recomendado es:
 
 ```text
-feature -> integración real (master/main) -> preview (SHA exacto) -> producción (mismo SHA)
+feature -> master -> preview -> production
 ```
 
-Las ramas de entorno estables (`preview`, `production`) son solo destinos de promoción: nunca se reapuntan a ramas de trabajo o configuración, y nunca se desarrolla en ellas. Todo cambio, incluida la configuración de despliegue, entra por una rama de funcionalidad y un PR hacia la integración real, sin saltarse CI. QA el SHA exacto en preview y promueve ese mismo SHA a producción. Congela la release como etiqueta/SHA inmutable más digest de imagen, nunca como rama `release/*` permanente; si el método de promoción genera un merge nuevo SHA, revalida el SHA final antes de producción y no afirmes que es el mismo commit.
+Las ramas de entorno estables (`preview`, `production`) son solo destinos de promoción: nunca se reapuntan a ramas de trabajo o configuración y nunca se desarrolla en ellas. Todo cambio, incluida la configuración de despliegue, entra por rama de funcionalidad y PR hacia `master`. La ruta de ramas es `feature -> master -> preview -> production`; el congelado TAG/SHA más digest de imagen queda fuera de la ruta de ramas, nunca como rama `release/*`. QA el SHA exacto en preview y promueve ese mismo SHA a producción; si la promoción genera un merge nuevo SHA, revalida el SHA final antes de producción y no afirmes que es el mismo commit. No saltes CI.
 
 Antes de promoción:
 
