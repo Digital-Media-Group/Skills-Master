@@ -1,0 +1,48 @@
+schemaVersion: 1
+id: proceso-estandar-desarrollo-ideavo
+version: 0.1.0
+status: experimental
+category: management-quality
+name:
+  es: Proceso estándar de desarrollo con Ideavo
+  en: Standard development process with Ideavo
+summary:
+  es: Estándar vigente para ejecutar proyectos con Ideavo por fases y bloques, con CI propio, QA real en preview y ventanas de producción gobernadas.
+  en: Current standard for running projects with Ideavo in phases and blocks, with own CI, real preview QA, and governed production windows.
+tags:
+  - ideavo
+  - software-development
+  - release-management
+  - ci-cd
+  - governance
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+  - browser
+  - database
+  - cloud
+  - credentials
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Plan por fases del proyecto, repositorio con ramas master/preview/production, CI propio en Atlas/Dokploy y límites de autonomía aprobados por el propietario.
+  en:
+    - Phased project plan, repository with master/preview/production branches, own CI on Atlas/Dokploy, and owner-approved autonomy limits.
+outputs:
+  es:
+    - Fases entregadas en producción con PRs mergeados por el operador, CI verde, QA de preview, ventanas documentadas y cierre con evidencia.
+  en:
+    - Phases delivered to production with operator-merged PRs, green CI, preview QA, documented windows, and evidenced closeout.
+dependencies: []
+lastReviewed: 2026-11-15
