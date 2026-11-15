@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "locale": "es",
-  "generatedAt": "2026-11-11T00:00:00.000Z",
+  "generatedAt": "2026-11-15T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
@@ -307,6 +307,22 @@
       "title": "Gestión y calidad",
       "description": "Discovery, requisitos, estimación, QA, entregas y mejora continua.",
       "skills": [
+        {
+          "id": "proceso-estandar-desarrollo-ideavo",
+          "name": "Proceso estándar de desarrollo con Ideavo",
+          "summary": "Estándar vigente para ejecutar proyectos con Ideavo por fases y bloques, con CI propio, QA real en preview y ventanas de producción gobernadas.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "ideavo",
+            "software-development",
+            "release-management",
+            "ci-cd",
+            "governance"
+          ],
+          "source": "../../skills/management-quality/proceso-estandar-desarrollo-ideavo/locales/es/SKILL.md"
+        },
         {
           "id": "project-discovery",
           "name": "Discovery de proyecto",

@@ -53,6 +53,7 @@ Discovery, requirements, estimation, QA, delivery, and continuous improvement.
 
 | Skill | ID | Summary | Status | Risk |
 | --- | --- | --- | --- | --- |
+| [Standard development process with Ideavo](../../skills/management-quality/proceso-estandar-desarrollo-ideavo/locales/en/SKILL.md) | `proceso-estandar-desarrollo-ideavo` | Current standard for running projects with Ideavo in phases and blocks, with own CI, real preview QA, and governed production windows. | experimental | high |
 | [Project Discovery](../../skills/management-quality/project-discovery/locales/en/SKILL.md) | `project-discovery` | Align the problem, outcomes, scope, risks, and validation plan before execution. | experimental | low |
 | [Release Readiness Review](../../skills/management-quality/release-readiness-review/locales/en/SKILL.md) | `release-readiness-review` | Decide whether a release can proceed using technical, operational, and business evidence. | experimental | high |
 | [Software Estimation](../../skills/management-quality/software-estimation/locales/en/SKILL.md) | `software-estimation` | Produce an explainable estimate with a range, assumptions, risks, and confidence level. | experimental | low |

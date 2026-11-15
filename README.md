@@ -47,6 +47,7 @@ Copia el nombre técnico o la URL completa para indicarle a un agente qué skill
 | Redacción de instrucciones para agentes | `agent-instructions-authoring` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/agent-instructions-authoring |
 | Auditoría de instrucciones de IDE | `ide-instructions-audit` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ide-instructions-audit |
 | Configuración de instrucciones para Ideavo | `ideavo-instructions-setup` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-instructions-setup |
+| Proceso estándar de desarrollo con Ideavo | `proceso-estandar-desarrollo-ideavo` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/proceso-estandar-desarrollo-ideavo |
 | Discovery de proyecto | `project-discovery` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/project-discovery |
 | Revisión de preparación para release | `release-readiness-review` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/release-readiness-review |
 | Estimación de software | `software-estimation` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation |
