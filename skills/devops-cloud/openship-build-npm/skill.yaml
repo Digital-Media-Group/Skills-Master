@@ -1,0 +1,41 @@
+schemaVersion: 1
+id: openship-build-npm
+version: 0.1.0
+status: experimental
+category: devops-cloud
+name:
+  es: Builds npm/Node en OpenShip
+  en: npm/Node Builds in OpenShip
+summary:
+  es: "Configurar builds de Next.js en OpenShip/Atlas con npm y Node: nunca bun, packageManager exacto, package-lock commiteado y diagnóstico del bootstrap."
+  en: "Configure Next.js builds on OpenShip/Atlas with npm and Node: never bun, exact packageManager, committed package-lock, and bootstrap diagnostics."
+tags:
+  - openship
+  - atlas
+  - npm
+  - node
+  - build
+  - nextjs
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+capabilities:
+  - files
+riskLevel: medium
+inputs:
+  es:
+    - Servicio Next.js en OpenShip/Atlas cuyo build falla o produce bundles rotos con bun.
+  en:
+    - Next.js service on OpenShip/Atlas whose build fails or produces broken bundles with bun.
+outputs:
+  es:
+    - Build verde en Node con la app respondiendo y diagnóstico documentado.
+  en:
+    - Green build on Node with the app responding and the diagnosis documented.
+dependencies: []
+lastReviewed: 2026-11-16

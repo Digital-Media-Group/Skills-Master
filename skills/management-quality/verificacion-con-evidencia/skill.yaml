@@ -1,0 +1,39 @@
+schemaVersion: 1
+id: verificacion-con-evidencia
+version: 0.1.0
+status: experimental
+category: management-quality
+name:
+  es: Verificación con evidencia
+  en: Evidence-Based Verification
+summary:
+  es: "Nunca afirmar un estado sin evidencia directa: verificar antes de reportar y distinguir verificado, pendiente y bloqueado."
+  en: "Never claim a state without direct evidence: verify before reporting and distinguish verified, pending, and blocked."
+tags:
+  - calidad
+  - verificacion
+  - evidencia
+  - reporting
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+capabilities:
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Cualquier afirmación sobre el estado de un sistema, despliegue o tarea.
+  en:
+    - Any claim about the state of a system, deployment, or task.
+outputs:
+  es:
+    - Informes donde cada estado lleva su evidencia (fuente, comando o captura, fecha y hora).
+  en:
+    - Reports where every state carries its evidence (source, command or capture, date and time).
+dependencies: []
+lastReviewed: 2026-11-16

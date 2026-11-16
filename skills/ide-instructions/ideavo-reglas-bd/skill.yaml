@@ -1,0 +1,40 @@
+schemaVersion: 1
+id: ideavo-reglas-bd
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Reglas de base de datos en Ideavo
+  en: Database Rules in Ideavo
+summary:
+  es: Neon de Ideavo solo lectura y sin claim, bases de datos de despliegue en Atlas o Dokploy y Neon solo como respaldo.
+  en: Ideavo Neon read-only with no claiming, deployment databases on Atlas or Dokploy, and Neon as backup only.
+tags:
+  - ideavo
+  - neon
+  - base-de-datos
+  - atlas
+  - dokploy
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+capabilities:
+  - files
+riskLevel: high
+inputs:
+  es:
+    - Proyecto Ideavo con Neon gestionado y despliegue en Atlas o Dokploy.
+  en:
+    - Ideavo project with managed Neon and deployment on Atlas or Dokploy.
+outputs:
+  es:
+    - BD de despliegue propia con migraciones aplicadas y Neon intacto como respaldo.
+  en:
+    - Own deployment database with migrations applied and Neon intact as backup.
+dependencies: []
+lastReviewed: 2026-11-16

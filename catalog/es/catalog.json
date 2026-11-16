@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "locale": "es",
-  "generatedAt": "2026-11-15T00:00:00.000Z",
+  "generatedAt": "2026-11-16T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
@@ -178,6 +178,23 @@
             "hardening"
           ],
           "source": "../../skills/devops-cloud/openship-actions-ci/locales/es/SKILL.md"
+        },
+        {
+          "id": "openship-build-npm",
+          "name": "Builds npm/Node en OpenShip",
+          "summary": "Configurar builds de Next.js en OpenShip/Atlas con npm y Node: nunca bun, packageManager exacto, package-lock commiteado y diagnóstico del bootstrap.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "openship",
+            "atlas",
+            "npm",
+            "node",
+            "build",
+            "nextjs"
+          ],
+          "source": "../../skills/devops-cloud/openship-build-npm/locales/es/SKILL.md"
         },
         {
           "id": "openship-project-environments",
@@ -364,6 +381,21 @@
             "risk"
           ],
           "source": "../../skills/management-quality/software-estimation/locales/es/SKILL.md"
+        },
+        {
+          "id": "verificacion-con-evidencia",
+          "name": "Verificación con evidencia",
+          "summary": "Nunca afirmar un estado sin evidencia directa: verificar antes de reportar y distinguir verificado, pendiente y bloqueado.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "calidad",
+            "verificacion",
+            "evidencia",
+            "reporting"
+          ],
+          "source": "../../skills/management-quality/verificacion-con-evidencia/locales/es/SKILL.md"
         }
       ]
     },
@@ -388,6 +420,21 @@
           "source": "../../skills/ide-instructions/agent-instructions-authoring/locales/es/SKILL.md"
         },
         {
+          "id": "desarrollo-ideavo",
+          "name": "Desarrollo en Ideavo",
+          "summary": "Skill principal para desarrollar proyectos Ideavo: mapa de skills del flujo de ramas, previews restringidas, base de datos, hosting y claves de tarea.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "ideavo",
+            "desarrollo",
+            "flujo-de-trabajo",
+            "principal"
+          ],
+          "source": "../../skills/ide-instructions/desarrollo-ideavo/locales/es/SKILL.md"
+        },
+        {
           "id": "ide-instructions-audit",
           "name": "Auditoría de instrucciones de IDE",
           "summary": "Revisar archivos de instrucciones existentes para detectar reglas obsoletas, contradictorias o inseguras.",
@@ -403,6 +450,36 @@
           "source": "../../skills/ide-instructions/ide-instructions-audit/locales/es/SKILL.md"
         },
         {
+          "id": "ideavo-claves-tarea",
+          "name": "Claves de tarea en Ideavo",
+          "summary": "Autonomía de claves de tarea: crear, usar, revocar e informar; valores nunca visibles; baúl de credenciales y buzón de Triana para resets.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "ideavo",
+            "credenciales",
+            "claves",
+            "seguridad"
+          ],
+          "source": "../../skills/ide-instructions/ideavo-claves-tarea/locales/es/SKILL.md"
+        },
+        {
+          "id": "ideavo-flujo-ramas",
+          "name": "Flujo de ramas en Ideavo",
+          "summary": "Flujo de ramas desarrollo, preview y producción en proyectos Ideavo, con tratamiento de ramas de historia disjunta.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "low",
+          "tags": [
+            "ideavo",
+            "git",
+            "ramas",
+            "despliegue"
+          ],
+          "source": "../../skills/ide-instructions/ideavo-flujo-ramas/locales/es/SKILL.md"
+        },
+        {
           "id": "ideavo-instructions-setup",
           "name": "Configuración de instrucciones para Ideavo",
           "summary": "Crear el archivo de instrucciones de Ideavo con contexto, convenciones y límites del proyecto.",
@@ -416,6 +493,37 @@
             "onboarding"
           ],
           "source": "../../skills/ide-instructions/ideavo-instructions-setup/locales/es/SKILL.md"
+        },
+        {
+          "id": "ideavo-previews-restringidas",
+          "name": "Previews restringidas en Ideavo",
+          "summary": "Dominios y protección de acceso de previews: preview.dominio del proyecto, protección nativa de OpenShip, middleware o Cloudflare Access, con verificación humana.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "ideavo",
+            "preview",
+            "seguridad",
+            "dns"
+          ],
+          "source": "../../skills/ide-instructions/ideavo-previews-restringidas/locales/es/SKILL.md"
+        },
+        {
+          "id": "ideavo-reglas-bd",
+          "name": "Reglas de base de datos en Ideavo",
+          "summary": "Neon de Ideavo solo lectura y sin claim, bases de datos de despliegue en Atlas o Dokploy y Neon solo como respaldo.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "ideavo",
+            "neon",
+            "base-de-datos",
+            "atlas",
+            "dokploy"
+          ],
+          "source": "../../skills/ide-instructions/ideavo-reglas-bd/locales/es/SKILL.md"
         }
       ]
     }
