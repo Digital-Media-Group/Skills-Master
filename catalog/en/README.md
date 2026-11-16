@@ -25,6 +25,7 @@ Continuous delivery, infrastructure, containers, observability, and cloud securi
 | [Dokploy Compose Deployment](../../skills/devops-cloud/dokploy-compose-deployment/locales/en/SKILL.md) | `dokploy-compose-deployment` | Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, domains, and a master -> preview -> production flow. | experimental | high |
 | [Dokploy Swarm Stack Deployment](../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/en/SKILL.md) | `dokploy-swarm-stack-deployment` | Prepare, promote, and diagnose Dokploy/Swarm stacks with verifiable backup gates, API-only builds, independent maintenance, and site/app bindings. | experimental | high |
 | [CI with OpenShip Actions and Self-Hosted Runners](../../skills/devops-cloud/openship-actions-ci/locales/en/SKILL.md) | `openship-actions-ci` | Run CI validation on own infrastructure with OpenShip Actions, in independent mode or with self-hosted runners for GitHub workflows, with a hardened Dokploy alternative. | experimental | high |
+| [npm/Node Builds in OpenShip](../../skills/devops-cloud/openship-build-npm/locales/en/SKILL.md) | `openship-build-npm` | Configure Next.js builds on OpenShip/Atlas with npm and Node: never bun, exact packageManager, committed package-lock, and bootstrap diagnostics. | experimental | medium |
 | [OpenShip Project and Environment Deployment](../../skills/devops-cloud/openship-project-environments/locales/en/SKILL.md) | `openship-project-environments` | Operate OpenShip projects with Production and Preview, persistent services, PostgreSQL migrations, verifiable backups, promotion, and rollback. | experimental | high |
 
 ## Hosting and Support
@@ -57,6 +58,7 @@ Discovery, requirements, estimation, QA, delivery, and continuous improvement.
 | [Project Discovery](../../skills/management-quality/project-discovery/locales/en/SKILL.md) | `project-discovery` | Align the problem, outcomes, scope, risks, and validation plan before execution. | experimental | low |
 | [Release Readiness Review](../../skills/management-quality/release-readiness-review/locales/en/SKILL.md) | `release-readiness-review` | Decide whether a release can proceed using technical, operational, and business evidence. | experimental | high |
 | [Software Estimation](../../skills/management-quality/software-estimation/locales/en/SKILL.md) | `software-estimation` | Produce an explainable estimate with a range, assumptions, risks, and confidence level. | experimental | low |
+| [Evidence-Based Verification](../../skills/management-quality/verificacion-con-evidencia/locales/en/SKILL.md) | `verificacion-con-evidencia` | Never claim a state without direct evidence: verify before reporting and distinguish verified, pending, and blocked. | experimental | low |
 
 ## IDE Instructions
 
@@ -65,5 +67,10 @@ Instruction and rule files for IDEs and coding agents such as Ideavo, Claude Cod
 | Skill | ID | Summary | Status | Risk |
 | --- | --- | --- | --- | --- |
 | [Agent Instructions Authoring](../../skills/ide-instructions/agent-instructions-authoring/locales/en/SKILL.md) | `agent-instructions-authoring` | Write a neutral, reusable instructions file shared across IDEs and coding agents. | experimental | low |
+| [Ideavo Development](../../skills/ide-instructions/desarrollo-ideavo/locales/en/SKILL.md) | `desarrollo-ideavo` | Principal skill for Ideavo development: map of skills covering branch flow, restricted previews, database rules, hosting, and task keys. | experimental | low |
 | [IDE Instructions Audit](../../skills/ide-instructions/ide-instructions-audit/locales/en/SKILL.md) | `ide-instructions-audit` | Review existing instruction files to detect outdated, contradictory, or unsafe rules. | experimental | medium |
+| [Task Keys in Ideavo](../../skills/ide-instructions/ideavo-claves-tarea/locales/en/SKILL.md) | `ideavo-claves-tarea` | Task-key autonomy: create, use, revoke, and report; values never shown; credential vault and the Triana mailbox for resets. | experimental | medium |
+| [Ideavo Branch Flow](../../skills/ide-instructions/ideavo-flujo-ramas/locales/en/SKILL.md) | `ideavo-flujo-ramas` | Branch flow for desarrollo, preview, and producción in Ideavo projects, including disjoint-history branches. | experimental | low |
 | [Ideavo Instructions Setup](../../skills/ide-instructions/ideavo-instructions-setup/locales/en/SKILL.md) | `ideavo-instructions-setup` | Create the Ideavo instructions file with project context, conventions, and boundaries. | experimental | low |
+| [Restricted Previews in Ideavo](../../skills/ide-instructions/ideavo-previews-restringidas/locales/en/SKILL.md) | `ideavo-previews-restringidas` | Preview domains and access protection: preview.project-domain, OpenShip native protection, middleware, or Cloudflare Access, with human verification. | experimental | medium |
+| [Database Rules in Ideavo](../../skills/ide-instructions/ideavo-reglas-bd/locales/en/SKILL.md) | `ideavo-reglas-bd` | Ideavo Neon read-only with no claiming, deployment databases on Atlas or Dokploy, and Neon as backup only. | experimental | high |

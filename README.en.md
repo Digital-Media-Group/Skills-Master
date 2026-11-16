@@ -37,6 +37,7 @@ Copy the technical ID or the full URL to tell an agent which skill to install: `
 | Dokploy Compose Deployment | `dokploy-compose-deployment` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-compose-deployment |
 | Dokploy Swarm Stack Deployment | `dokploy-swarm-stack-deployment` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-swarm-stack-deployment |
 | CI with OpenShip Actions and Self-Hosted Runners | `openship-actions-ci` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-actions-ci |
+| npm/Node Builds in OpenShip | `openship-build-npm` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-build-npm |
 | OpenShip Project and Environment Deployment | `openship-project-environments` | DevOps and Cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-project-environments |
 | Analytics Measurement Plan | `analytics-measurement-plan` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan |
 | Conversion Rate Audit | `conversion-rate-audit` | Digital Marketing | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit |
@@ -45,12 +46,18 @@ Copy the technical ID or the full URL to tell an agent which skill to install: `
 | DNS Configuration | `dns-configuration` | Hosting and Support | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/dns-configuration |
 | Website Migration | `website-migration` | Hosting and Support | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/website-migration |
 | Agent Instructions Authoring | `agent-instructions-authoring` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/agent-instructions-authoring |
+| Ideavo Development | `desarrollo-ideavo` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/desarrollo-ideavo |
 | IDE Instructions Audit | `ide-instructions-audit` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ide-instructions-audit |
+| Task Keys in Ideavo | `ideavo-claves-tarea` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-claves-tarea |
+| Ideavo Branch Flow | `ideavo-flujo-ramas` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-flujo-ramas |
 | Ideavo Instructions Setup | `ideavo-instructions-setup` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-instructions-setup |
+| Restricted Previews in Ideavo | `ideavo-previews-restringidas` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-previews-restringidas |
+| Database Rules in Ideavo | `ideavo-reglas-bd` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-reglas-bd |
 | Standard development process with Ideavo | `proceso-estandar-desarrollo-ideavo` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/proceso-estandar-desarrollo-ideavo |
 | Project Discovery | `project-discovery` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/project-discovery |
 | Release Readiness Review | `release-readiness-review` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/release-readiness-review |
 | Software Estimation | `software-estimation` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation |
+| Evidence-Based Verification | `verificacion-con-evidencia` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/verificacion-con-evidencia |
 | API Design Review | `api-design-review` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/api-design-review |
 | IDEAVO Development - OpenCode | `desarrollo-ideavo-opencode` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/desarrollo-ideavo-opencode |
 | Web Performance Audit | `web-performance-audit` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-performance-audit |

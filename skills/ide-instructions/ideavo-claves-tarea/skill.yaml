@@ -1,0 +1,39 @@
+schemaVersion: 1
+id: ideavo-claves-tarea
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Claves de tarea en Ideavo
+  en: Task Keys in Ideavo
+summary:
+  es: "Autonomía de claves de tarea: crear, usar, revocar e informar; valores nunca visibles; baúl de credenciales y buzón de Triana para resets."
+  en: "Task-key autonomy: create, use, revoke, and report; values never shown; credential vault and the Triana mailbox for resets."
+tags:
+  - ideavo
+  - credenciales
+  - claves
+  - seguridad
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+capabilities:
+  - files
+riskLevel: medium
+inputs:
+  es:
+    - Servicio externo que exige credenciales para una tarea (Stripe test, LLM router, etc.).
+  en:
+    - External service requiring credentials for a task (Stripe test, LLM router, etc.).
+outputs:
+  es:
+    - Claves creadas, almacenadas en el baúl, usadas y revocadas al terminar, con informe sin valores.
+  en:
+    - Keys created, stored in the vault, used, and revoked on completion, with a value-free report.
+dependencies: []
+lastReviewed: 2026-11-16

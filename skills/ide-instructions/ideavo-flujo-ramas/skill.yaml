@@ -1,0 +1,39 @@
+schemaVersion: 1
+id: ideavo-flujo-ramas
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Flujo de ramas en Ideavo
+  en: Ideavo Branch Flow
+summary:
+  es: Flujo de ramas desarrollo, preview y producción en proyectos Ideavo, con tratamiento de ramas de historia disjunta.
+  en: Branch flow for desarrollo, preview, and producción in Ideavo projects, including disjoint-history branches.
+tags:
+  - ideavo
+  - git
+  - ramas
+  - despliegue
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+capabilities:
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Repo GitHub del proyecto Ideavo y entorno de despliegue que carga ramas concretas.
+  en:
+    - GitHub repo of the Ideavo project and a deploy environment loading specific branches.
+outputs:
+  es:
+    - Ramas ordenadas, trabajo integrado sin pérdidas y obsoletas propuestas para borrado con OK.
+  en:
+    - Ordered branches, integrated work without loss, and stale ones proposed for deletion with approval.
+dependencies: []
+lastReviewed: 2026-11-16

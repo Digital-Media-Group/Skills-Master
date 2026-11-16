@@ -1,0 +1,39 @@
+schemaVersion: 1
+id: ideavo-previews-restringidas
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Previews restringidas en Ideavo
+  en: Restricted Previews in Ideavo
+summary:
+  es: "Dominios y protección de acceso de previews: preview.dominio del proyecto, protección nativa de OpenShip, middleware o Cloudflare Access, con verificación humana."
+  en: "Preview domains and access protection: preview.project-domain, OpenShip native protection, middleware, or Cloudflare Access, with human verification."
+tags:
+  - ideavo
+  - preview
+  - seguridad
+  - dns
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+capabilities:
+  - files
+riskLevel: medium
+inputs:
+  es:
+    - App desplegada en Atlas/OpenShip, dominio del proyecto y acceso al DNS.
+  en:
+    - App deployed on Atlas/OpenShip, the project domain, and DNS access.
+outputs:
+  es:
+    - Preview en preview.dominio restringida y verificada (401 sin credenciales, 200 con ellas, noindex).
+  en:
+    - Preview at preview.domain restricted and verified (401 without credentials, 200 with them, noindex).
+dependencies: []
+lastReviewed: 2026-11-16

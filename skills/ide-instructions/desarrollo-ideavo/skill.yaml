@@ -1,0 +1,39 @@
+schemaVersion: 1
+id: desarrollo-ideavo
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Desarrollo en Ideavo
+  en: Ideavo Development
+summary:
+  es: "Skill principal para desarrollar proyectos Ideavo: mapa de skills del flujo de ramas, previews restringidas, base de datos, hosting y claves de tarea."
+  en: "Principal skill for Ideavo development: map of skills covering branch flow, restricted previews, database rules, hosting, and task keys."
+tags:
+  - ideavo
+  - desarrollo
+  - flujo-de-trabajo
+  - principal
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+capabilities:
+  - files
+riskLevel: low
+inputs:
+  es:
+    - Proyecto gestionado con Ideavo (repo GitHub, sandbox, despliegues en Atlas o Dokploy).
+  en:
+    - Project managed with Ideavo (GitHub repo, sandbox, deployments on Atlas or Dokploy).
+outputs:
+  es:
+    - Trabajo dirigido a la skill específica correcta en cada fase.
+  en:
+    - Work routed to the correct specific skill at each phase.
+dependencies: []
+lastReviewed: 2026-11-16
