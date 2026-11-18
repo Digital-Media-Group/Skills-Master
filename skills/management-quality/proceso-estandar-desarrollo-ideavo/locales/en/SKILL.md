@@ -48,7 +48,7 @@ Run any engineering work with Ideavo in an orderly, verifiable, and governed way
 3. **Block development**: Ideavo works block by block, each block on its own `feat/` branch off current master, with frequent pushes as insurance against sandbox interruptions.
 4. **PR + green CI**: each block ends in a PR opened against master. CI (own runner on Atlas/Dokploy, never GitHub-hosted Actions) must be green on the branch.
 5. **Operator review and merge**: the operator reviews the diff (additive, no secrets, new tests) and merges. Ideavo NEVER merges or pushes to master, preview, or production.
-6. **Real preview QA**: promote to preview, deploy, and run real smokes with test data (login, touched pages and APIs). What fails in preview does not reach production.
+6. **Real preview QA**: promote to preview, deploy, and run the full milestone and batch acceptance matrix with test data. What fails in preview does not reach production.
 7. **Production window**: with a fresh verified backup, additive migrations applied by hand, deploy, smokes, and a rehearsed rollback. Announce when opening and when closing.
 8. **Closeout and cleanup**: closeout report with times and evidence, and cleanup of temporary resources (rehearsal containers, dumps with real data).
 
@@ -103,7 +103,7 @@ Phases delivered to production with full traceability: living document up to dat
 
 ## Safety
 
-Each phase is decided and shipped without asking for a numbered OK, provided the standing conditions hold (green CI, real QA, verified backup, rehearsed rollback) and what ships is announced. OUTSIDE that autonomy, always ask for express approval first:
+This guide grants no autonomy to merge or promote. Each batch requires the owner's current authorization for its version and environment, plus green CI, complete Preview acceptance, a verified backup and rehearsed rollback. Specific authorization is always required for:
 
 1. **Payments and top-ups** (Telnyx, VoIP.ms, and any spend).
 2. **EmprenRed catalog in production**.
