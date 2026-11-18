@@ -20,7 +20,7 @@ El archivo de arranque del proyecto (AGENTS.md o equivalente nativo de Ideavo) d
 
 ## Propósito
 
-Ejecutar cualquier trabajo de ingeniería con Ideavo de forma ordenada, verificable y gobernada: plan por fases, desarrollo por bloques con PR y CI verde, QA real en preview y ventanas de producción con copia verificada y vuelta atrás ensayada. Es el estándar vigente para todos los proyectos actuales y futuros, fijado a partir de cómo se llevó GESCODI.
+Ejecutar cualquier trabajo de ingeniería con Ideavo de forma ordenada, verificable y gobernada: plan por fases, desarrollo por bloques con PR y CI verde, aceptación completa en Preview y ventanas de producción por lotes con copia verificada y vuelta atrás ensayada. Es el estándar vigente para todos los proyectos actuales y futuros, fijado a partir de cómo se llevó GESCODI.
 
 ## Cuándo utilizarla
 
@@ -48,7 +48,7 @@ Ejecutar cualquier trabajo de ingeniería con Ideavo de forma ordenada, verifica
 3. **Desarrollo por bloques**: Ideavo trabaja bloque a bloque, cada bloque en su rama `feat/` desde el master vigente, con push frecuente como seguro contra cortes del sandbox.
 4. **PR + CI verde**: cada bloque termina en un PR abierto contra master. El CI (runner propio en Atlas/Dokploy, nunca GitHub-hosted Actions) debe dar verde en la rama.
 5. **Revisión y merge del operador**: el operador revisa el diff (aditivo, sin secretos, tests nuevos) y mergea. Ideavo NUNCA mergea ni empuja a master, preview ni production.
-6. **QA real en preview**: promoción a preview, despliegue y smokes reales con datos de prueba (login, páginas y APIs tocadas). Lo que falla en preview no llega a producción.
+6. **QA real en preview**: promoción a preview, despliegue y la matriz completa de aceptación del hito y del lote con datos de prueba. Lo que falla en preview no llega a producción.
 7. **Ventana de producción**: con backup fresco verificado, migraciones aditivas aplicadas a mano, despliegue, smokes y vuelta atrás ensayada. Se avisa al abrir y al cerrar.
 8. **Cierre y limpieza**: reporte de cierre con horas y evidencia, y limpieza de recursos temporales (contenedores de ensayo, dumps con datos reales).
 
@@ -103,7 +103,7 @@ Fases entregadas en producción con trazabilidad completa: documento vivo al dí
 
 ## Seguridad
 
-Se decide y se sube cada fase sin pedir OK numerado, cumpliendo las condiciones de siempre (CI verde, QA real, copia verificada, vuelta atrás ensayada) y avisando de lo que sube. FUERA de esa autonomía, siempre OK expreso primero:
+Esta guía no concede autonomía para fusionar ni promover. Cada lote necesita la autorización vigente del propietario para su versión y entorno, además de CI verde, aceptación completa de Preview, copia verificada y rollback ensayado. Siempre se exige autorización específica para:
 
 1. **Pagos y recargas** (Telnyx, VoIP.ms y cualquier gasto).
 2. **Catálogo de EmprenRed en producción**.
