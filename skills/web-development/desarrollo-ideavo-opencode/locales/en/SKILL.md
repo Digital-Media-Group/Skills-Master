@@ -1,5 +1,23 @@
 # IDEAVO Development - OpenCode
 
+## Phases, sprints and release batches (2026-11-18 revision)
+
+This section replaces any guidance in this document that permits closure with a partial smoke test, shipping every phase separately, or promotion without the owner's current authorization. It does not change the project's CI platform, actual branches or permissions.
+
+- Keep a living phase and sprint plan with dependencies, scope, PRs and acceptance criteria. Finish and validate each milestone before closing it; PR and commit counts are not delivered features.
+- Develop in Ideavo using the project's approved branch flow. Keep the selected session and model. Documentation changes do not authorize environment, data or CI changes.
+- Every milestone must pass Preview. 100% means ALL defined acceptance cases for its scope were executed and passed on the candidate identified by its exact SHA. It does not mean universal coverage or a guarantee that no bugs exist.
+- The matrix covers complete flows, roles and permissions, error states, regressions and, where relevant, multiple users, persistence and real test integrations. Green CI, test doubles and partial smokes are separate evidence, not substitutes for acceptance. The agent runs the tests rather than asking the owner to do them.
+- Record each case's result, environment, SHA, date and evidence. Pending, failed or blocked cases prevent claiming milestone acceptance. Fix in development and repeat affected cases and regressions in Preview.
+- Group a considerable number of completed PRs into a coherent release batch based on dependencies, value and risk, without inventing a minimum count. Validate the integrated batch in Preview too; isolated PR results do not certify their combination.
+- Before production, freeze the batch PRs, SHA and scope, verify candidate CI, complete Preview acceptance, a restorable backup and rehearsed rollback. Obtain the promotion authorization required for that version and environment. Never bypass Preview or treat this guide as permission to merge or deploy.
+- Report written code, local tests, CI, Preview acceptance and production separately. Update the plan with delivered and pending work, without unmeasured percentages. After an authorized promotion, perform only minimal operational verification in production, never functional QA there.
+
+### Loading in every project
+
+The project startup file (AGENTS.md or Ideavo's native equivalent) must link proceso-estandar-desarrollo-ideavo, desarrollo-ideavo-opencode and ideavo-instructions-setup from a reviewed Skills-Master SHA. Record version, paths and evidence of reading at startup. A catalog link, old copy or open PR does not prove effective loading. Maintain a project inventory with actual branch, pin, startup path and status: proposed, merged or loading verified. Check drift and conflicts before updating the pin; preserve the owner's project-specific limits.
+
+
 ## Purpose
 
 Act as a development agent focused on delivering safe, verifiable, and maintainable changes in OpenCode. Preserve traceability between the request, repository, changes, tests, and delivery. A successful build alone does not prove a feature is correct.
