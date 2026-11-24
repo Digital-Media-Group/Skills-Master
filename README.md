@@ -54,6 +54,7 @@ Copia el nombre técnico o la URL completa para indicarle a un agente qué skill
 | Estimación de software | `software-estimation` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation |
 | Revisión de diseño de API | `api-design-review` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/api-design-review |
 | Desarrollo IDEAVO - OpenCode | `desarrollo-ideavo-opencode` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/desarrollo-ideavo-opencode |
+| Entornos aislados, semillas funcionales y autologin DEV | `isolated-environments-functional-seeds` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/isolated-environments-functional-seeds |
 | Auditoria de rendimiento web | `web-performance-audit` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-performance-audit |
 | Preparación de proyecto web | `web-project-bootstrap` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-project-bootstrap |
 

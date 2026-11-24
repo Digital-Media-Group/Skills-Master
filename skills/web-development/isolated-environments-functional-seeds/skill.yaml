@@ -1,0 +1,45 @@
+schemaVersion: 1
+id: isolated-environments-functional-seeds
+version: 0.1.0
+status: experimental
+category: web-development
+name:
+  es: Entornos aislados, semillas funcionales y autologin DEV
+  en: Isolated environments, functional seeds and DEV autologin
+summary:
+  es: Preparar datos ficticios persistidos que ejercitan funciones reales, separar desarrollo, Preview y producción, y verificar acceso por rol solo en DEV.
+  en: Prepare persisted fictional data that exercises real functions, separate development, Preview and production, and verify role access only in DEV.
+tags:
+  - development
+  - seeds
+  - authentication
+  - isolation
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+  - en
+compatibility:
+  - universal
+  - claude-code
+  - openai-codex
+capabilities:
+  - files
+  - shell
+  - database
+  - credentials
+  - human-approval
+riskLevel: high
+inputs:
+  es:
+    - Proyecto, roles efectivos, destinos acreditados, alcance autorizado y mecanismo de autenticación existente.
+  en:
+    - Project, effective roles, verified destinations, authorized scope and existing authentication mechanism.
+outputs:
+  es:
+    - Matriz de entornos, semillas verificadas, acceso DEV confinado y evidencia de pruebas negativas.
+  en:
+    - Environment matrix, verified seeds, confined DEV access and negative-test evidence.
+dependencies: []
+lastReviewed: 2026-11-24

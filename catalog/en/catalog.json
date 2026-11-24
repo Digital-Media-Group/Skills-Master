@@ -26,7 +26,7 @@
           "id": "desarrollo-ideavo-opencode",
           "name": "IDEAVO Development - OpenCode",
           "summary": "General workflow for safe, verifiable, and governed development with IDEAVO in OpenCode.",
-          "version": "0.4.0",
+          "version": "0.4.1",
           "status": "experimental",
           "riskLevel": "high",
           "tags": [
@@ -37,6 +37,21 @@
             "validation"
           ],
           "source": "../../skills/web-development/desarrollo-ideavo-opencode/locales/en/SKILL.md"
+        },
+        {
+          "id": "isolated-environments-functional-seeds",
+          "name": "Isolated environments, functional seeds and DEV autologin",
+          "summary": "Prepare persisted fictional data that exercises real functions, separate development, Preview and production, and verify role access only in DEV.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "development",
+            "seeds",
+            "authentication",
+            "isolation"
+          ],
+          "source": "../../skills/web-development/isolated-environments-functional-seeds/locales/en/SKILL.md"
         },
         {
           "id": "web-performance-audit",
