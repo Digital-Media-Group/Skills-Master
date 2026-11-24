@@ -71,6 +71,12 @@ Solo crea proyectos separados si el contrato de OpenShip exige explícitamente q
 - Orden: validación → build/artifact → Preview → smoke tests → aprobación humana → Production.
 - Conserva deployment, datos y configuración anteriores para rollback.
 
+## Promoción en proyectos Ideavo
+
+En proyectos que adoptan `desarrollo` como rama de trabajo, lee `ideavo-flujo-ramas` antes de promover. El sandbox desarrolla en `desarrollo`; el PR hacia `preview` alimenta CI/CD, migraciones y QA completo en Preview sobre el SHA exacto. Los fallos vuelven a `desarrollo`. Solo lo validado pasa por PR a `production`, con la autorización vigente del propietario para esa versión y entorno. `master` no es un paso obligatorio y no se elimina por este flujo.
+
+Comprueba en vivo rama configurada, SHA desplegado, ledger de migraciones y copia del entorno; conserva una restauración y rollback comprobados antes de producción según los gates aplicables. Auto-deploy solo apunta a la rama estable de cada entorno, nunca a la de trabajo. Lee también `openship-actions-ci`, `proceso-estandar-desarrollo-ideavo` y el protocolo de migraciones de `desarrollo-ideavo-opencode`. Citar rutas o SHA acredita lectura, no cumplimiento. Esta documentación no concede autorización de despliegue ni cambia la configuración por sí sola.
+
 ## Servicios y persistencia
 
 Un deployment puede contener `web`, `worker`/`cron` y `postgres`, además de Redis u object storage cuando estén documentados. Cada entorno debe tener volúmenes separados, por ejemplo:

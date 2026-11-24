@@ -46,6 +46,7 @@ Copy the technical ID or the full URL to tell an agent which skill to install: `
 | Website Migration | `website-migration` | Hosting and Support | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/website-migration |
 | Agent Instructions Authoring | `agent-instructions-authoring` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/agent-instructions-authoring |
 | IDE Instructions Audit | `ide-instructions-audit` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ide-instructions-audit |
+| Branch Flow in Ideavo | `ideavo-flujo-ramas` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-flujo-ramas |
 | Ideavo Instructions Setup | `ideavo-instructions-setup` | IDE Instructions | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-instructions-setup |
 | Standard development process with Ideavo | `proceso-estandar-desarrollo-ideavo` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/proceso-estandar-desarrollo-ideavo |
 | Project Discovery | `project-discovery` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/project-discovery |
