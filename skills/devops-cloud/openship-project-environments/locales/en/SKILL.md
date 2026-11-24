@@ -69,6 +69,12 @@ Create separate projects only when OpenShip explicitly requires a non-production
 - Order: validation -> build/artifact -> Preview -> smoke tests -> human approval -> Production.
 - Keep the previous deployment, data, and configuration for rollback.
 
+## Promotion in Ideavo projects
+
+For projects adopting `desarrollo` as their working branch, read `ideavo-flujo-ramas` before promoting. The sandbox develops on `desarrollo`; a PR to `preview` feeds CI/CD, migrations and full QA in Preview on the exact SHA. Failures return to `desarrollo`. Only validated work passes by PR to `production`, with the owner's current authorization for that version and environment. `master` is not a mandatory step and is not deleted by this flow.
+
+Read the configured branch, deployed SHA, migration ledger and environment backup live; retain verified restore and rollback evidence before production under the applicable gates. Auto-deploy targets only each environment's stable branch, never the working branch. Also read `openship-actions-ci`, `proceso-estandar-desarrollo-ideavo` and the migration protocol in `desarrollo-ideavo-opencode`. Citing paths or SHAs proves reading, not compliance. This documentation does not grant deployment authority or change configuration by itself.
+
 ## Services and Persistence
 
 A deployment may contain `web`, `worker`/`cron`, `postgres`, Redis, and object storage when documented. Each environment must have separate volumes and must not share `DATABASE_URL`, passwords, restored backups, or data. Do not claim HA on one server; compensate with external backups and restore rehearsals.

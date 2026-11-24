@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Keep a predictable branch flow: the Ideavo sandbox always loads `desarrollo`, the preview environment loads the `preview` branch and production loads the `production` branch.
+Keep a predictable branch flow: the Ideavo sandbox loads the working branch `desarrollo` in projects adopting this flow, the preview environment loads the `preview` branch and production loads the `production` branch.
 
 ## Branch rule
 
@@ -12,7 +12,7 @@ Keep a predictable branch flow: the Ideavo sandbox always loads `desarrollo`, th
 - Errors or changes found in Preview go back to `desarrollo` and are promoted again through the same path.
 - `production` only receives what was validated in Preview, with the project owner's authorization for that version.
 - `master` is not a mandatory step of this chain. If it exists, keep it; do not overwrite or delete it without explicit approval.
-- If `desarrollo` does not exist, create it from `master`.
+- If `desarrollo` does not exist, identify the current base (`main`, `master` or another branch) and prepare its creation from the agreed SHA, only with authority to change branches. Do not assume `master` contains all current work.
 
 ## Check before promoting
 
@@ -23,30 +23,30 @@ Keep a predictable branch flow: the Ideavo sandbox always loads `desarrollo`, th
 
 ## Disjoint-history branches
 
-Ideavo creates each branch with its own root: there is no merge base between them, so a normal merge fails or drags artificial conflicts.
+Do not assume histories are disjoint because a project uses Ideavo. First check `git merge-base` between the exact branches and retain their SHAs. An old date does not prove that content is integrated or that a branch is obsolete.
 
-1. Compare each loose branch with `git log` and `git diff` against `master` and `desarrollo`.
-2. Integrate current work into `desarrollo` by applying the changes, not by merging histories.
-3. Disjoint branches older than `master` are marked obsolete.
-4. Propose deleting them with an exact list (name, last commit date, reason) and wait for approval.
+1. Compare commits and content with `git log` and `git diff`; also check unpublished changes before moving work.
+2. With a common ancestor, use the normal PR and integration flow with its checks.
+3. Without a common ancestor, inventory unique changes and prepare a reviewed application of those changes to `desarrollo`. Do not force unrelated histories or lose work to make a merge pass.
+4. Propose a branch as obsolete only after verifying its work is integrated, replaced or explicitly discarded. Propose any deletion with name, SHA, date, reason and coverage evidence, then wait for approval.
 
-## When to use it
+## When to Use
 
 - When creating, promoting, integrating or cleaning branches in an Ideavo project whose working branch is `desarrollo`.
 
-## When not to use it
+## When Not to Use
 
 - Repos without branch-based deployment or projects that do not follow the desarrollo - preview - production flow.
 
-## Required information
+## Required Information
 
 - Repo URL, existing branches (`git ls-remote`) and which branch each environment loads.
 
 ## Procedure
 
-1. Clone or update the repo and fetch each branch explicitly (the default refspec only brings `master`).
+1. Clone or update the repo, check the actual refspec and fetch the required references. Do not assume only `master` is fetched.
 2. Verify the state with evidence: `git ls-remote`, `git log --oneline`.
-3. Apply the branch rule; resolve disjoint branches as described above.
+3. Apply the branch rule; handle disjoint histories only when the check confirms they are disjoint.
 4. Push only authorized branches.
 
 ## Validation
@@ -54,7 +54,7 @@ Ideavo creates each branch with its own root: there is no merge base between the
 - `git ls-remote` shows `desarrollo` up to date with the integrated work.
 - No current work is lost; obsolete branches are listed for decision.
 
-## Expected result
+## Expected Result
 
 A working desarrollo - preview - production flow, with no ambiguous branches.
 

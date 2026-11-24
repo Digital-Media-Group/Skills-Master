@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Mantener un flujo de ramas predecible: el sandbox de Ideavo carga siempre `desarrollo`, el entorno de preview carga la rama `preview` y producción carga la rama `production`.
+Mantener un flujo de ramas predecible: el sandbox de Ideavo carga la rama de trabajo `desarrollo` en los proyectos que adoptan este flujo, el entorno de preview carga la rama `preview` y producción carga la rama `production`.
 
 ## Regla de ramas
 
@@ -12,7 +12,7 @@ Mantener un flujo de ramas predecible: el sandbox de Ideavo carga siempre `desar
 - Los errores o cambios que salgan de Preview vuelven a `desarrollo` y se promueven de nuevo por el mismo circuito.
 - `production` solo recibe lo ya validado en Preview, con la autorización del propietario del proyecto para esa versión.
 - `master` no es un paso obligatorio de esta cadena. Si existe, se conserva; no se sobrescribe ni se borra sin OK explícito.
-- Si `desarrollo` no existe, créala desde `master`.
+- Si `desarrollo` no existe, identifica la base vigente (`main`, `master` u otra) y prepara su creación desde el SHA acordado, solo con autoridad para cambiar ramas. No asumir que `master` contiene todo el trabajo.
 
 ## Comprobar antes de promover
 
@@ -23,12 +23,12 @@ Mantener un flujo de ramas predecible: el sandbox de Ideavo carga siempre `desar
 
 ## Ramas de historia disjunta
 
-Ideavo crea cada rama con su propia raíz: no hay merge-base entre ellas y un merge normal falla o arrastra conflictos artificiales.
+No presupongas historias disjuntas por usar Ideavo. Comprueba primero `git merge-base` entre las ramas exactas y conserva sus SHA. Una fecha antigua no prueba que el contenido esté integrado ni que una rama sea obsoleta.
 
-1. Compara cada rama suelta con `git log` y `git diff` contra `master` y `desarrollo`.
-2. Integra el trabajo vigente en `desarrollo` aplicando los cambios, no fusionando historias.
-3. Las ramas disjuntas más antiguas que `master` se marcan como obsoletas.
-4. Propón su borrado con una lista exacta (nombre, fecha del último commit, motivo) y espera el OK.
+1. Compara commits y contenido con `git log` y `git diff`; revisa también cambios sin publicar antes de mover trabajo.
+2. Si hay ancestro común, usa el flujo normal de PR e integración con sus verificaciones.
+3. Si no hay ancestro común, inventaría los cambios únicos y prepara una aplicación revisada de esos cambios a `desarrollo`. No fuerces historias no relacionadas ni pierdas trabajo para hacer pasar el merge.
+4. Solo propón una rama como obsoleta tras comprobar que su trabajo está integrado, sustituido o descartado expresamente. Propón cualquier borrado con nombre, SHA, fecha, motivo y comprobación de cobertura, y espera aprobación.
 
 ## Cuándo utilizarla
 
@@ -44,9 +44,9 @@ Ideavo crea cada rama con su propia raíz: no hay merge-base entre ellas y un me
 
 ## Procedimiento
 
-1. Clona o actualiza el repo y haz fetch explícito de cada rama (el refspec por defecto solo trae `master`).
+1. Clona o actualiza el repo, comprueba el refspec real y recupera las referencias necesarias. No presupongas que solo se descarga `master`.
 2. Verifica el estado con evidencia: `git ls-remote`, `git log --oneline`.
-3. Aplica la regla de ramas; resuelve las disjuntas como se indica arriba.
+3. Aplica la regla de ramas; trata historias disjuntas solo si la comprobación confirma que lo son.
 4. Push solo de las ramas autorizadas.
 
 ## Validación

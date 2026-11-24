@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "locale": "en",
-  "generatedAt": "2026-11-15T00:00:00.000Z",
+  "generatedAt": "2026-11-24T00:00:00.000Z",
   "categories": [
     {
       "id": "web-development",
@@ -401,6 +401,21 @@
             "maintenance"
           ],
           "source": "../../skills/ide-instructions/ide-instructions-audit/locales/en/SKILL.md"
+        },
+        {
+          "id": "ideavo-flujo-ramas",
+          "name": "Branch Flow in Ideavo",
+          "summary": "Branch flow desarrollo, preview and production in Ideavo projects, including disjoint-history branches.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "medium",
+          "tags": [
+            "ideavo",
+            "git",
+            "ramas",
+            "despliegue"
+          ],
+          "source": "../../skills/ide-instructions/ideavo-flujo-ramas/locales/en/SKILL.md"
         },
         {
           "id": "ideavo-instructions-setup",

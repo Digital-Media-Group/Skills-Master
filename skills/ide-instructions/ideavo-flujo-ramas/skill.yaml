@@ -26,4 +26,15 @@ capabilities:
   - files
   - shell
 riskLevel: medium
+inputs:
+  es:
+    - Repositorio, ramas y SHA vigentes, configuración real de entornos y autoridad del propietario.
+  en:
+    - Repository, current branches and SHAs, live environment configuration, and owner authority.
+outputs:
+  es:
+    - Flujo de promoción documentado y verificado por versión, con estado de ramas y evidencia de sus gates.
+  en:
+    - Documented promotion flow verified per version, with branch status and gate evidence.
+dependencies: []
 lastReviewed: 2026-11-24

@@ -71,19 +71,11 @@ Solo crea proyectos separados si el contrato de OpenShip exige explícitamente q
 - Orden: validación → build/artifact → Preview → smoke tests → aprobación humana → Production.
 - Conserva deployment, datos y configuración anteriores para rollback.
 
-## Cadena de promoción cuando la rama de trabajo es `desarrollo`
+## Promoción en proyectos Ideavo
 
-Aplica a proyectos Ideavo cuya rama de trabajo vigente es `desarrollo`. Es el flujo fijado por el dueño en su audio del 24/11/2026 y debe confirmarse con el propietario del proyecto antes de aplicarlo a otro.
+En proyectos que adoptan `desarrollo` como rama de trabajo, lee `ideavo-flujo-ramas` antes de promover. El sandbox desarrolla en `desarrollo`; el PR hacia `preview` alimenta CI/CD, migraciones y QA completo en Preview sobre el SHA exacto. Los fallos vuelven a `desarrollo`. Solo lo validado pasa por PR a `production`, con la autorización vigente del propietario para esa versión y entorno. `master` no es un paso obligatorio y no se elimina por este flujo.
 
-1. Se desarrolla y se comprueba el código en `desarrollo`, dentro del sandbox de Ideavo.
-2. Para probar, se abre un PR de `desarrollo` hacia `preview`. Tras el merge aceptado, el CI/CD aplica las migraciones pendientes y despliega en Preview. No se despliega `desarrollo` directamente en Preview.
-3. En Preview se hace el QA completo sobre el SHA exacto. Lo que falla vuelve a `desarrollo`, se corrige allí y vuelve a Preview por el mismo circuito.
-4. Lo validado pasa por PR a `production` y a su CI/CD, solo con autorización del propietario para esa versión y ese entorno, backup restaurable y rollback ensayado.
-5. `master` no es un paso obligatorio de esta cadena. Si existe, se conserva y no se borra.
-6. El despliegue automático de un entorno solo puede apuntar a su rama estable (`preview` o `production`), nunca a una rama de trabajo. Antes de promover, comprueba en vivo la rama, el SHA, el ledger de migraciones y el backup de ese entorno; la documentación no sustituye la configuración real.
-
-Qué leer antes de promover: esta skill, `openship-actions-ci`, `proceso-estandar-desarrollo-ideavo`, `desarrollo-ideavo-opencode` (protocolo de migraciones) y los gates de la sección Validación. Citar rutas o SHA acredita lectura, no cumplimiento: el ciclo se da por validado solo con CI, migraciones, QA en Preview, backup y rollback comprobados. Un documento del repositorio no concede autorización de despliegue. La regla de ramas y la comprobación previa a promover están en la skill `ideavo-flujo-ramas`.
-
+Comprueba en vivo rama configurada, SHA desplegado, ledger de migraciones y copia del entorno; conserva una restauración y rollback comprobados antes de producción según los gates aplicables. Auto-deploy solo apunta a la rama estable de cada entorno, nunca a la de trabajo. Lee también `openship-actions-ci`, `proceso-estandar-desarrollo-ideavo` y el protocolo de migraciones de `desarrollo-ideavo-opencode`. Citar rutas o SHA acredita lectura, no cumplimiento. Esta documentación no concede autorización de despliegue ni cambia la configuración por sí sola.
 
 ## Servicios y persistencia
 

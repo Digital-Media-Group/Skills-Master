@@ -66,4 +66,5 @@ Instruction and rule files for IDEs and coding agents such as Ideavo, Claude Cod
 | --- | --- | --- | --- | --- |
 | [Agent Instructions Authoring](../../skills/ide-instructions/agent-instructions-authoring/locales/en/SKILL.md) | `agent-instructions-authoring` | Write a neutral, reusable instructions file shared across IDEs and coding agents. | experimental | low |
 | [IDE Instructions Audit](../../skills/ide-instructions/ide-instructions-audit/locales/en/SKILL.md) | `ide-instructions-audit` | Review existing instruction files to detect outdated, contradictory, or unsafe rules. | experimental | medium |
+| [Branch Flow in Ideavo](../../skills/ide-instructions/ideavo-flujo-ramas/locales/en/SKILL.md) | `ideavo-flujo-ramas` | Branch flow desarrollo, preview and production in Ideavo projects, including disjoint-history branches. | experimental | medium |
 | [Ideavo Instructions Setup](../../skills/ide-instructions/ideavo-instructions-setup/locales/en/SKILL.md) | `ideavo-instructions-setup` | Create the Ideavo instructions file with project context, conventions, and boundaries. | experimental | low |
