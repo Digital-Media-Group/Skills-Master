@@ -10,6 +10,7 @@ Frontend, backend, APIs, data, testing, accessibility, and performance.
 | --- | --- | --- | --- | --- |
 | [API Design Review](../../skills/web-development/api-design-review/locales/en/SKILL.md) | `api-design-review` | Assess an API for consistency, security, evolution, and consumer experience. | experimental | medium |
 | [IDEAVO Development - OpenCode](../../skills/web-development/desarrollo-ideavo-opencode/locales/en/SKILL.md) | `desarrollo-ideavo-opencode` | General workflow for safe, verifiable, and governed development with IDEAVO in OpenCode. | experimental | high |
+| [Isolated environments, functional seeds and DEV autologin](../../skills/web-development/isolated-environments-functional-seeds/locales/en/SKILL.md) | `isolated-environments-functional-seeds` | Prepare persisted fictional data that exercises real functions, separate development, Preview and production, and verify role access only in DEV. | experimental | high |
 | [Web Performance Audit](../../skills/web-development/web-performance-audit/locales/en/SKILL.md) | `web-performance-audit` | Identify bottlenecks and propose measurable web performance improvements. | experimental | low |
 | [Web Project Bootstrap](../../skills/web-development/web-project-bootstrap/locales/en/SKILL.md) | `web-project-bootstrap` | Prepare a maintainable web foundation with initial decisions, structure, and controls. | experimental | low |
 

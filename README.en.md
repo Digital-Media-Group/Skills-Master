@@ -54,6 +54,7 @@ Copy the technical ID or the full URL to tell an agent which skill to install: `
 | Software Estimation | `software-estimation` | Management and Quality | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation |
 | API Design Review | `api-design-review` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/api-design-review |
 | IDEAVO Development - OpenCode | `desarrollo-ideavo-opencode` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/desarrollo-ideavo-opencode |
+| Isolated environments, functional seeds and DEV autologin | `isolated-environments-functional-seeds` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/isolated-environments-functional-seeds |
 | Web Performance Audit | `web-performance-audit` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-performance-audit |
 | Web Project Bootstrap | `web-project-bootstrap` | Web Development | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-project-bootstrap |
 

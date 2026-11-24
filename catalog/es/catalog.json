@@ -39,6 +39,21 @@
           "source": "../../skills/web-development/desarrollo-ideavo-opencode/locales/es/SKILL.md"
         },
         {
+          "id": "isolated-environments-functional-seeds",
+          "name": "Entornos aislados, semillas funcionales y autologin DEV",
+          "summary": "Preparar datos ficticios persistidos que ejercitan funciones reales, separar desarrollo, Preview y producción, y verificar acceso por rol solo en DEV.",
+          "version": "0.1.0",
+          "status": "experimental",
+          "riskLevel": "high",
+          "tags": [
+            "development",
+            "seeds",
+            "authentication",
+            "isolation"
+          ],
+          "source": "../../skills/web-development/isolated-environments-functional-seeds/locales/es/SKILL.md"
+        },
+        {
           "id": "web-performance-audit",
           "name": "Auditoria de rendimiento web",
           "summary": "Identificar cuellos de botella y proponer mejoras medibles de rendimiento web.",
