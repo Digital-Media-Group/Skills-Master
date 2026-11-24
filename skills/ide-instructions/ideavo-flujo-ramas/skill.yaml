@@ -1,0 +1,26 @@
+schemaVersion: 1
+id: ideavo-flujo-ramas
+version: 0.1.0
+status: experimental
+category: ide-instructions
+name:
+  es: Flujo de ramas en Ideavo
+summary:
+  es: Flujo de ramas desarrollo, preview y producción en proyectos Ideavo, con compuerta de producción y tratamiento de ramas de historia disjunta.
+tags:
+  - ideavo
+  - git
+  - ramas
+  - despliegue
+maintainers:
+  - community
+license: Apache-2.0
+locales:
+  - es
+compatibility:
+  - universal
+capabilities:
+  - files
+  - shell
+riskLevel: medium
+lastReviewed: 2026-11-24
