@@ -2,21 +2,24 @@
 
 ## Propósito
 
-Mantener un flujo de ramas predecible: el sandbox de Ideavo carga siempre `desarrollo`, el entorno de preview carga la rama de preview y producción carga la de producción.
+Mantener un flujo de ramas predecible: el sandbox de Ideavo carga siempre `desarrollo`, el entorno de preview carga la rama `preview` y producción carga la rama `production`.
 
 ## Regla de ramas
 
-- El trabajo se hace en ramas de feature y se fusiona en `desarrollo`.
-- Promoción: trabajo - `desarrollo` - rama preview - rama producción.
+- El trabajo se hace en `desarrollo` (o en ramas de feature que se fusionan en `desarrollo`).
+- Promoción: `desarrollo` - `preview` - `production`, siempre por PR.
+- Preview se despliega desde la rama `preview`, con su CI/CD y sus migraciones en el hosting (Atlas/OpenShip). Nunca se despliega `desarrollo` directamente en Preview.
+- Los errores o cambios que salgan de Preview vuelven a `desarrollo` y se promueven de nuevo por el mismo circuito.
+- `production` solo recibe lo ya validado en Preview, con la autorización del propietario del proyecto para esa versión.
+- `master` no es un paso obligatorio de esta cadena. Si existe, se conserva; no se sobrescribe ni se borra sin OK explícito.
 - Si `desarrollo` no existe, créala desde `master`.
-- `master` se conserva; no es obligatoria en la cadena y no se borra ni se sobrescribe sin OK explícito.
-- Preview carga la rama `preview` con su CI/CD y migraciones en el hosting (Atlas/OpenShip). Los fallos o cambios que salgan de Preview vuelven a `desarrollo` y se promueven de nuevo.
 
-## Compuerta de producción
+## Comprobar antes de promover
 
-- Producción solo recibe una versión con OK numerado de Carlos para esa versión exacta (criterio registrado el 7/11/2026).
-- Antes de ese OK se prepara y comprueba copia de la base de datos y vuelta atrás (práctica de las promociones anteriores, por ejemplo V24-B; confirmar con Carlos si la quiere como regla fija).
-- Un documento de repositorio o una página de sesión no sustituye ese OK.
+- Rama configurada, SHA desplegado y último deploy de cada entorno, en vivo en Atlas.
+- Ledger de migraciones pendientes y copia de la base de datos del entorno (ver `openship-project-environments`).
+- El despliegue automático de un entorno solo apunta a su rama estable (`preview` o `production`), nunca a una rama de trabajo.
+- Un documento del repositorio no concede autorización de despliegue.
 
 ## Ramas de historia disjunta
 
@@ -29,11 +32,11 @@ Ideavo crea cada rama con su propia raíz: no hay merge-base entre ellas y un me
 
 ## Cuándo utilizarla
 
-- Al crear, promover, integrar o limpiar ramas en un proyecto Ideavo.
+- Al crear, promover, integrar o limpiar ramas en un proyecto Ideavo cuya rama de trabajo es `desarrollo`.
 
 ## Cuándo no utilizarla
 
-- Repos sin despliegue por ramas o proyectos que no siguen el flujo desarrollo - preview - producción.
+- Repos sin despliegue por ramas o proyectos que no siguen el flujo desarrollo - preview - production.
 
 ## Información necesaria
 
@@ -41,7 +44,7 @@ Ideavo crea cada rama con su propia raíz: no hay merge-base entre ellas y un me
 
 ## Procedimiento
 
-1. Clona o actualiza el repo y haz fetch explícito de cada rama (el refspec por defecto solo trae master).
+1. Clona o actualiza el repo y haz fetch explícito de cada rama (el refspec por defecto solo trae `master`).
 2. Verifica el estado con evidencia: `git ls-remote`, `git log --oneline`.
 3. Aplica la regla de ramas; resuelve las disjuntas como se indica arriba.
 4. Push solo de las ramas autorizadas.
@@ -53,9 +56,8 @@ Ideavo crea cada rama con su propia raíz: no hay merge-base entre ellas y un me
 
 ## Resultado esperado
 
-Flujo desarrollo - preview - producción funcionando, sin ramas ambiguas.
+Flujo desarrollo - preview - production funcionando, sin ramas ambiguas.
 
 ## Seguridad
 
-Nivel de riesgo: **medium**. Origen: contenido de la PR #16 (Skills-Master) con la compuerta de producción añadida; pendiente de revisión y fusión por el operador. Nada de force-push a master ni borrados sin aprobación.
-
+Nivel de riesgo: **medium**. Nada de force-push a `master` ni borrados sin aprobación.
