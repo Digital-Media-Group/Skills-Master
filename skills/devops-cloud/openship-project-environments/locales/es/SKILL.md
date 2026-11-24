@@ -82,7 +82,7 @@ Aplica a proyectos Ideavo cuya rama de trabajo vigente es `desarrollo`. Es el fl
 5. `master` no es un paso obligatorio de esta cadena. Si existe, se conserva y no se borra.
 6. El despliegue automático de un entorno solo puede apuntar a su rama estable (`preview` o `production`), nunca a una rama de trabajo. Antes de promover, comprueba en vivo la rama, el SHA, el ledger de migraciones y el backup de ese entorno; la documentación no sustituye la configuración real.
 
-Qué leer antes de promover: esta skill, `openship-actions-ci`, `proceso-estandar-desarrollo-ideavo`, `desarrollo-ideavo-opencode` (protocolo de migraciones) y los gates de la sección Validación. Citar rutas o SHA acredita lectura, no cumplimiento: el ciclo se da por validado solo con CI, migraciones, QA en Preview, backup y rollback comprobados. Un documento del repositorio no concede autorización de despliegue.
+Qué leer antes de promover: esta skill, `openship-actions-ci`, `proceso-estandar-desarrollo-ideavo`, `desarrollo-ideavo-opencode` (protocolo de migraciones) y los gates de la sección Validación. Citar rutas o SHA acredita lectura, no cumplimiento: el ciclo se da por validado solo con CI, migraciones, QA en Preview, backup y rollback comprobados. Un documento del repositorio no concede autorización de despliegue. La regla de ramas y la comprobación previa a promover están en la skill `ideavo-flujo-ramas`.
 
 
 ## Servicios y persistencia
