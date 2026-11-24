@@ -5,8 +5,10 @@ status: experimental
 category: ide-instructions
 name:
   es: Flujo de ramas en Ideavo
+  en: Branch Flow in Ideavo
 summary:
-  es: Flujo de ramas desarrollo, preview y producción en proyectos Ideavo, con compuerta de producción y tratamiento de ramas de historia disjunta.
+  es: Flujo de ramas desarrollo, preview y production en proyectos Ideavo, con tratamiento de ramas de historia disjunta.
+  en: Branch flow desarrollo, preview and production in Ideavo projects, including disjoint-history branches.
 tags:
   - ideavo
   - git
@@ -17,6 +19,7 @@ maintainers:
 license: Apache-2.0
 locales:
   - es
+  - en
 compatibility:
   - universal
 capabilities:
