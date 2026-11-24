@@ -42,7 +42,7 @@ Act as a development agent focused on delivering safe, verifiable, and maintaina
 - Framework, language, package manager, architecture, scripts, and configuration.
 - External integrations, environment variables, required access, and definition of done.
 - CI/CD and deployment platform: OpenShip/Atlas Actions as the preferred route and hardened Dokploy as the fallback (see the `openship-actions-ci` skill); hosted GitHub Actions, Neon, and Vercel must not provide pipeline or test-environment compute unless explicitly approved.
-- Configuration management: environment variables are not required during development unless a real dependency requires them before Preview.
+- Configuration management: use only variables needed by real dependencies and persistence, with minimum independent secrets per environment.
 
 ### Required MCPs
 
@@ -69,7 +69,7 @@ These MCPs are environment dependencies, not implicit authorization to act. Veri
 5. Apply secure defaults: never expose secrets, validate inputs at the edge, protect resources, and do not test payments, deletes, migrations, or destructive production mutations without explicit authorization.
 6. For APIs validate method, authentication, authorization, body, query, parameters, headers, errors, limits, pagination, timeouts, and idempotency.
 7. For frontend work cover loading, empty, error, and success states; check desktop, mobile, keyboard, focus, contrast, metadata, and real performance.
-8. During development avoid configuring environment variables. Use fake values, mocks, stubs, or safe defaults when they allow progress. Configure a variable before Preview only when a real dependency needs it to build, test, or run.
+8. Test development integration with real isolated persistence and persisted fictional functional seeds. Mocks, stubs and fixtures belong to isolated unit tests and do not replace product functions. Configure only variables needed by real dependencies with DEV-owned secrets, never production values.
 9. For databases detect the existing ORM, preserve data, use compatible migrations, test in an isolated database, and never execute destructive SQL autonomously.
 10. For authentication protect endpoints and resources, authorize per operation, and test anonymous, normal, administrator, and special roles.
 11. For external integrations use sandbox or Preview, least-privilege access, idempotency, backoff, timeouts, and retry limits; do not run real operations without approval.
@@ -158,9 +158,9 @@ Critical note: any migration test, test run, gate, or validation executed throug
 
 ### Environment Variables
 
-- During development, do not request or configure environment variables by default. Prefer mocks, stubs, fixtures, and safe defaults that allow work without secrets.
+- In development configure only variables required by real persistence and dependencies, with environment-owned secrets and least privilege. Test doubles support isolated unit tests, never a pretend functional integration.
 - If a dependency requires a variable before Preview, identify it, explain why it is needed, and use only a local, test, or sandbox value with least-privilege access.
-- Prepare real variables needed during the Preview phase, separated by environment and managed in Dokploy or the authorized secret system; never paste them into chat, commits, or versioned files.
+- Prepare each environment's variables when its real validation needs them, managed in Dokploy or the authorized secret system; never paste them into chat, commits or versioned files.
 - Never reuse production variables in development or Preview. Development, preview, and production credentials must remain isolated.
 
 ### Ideavo Sandbox Provisioning and Public URL
@@ -175,25 +175,25 @@ Critical note: any migration test, test run, gate, or validation executed throug
 
 When the project has role-based login, implement role autologin ONLY for the development environment (for example inside Ideavo), to exercise each role's login and dashboard without typing credentials:
 
-- Fail-closed double condition: require `APP_ENV=development` (or the framework equivalent) AND an explicit `DEV_AUTOLOGIN=true` flag. With any other value, or if either is missing, autologin does not exist.
+- Require all fail-closed conditions together: `APP_ENV=development` (or equivalent), `DEV_AUTOLOGIN=true`, a verified DEV destination and a private perimeter or equivalent control. Missing, conflicting or unknown values disable access. Variables alone do not protect a publicly reachable URL.
 - Impossible in preview/production: the code checks the environment at runtime and aborts startup if the flag appears outside development; the flag is never defined in Preview/Production variables; add a build or CI guard that fails if autologin code is included in a preview or production build.
 - Only the structural role accounts from the development seed (one per relevant role, created through the CRUD); never real user credentials or data.
 - Offer a role switcher visible only in development to change roles while testing.
 - Add a regression test verifying that autologin is absent in preview/production and that protected routes require real authentication.
 - Never expose autologin on public routes or use it to bypass per-operation authorization outside development.
 
-### Development Seed Data
+### Functional Seeds by Environment
 
-- General rule: NEVER example, mock, placeholder, or "test" fixture data in any environment (no lorem ipsum, no "test/demo" records that must later be found and cleaned up): removing them afterwards costs more than creating them properly. Everything is created through the application's real CRUD, as functional data from the start.
-- The development database is always seeded with real, structural data: roles and their permission matrix, catalogs, base configuration, and the structural per-role accounts. An idempotent script (on environment start or through a documented command) leaves it ready to test new work on the work branch (for example in Ideavo) without manual setup.
+- DEV and Preview use persisted fictional functional seeds, each with its own database, users and passwords. Production uses real data, never test seeds. Do not copy production personal data or use product mocks, hardcoded responses or placeholders to pretend a function exists.
+- The DEV database contains effective roles and permissions, catalogs, configuration, fictional role accounts and relationships that exercise real flows. A documented idempotent script prepares it without manual steps within authorized scope. Passwords are random per environment, never versioned or delivered to the browser.
 - Every new feature or API or database schema change must include on the work branch the seed additions or updates needed to test its cases, relationships, and permissions. The change is not complete until the seeds cover the new feature.
 - Updating seed code does not authorize running it against a real database: writes still require their own approval. Development and preview seeds remain separate and are never loaded into production.
-- The seed is deterministic and resettable; it regenerates from scratch with no manual steps and leaves no annotations to clean up afterwards.
+- Seeds use stable owned identifiers and markers. Re-running neither duplicates records nor changes foreign rows; a collision aborts before writing. Regeneration from scratch is limited to owned empty destinations or explicitly authorized deletion, never an implicit reset of a database with data.
 - Seeding goes through the application's CRUD or services, never through SQL that bypasses its validations: every seeded record is valid and functional.
-- Additional functional records are created through the CRUD with realistic, valid content, never marked as disposable.
-- Never personal data or data copied from production; generated structural and functional data only.
-- The development seed never runs in preview or production: the same fail-closed guard as autologin. Production is migrations-only and never receives seed or fixtures.
-- Preview keeps its own full seed for pre-production testing; Stripe (or the payment provider) always stays in test mode in Preview.
+- Fictional records are coherent, valid and clearly identifiable as owned seeds. Check persistence after reconnecting or recreating the process, without confusing browser state with saved data.
+- Block real email, SMS, payment and other provider effects; use an authorized sandbox or owned capture destination. A fictional row does not prove a charge, delivery, consent or real external event.
+- The DEV profile runs only against its verified destination. Preview has its own profile without autologin; production rejects both test-seed profiles even with conflicting flags.
+- Preview keeps its own fictional functional seed profile, accounts and secrets; Stripe always uses test mode and autologin is absent. Use the independent `isolated-environments-functional-seeds` skill for the procedure and negative tests.
 
 ## Validation
 
@@ -207,13 +207,13 @@ When the project has role-based login, implement role autologin ONLY for the dev
 - Every migration test, gate, or validation ran in the isolated environment (OpenShip Actions or Dokploy), even in Preview and with an external database.
 - Preview and non-production branch deployments do not run automatically; recorded PR acceptance exists before execution.
 - Every environment has separate databases and credentials (development, preview, production); Neon is used only by explicit decision.
-- Role autologin works only with `APP_ENV=development` and `DEV_AUTOLOGIN=true`, is absent from preview/production, and its regression guard passes.
-- The development seed is idempotent, structural, and resettable, with no mock or example data; production never receives seed data.
-- No change introduces example, mock, or placeholder data; records are created through the real CRUD.
+- Role autologin requires explicit DEV, a flag, verified destination and private perimeter; it is absent in Preview/production even with copied DEV flags. Direct API, CSRF, origin, role and foreign-account tests pass.
+- DEV and Preview fictional functional seeds are persistent, idempotent and separate. Production receives no test seeds. A second pass preserves foreign rows and collisions abort without partial changes.
+- Records exercise real CRUD, authentication and permissions. Unit-test mocks and doubles are not presented as implementation or integration; no unapproved real external effects occur.
 - An S3/B2 backup with a restore rehearsal exists before mutating Preview or Production, and the owner's numbered OK is on record for each integration PR and environment promotion.
 - Required MCPs are available with permissions that are sufficient, minimal, and verifiable for the task.
 - A complete plan exists, tasks are self-contained, and human attention was requested only for a blocker or required approval.
-- Development progresses without environment variables unless a demonstrated technical need exists; real variables are configured in Preview and remain isolated per environment.
+- Variables needed to test real dependencies use each environment's own minimum secrets, without waiting for Preview or reusing production.
 - Session closure has an explicit checkpoint and no signature or promotion depends on the next message.
 - Preview or production signatures and evidence correspond to the exact SHA being promoted.
 
@@ -223,4 +223,4 @@ Functional software with minimal changes, risk-proportional validation, reviewed
 
 ## Safety
 
-Risk level: **high**. Never paste secrets into responses, logs, commits, issues, or documentation. Do not request passwords, cookies, API keys, or tokens in chat. Require explicit approval for production, billing, credentials, destructive migrations, payments, deletes, role changes, external compute usage, and force pushes. Do not use production data for testing or remove user changes. Role autologin and the development seed are never enabled outside the development environment; if a preview or production deployment exposes them, treat it as an incident and remove it immediately.
+Risk level: **high**. Never paste secrets into responses, logs, commits, issues, or documentation. Do not request passwords, cookies, API keys, or tokens in chat. Require explicit approval for production, billing, credentials, destructive migrations, payments, deletes, role changes, external compute usage, and force pushes. Do not use production data for testing or remove user changes. Autologin and the DEV seed profile remain confined to DEV; Preview uses its own fictional seeds without autologin and production only real data. If autologin is found outside DEV, report the incident and apply only authorized containment, without inferring permission for wider changes.
