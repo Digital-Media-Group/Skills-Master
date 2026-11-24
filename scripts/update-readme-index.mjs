@@ -12,21 +12,17 @@ function skillUrl(metadata) {
 }
 
 function buildIndex(locale, skills, taxonomy) {
-  const headers = locale === "es"
-    ? ["## Índice de skills", "", "Copia el nombre técnico o la URL completa para indicarle a un agente qué skill instalar: `instala la skill <id> desde <url>`.", "", "| Skill | ID técnico | Categoría | URL |", "| --- | --- | --- | --- |"]
-    : ["## Skills Index", "", "Copy the technical ID or the full URL to tell an agent which skill to install: `install skill <id> from <url>`.", "", "| Skill | Technical ID | Category | URL |", "| --- | --- | --- | --- |"];
-  const rows = [];
-  for (const [categoryId, category] of [...taxonomy.entries()].sort((a, b) => a[1].titles.en.localeCompare(b[1].titles.en))) {
-    const categorySkills = skills
-      .filter(({ metadata }) => metadata.category === categoryId)
-      .sort((a, b) => a.metadata.id.localeCompare(b.metadata.id));
-    for (const { metadata } of categorySkills) {
-      const name = String(metadata.name[locale]).replaceAll("|", "\\|").replaceAll("\n", " ");
-      const categoryTitle = String(category.titles[locale]).replaceAll("|", "\\|");
-      rows.push(`| ${name} | \`${metadata.id}\` | ${categoryTitle} | ${skillUrl(metadata)} |`);
-    }
-  }
-  return [...headers, ...rows].join("\n");
+  const es = locale === "es";
+  const clean = (value) => String(value).replaceAll("|", "\\|").replaceAll("\n", " ");
+  const intro = es
+    ? "## Directorio por tipos de trabajo\n\nAbre el [catálogo con fichas, requisitos, resultados y vistas por plataforma](catalog/es/README.md). El estado declarado y la fecha de revisión no sustituyen evidencia de pruebas ni conceden permiso para ejecutar cambios."
+    : "## Directory by work type\n\nOpen the [catalog with skill cards, requirements, results and platform views](catalog/en/README.md). Declared status and review dates do not replace test evidence or grant permission to execute changes.";
+  const sections = [...taxonomy.values()].map((category) => {
+    const selected = skills.filter(({ metadata }) => metadata.category === category.id);
+    const rows = selected.map(({ metadata }) => `| [${clean(metadata.name[locale])}](${skillUrl(metadata)}) | ${clean(metadata.summary[locale])} | \`${metadata.id}\` |`).join("\n");
+    return `### ${category.titles[locale]} (${selected.length})\n\n${category.description[locale]}\n\n| Skill | ${es ? "Para qué sirve" : "Purpose"} | ID |\n| --- | --- | --- |\n${rows}`;
+  });
+  return [intro, ...sections].join("\n\n");
 }
 
 async function updateReadme(file, index) {

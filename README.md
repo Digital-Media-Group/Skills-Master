@@ -23,39 +23,82 @@ Cada skill contiene sus versiónes en `locales/es/SKILL.md` y `locales/en/SKILL.
 | `management-quality` | Gestión y calidad | Management and Quality |
 | `ide-instructions` | Instrucciones para IDEs | IDE Instructions |
 
+## Lectura por IA
+
+Usa el catálogo JSON para seleccionar y el procedimiento canónico completo para ejecutar. Sigue la [secuencia de lectura, resolución de rutas y límites de validación](docs/es/lectura-ia.md). La validación estructural no demuestra por sí sola comprensión semántica ni compatibilidad operativa.
+
 <!-- BEGIN GENERATED SKILLS INDEX -->
 
-## Índice de skills
+## Directorio por tipos de trabajo
 
-Copia el nombre técnico o la URL completa para indicarle a un agente qué skill instalar: `instala la skill <id> desde <url>`.
+Abre el [catálogo con fichas, requisitos, resultados y vistas por plataforma](catalog/es/README.md). El estado declarado y la fecha de revisión no sustituyen evidencia de pruebas ni conceden permiso para ejecutar cambios.
 
-| Skill | ID técnico | Categoría | URL |
-| --- | --- | --- | --- |
-| Diseño de pipeline CI/CD | `ci-cd-pipeline-design` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/ci-cd-pipeline-design |
-| Revisión de arquitectura cloud | `cloud-architecture-review` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/cloud-architecture-review |
-| Contenerización de una aplicación web | `containerize-web-application` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/containerize-web-application |
-| Despliegue Dokploy en modo Compose multi-entorno | `dokploy-compose-deployment` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-compose-deployment |
-| Despliegue Dokploy en modo Stack (Swarm) | `dokploy-swarm-stack-deployment` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-swarm-stack-deployment |
-| CI con OpenShip Actions y runners propios | `openship-actions-ci` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-actions-ci |
-| Despliegue OpenShip por proyecto y entornos | `openship-project-environments` | DevOps y cloud | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-project-environments |
-| Plan de medición analítica | `analytics-measurement-plan` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan |
-| Auditoría de conversión | `conversion-rate-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit |
-| Auditoría SEO técnica | `technical-seo-audit` | Marketing digital | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/technical-seo-audit |
-| Copias de seguridad y restauracion | `backup-and-restore` | Alojamiento y soporte | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/backup-and-restore |
-| Configuración de DNS | `dns-configuration` | Alojamiento y soporte | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/dns-configuration |
-| Migración de sitio web | `website-migration` | Alojamiento y soporte | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/website-migration |
-| Redacción de instrucciones para agentes | `agent-instructions-authoring` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/agent-instructions-authoring |
-| Auditoría de instrucciones de IDE | `ide-instructions-audit` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ide-instructions-audit |
-| Flujo de ramas en Ideavo | `ideavo-flujo-ramas` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-flujo-ramas |
-| Configuración de instrucciones para Ideavo | `ideavo-instructions-setup` | Instrucciones para IDEs | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-instructions-setup |
-| Proceso estándar de desarrollo con Ideavo | `proceso-estandar-desarrollo-ideavo` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/proceso-estandar-desarrollo-ideavo |
-| Discovery de proyecto | `project-discovery` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/project-discovery |
-| Revisión de preparación para release | `release-readiness-review` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/release-readiness-review |
-| Estimación de software | `software-estimation` | Gestión y calidad | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation |
-| Revisión de diseño de API | `api-design-review` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/api-design-review |
-| Desarrollo IDEAVO - OpenCode | `desarrollo-ideavo-opencode` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/desarrollo-ideavo-opencode |
-| Auditoria de rendimiento web | `web-performance-audit` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-performance-audit |
-| Preparación de proyecto web | `web-project-bootstrap` | Desarrollo web | https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-project-bootstrap |
+### Desarrollo web (4)
+
+Frontend, backend, APIs, datos, pruebas, accesibilidad y rendimiento.
+
+| Skill | Para qué sirve | ID |
+| --- | --- | --- |
+| [Revisión de diseño de API](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/api-design-review) | Evaluar una API por consistencia, seguridad, evolucion y experiencia de consumo. | `api-design-review` |
+| [Desarrollo IDEAVO - OpenCode](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/desarrollo-ideavo-opencode) | Flujo general de desarrollo seguro, verificable y gobernado para proyectos trabajados con IDEAVO en OpenCode. | `desarrollo-ideavo-opencode` |
+| [Auditoria de rendimiento web](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-performance-audit) | Identificar cuellos de botella y proponer mejoras medibles de rendimiento web. | `web-performance-audit` |
+| [Preparación de proyecto web](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/web-development/web-project-bootstrap) | Preparar una base web mantenible con decisiones, estructura y controles iniciales. | `web-project-bootstrap` |
+
+### DevOps y cloud (7)
+
+Entrega continua, infraestructura, contenedores, observabilidad y seguridad cloud.
+
+| Skill | Para qué sirve | ID |
+| --- | --- | --- |
+| [Diseño de pipeline CI/CD](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/ci-cd-pipeline-design) | Diseñar una entrega automatizada con controles, trazabilidad y recuperación. | `ci-cd-pipeline-design` |
+| [Revisión de arquitectura cloud](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/cloud-architecture-review) | Evaluar una arquitectura cloud por fiabilidad, seguridad, rendimiento y coste. | `cloud-architecture-review` |
+| [Contenerización de una aplicación web](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/containerize-web-application) | Crear una imagen reproducible, segura y operable para una aplicación web. | `containerize-web-application` |
+| [Despliegue Dokploy en modo Compose multi-entorno](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-compose-deployment) | Crear, promover y diagnosticar recursos Docker Compose de Dokploy con nombres técnicos explícitos, variables protegidas, dominios y flujo master -> preview -> production. | `dokploy-compose-deployment` |
+| [Despliegue Dokploy en modo Stack (Swarm)](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/dokploy-swarm-stack-deployment) | Preparar, promover y diagnosticar stacks Dokploy/Swarm con gates de backup verificable, builds API-only, mantenimiento independiente y bindings site/app. | `dokploy-swarm-stack-deployment` |
+| [CI con OpenShip Actions y runners propios](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-actions-ci) | Ejecutar validaciones CI en infraestructura propia con OpenShip Actions, en modo independiente o con runners self-hosted para workflows de GitHub, con alternativa endurecida en Dokploy. | `openship-actions-ci` |
+| [Despliegue OpenShip por proyecto y entornos](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/devops-cloud/openship-project-environments) | Operar proyectos OpenShip con Production y Preview, servicios persistentes, migraciones PostgreSQL, backups verificables, promoción y rollback. | `openship-project-environments` |
+
+### Alojamiento y soporte (3)
+
+DNS, servidores, migraciónes, copias de seguridad, correo y soporte técnico.
+
+| Skill | Para qué sirve | ID |
+| --- | --- | --- |
+| [Copias de seguridad y restauracion](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/backup-and-restore) | Definir y verificar una estrategia de backup basada en objetivos de recuperación. | `backup-and-restore` |
+| [Configuración de DNS](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/dns-configuration) | Planificar y aplicar cambios DNS con validación y recuperación segura. | `dns-configuration` |
+| [Migración de sitio web](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/hosting-support/website-migration) | Mover un sitio entre entornos reduciendo pérdida de datos y tiempo de inactividad. | `website-migration` |
+
+### Marketing digital (3)
+
+SEO, analítica, contenidos, publicidad, conversión y automatizacion.
+
+| Skill | Para qué sirve | ID |
+| --- | --- | --- |
+| [Plan de medición analítica](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/analytics-measurement-plan) | Convertir objetivos de negocio en eventos, dimensiones, KPI y controles de calidad. | `analytics-measurement-plan` |
+| [Auditoría de conversión](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/conversion-rate-audit) | Identificar fricciones de conversión y formular experimentos medibles. | `conversion-rate-audit` |
+| [Auditoría SEO técnica](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/digital-marketing/technical-seo-audit) | Detectar barreras técnicas que afectan rastreo, indexacion y rendimiento orgánico. | `technical-seo-audit` |
+
+### Gestión y calidad (4)
+
+Discovery, requisitos, estimación, QA, entregas y mejora continua.
+
+| Skill | Para qué sirve | ID |
+| --- | --- | --- |
+| [Proceso estándar de desarrollo con Ideavo](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/proceso-estandar-desarrollo-ideavo) | Estándar vigente para ejecutar proyectos con Ideavo por fases y bloques, con CI propio, QA real en preview y ventanas de producción gobernadas. | `proceso-estandar-desarrollo-ideavo` |
+| [Discovery de proyecto](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/project-discovery) | Alinear problema, resultados, alcance, riesgos y plan de validación antes de ejecutar. | `project-discovery` |
+| [Revisión de preparación para release](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/release-readiness-review) | Decidir si una release puede avanzar mediante evidencia técnica, operativa y de negocio. | `release-readiness-review` |
+| [Estimación de software](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/management-quality/software-estimation) | Producir una estimación explicable con rango, supuestos, riesgos y nivel de confianza. | `software-estimation` |
+
+### Instrucciones para IDEs (4)
+
+Archivos de instrucciones y reglas para IDEs y agentes de codificación como Ideavo, Claude Code y Codex.
+
+| Skill | Para qué sirve | ID |
+| --- | --- | --- |
+| [Redacción de instrucciones para agentes](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/agent-instructions-authoring) | Escribir un archivo de instrucciones neutral y reutilizable entre IDEs y agentes de codificación. | `agent-instructions-authoring` |
+| [Auditoría de instrucciones de IDE](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ide-instructions-audit) | Revisar archivos de instrucciones existentes para detectar reglas obsoletas, contradictorias o inseguras. | `ide-instructions-audit` |
+| [Flujo de ramas en Ideavo](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-flujo-ramas) | Flujo de ramas desarrollo, preview y production en proyectos Ideavo, con tratamiento de ramas de historia disjunta. | `ideavo-flujo-ramas` |
+| [Configuración de instrucciones para Ideavo](https://github.com/Digital-Media-Group/Skills-Master/tree/main/skills/ide-instructions/ideavo-instructions-setup) | Crear el archivo de instrucciones de Ideavo con contexto, convenciones y límites del proyecto. | `ideavo-instructions-setup` |
 
 <!-- END GENERATED SKILLS INDEX -->
 

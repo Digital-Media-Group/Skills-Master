@@ -12,6 +12,7 @@
           "id": "api-design-review",
           "name": "API Design Review",
           "summary": "Assess an API for consistency, security, evolution, and consumer experience.",
+          "whenToUse": "- An API contract or proposal is available for review.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "medium",
@@ -20,12 +21,22 @@
             "review",
             "security"
           ],
-          "source": "../../skills/web-development/api-design-review/locales/en/SKILL.md"
+          "source": "../../skills/web-development/api-design-review/locales/en/SKILL.md",
+          "inputs": [
+            "Contract, use cases, consumers, authentication, and operational constraints."
+          ],
+          "outputs": [
+            "Prioritized report with findings, risks, and recommended changes."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "desarrollo-ideavo-opencode",
           "name": "IDEAVO Development - OpenCode",
           "summary": "General workflow for safe, verifiable, and governed development with IDEAVO in OpenCode.",
+          "whenToUse": "- Create an application or service, add a feature, fix a bug, or refactor code.\n- Modify a web interface or add authentication, databases, payments, queues, or storage.\n- Prepare, validate, or promote deployments.\n- Review performance, accessibility, SEO, security, or quality.\n- Investigate CI, GitHub Actions, Vercel, database, or runtime failures.",
           "version": "0.4.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -36,12 +47,24 @@
             "security",
             "validation"
           ],
-          "source": "../../skills/web-development/desarrollo-ideavo-opencode/locales/en/SKILL.md"
+          "source": "../../skills/web-development/desarrollo-ideavo-opencode/locales/en/SKILL.md",
+          "inputs": [
+            "User request, repository state, local instructions, stack, validation commands, available MCPs, and operational constraints."
+          ],
+          "outputs": [
+            "Implemented change with validation evidence, documented remaining risks, and a clearly stated delivery status."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-11-11",
+          "platforms": [
+            "ideavo"
+          ]
         },
         {
           "id": "web-performance-audit",
           "name": "Web Performance Audit",
           "summary": "Identify bottlenecks and propose measurable web performance improvements.",
+          "whenToUse": "- A site is slow or needs a performance baseline.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -50,12 +73,22 @@
             "core-web-vitals",
             "audit"
           ],
-          "source": "../../skills/web-development/web-performance-audit/locales/en/SKILL.md"
+          "source": "../../skills/web-development/web-performance-audit/locales/en/SKILL.md",
+          "inputs": [
+            "URLs, devices, markets, available analytics, and performance goals."
+          ],
+          "outputs": [
+            "Baseline, verified causes, and a prioritized plan with target metrics."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "web-project-bootstrap",
           "name": "Web Project Bootstrap",
           "summary": "Prepare a maintainable web foundation with initial decisions, structure, and controls.",
+          "whenToUse": "- A new project needs a repeatable technical foundation.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -64,7 +97,16 @@
             "architecture",
             "quality"
           ],
-          "source": "../../skills/web-development/web-project-bootstrap/locales/en/SKILL.md"
+          "source": "../../skills/web-development/web-project-bootstrap/locales/en/SKILL.md",
+          "inputs": [
+            "Goals, users, constraints, approved stack, and delivery criteria."
+          ],
+          "outputs": [
+            "Initial repository, conventions, verifiable commands, and decision record."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         }
       ]
     },
@@ -77,6 +119,7 @@
           "id": "ci-cd-pipeline-design",
           "name": "CI/CD Pipeline Design",
           "summary": "Design automated delivery with controls, traceability, and recovery.",
+          "whenToUse": "- The project needs automated validation or deployment.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -85,12 +128,22 @@
             "automation",
             "release"
           ],
-          "source": "../../skills/devops-cloud/ci-cd-pipeline-design/locales/en/SKILL.md"
+          "source": "../../skills/devops-cloud/ci-cd-pipeline-design/locales/en/SKILL.md",
+          "inputs": [
+            "Repositories, environments, risks, approvals, tests, and release strategy."
+          ],
+          "outputs": [
+            "Documented pipeline with stages, controls, artifacts, and rollback."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "cloud-architecture-review",
           "name": "Cloud Architecture Review",
           "summary": "Assess cloud architecture for reliability, security, performance, and cost.",
+          "whenToUse": "- A solution diagram or inventory exists.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -99,12 +152,22 @@
             "architecture",
             "cost-optimization"
           ],
-          "source": "../../skills/devops-cloud/cloud-architecture-review/locales/en/SKILL.md"
+          "source": "../../skills/devops-cloud/cloud-architecture-review/locales/en/SKILL.md",
+          "inputs": [
+            "Architecture, workloads, SLOs, data, threats, costs, and regulatory constraints."
+          ],
+          "outputs": [
+            "Risk assessment and prioritized improvement roadmap."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "containerize-web-application",
           "name": "Containerize a Web Application",
           "summary": "Create a reproducible, secure, and operable image for a web application.",
+          "whenToUse": "- The application has known build and run processes.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "medium",
@@ -113,12 +176,22 @@
             "containers",
             "deployment"
           ],
-          "source": "../../skills/devops-cloud/containerize-web-application/locales/en/SKILL.md"
+          "source": "../../skills/devops-cloud/containerize-web-application/locales/en/SKILL.md",
+          "inputs": [
+            "Runtime, commands, ports, dependencies, secrets, and deployment targets."
+          ],
+          "outputs": [
+            "Validated Dockerfile, exclusions, documentation, and runtime tests."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "dokploy-compose-deployment",
           "name": "Dokploy Compose Deployment",
           "summary": "Create, promote, and diagnose Dokploy Docker Compose resources with explicit technical names, protected variables, domains, and a master -> preview -> production flow.",
+          "whenToUse": "- The service deploys as Docker Compose in Dokploy (`composeType: docker-compose`), with a compatible Dockerfile and `docker-compose.yml`.\n- Work follows `master` (development), `preview` (validation), and `production` (live) branches with a promotion PR.\n- Environment-identifiable resources and Traefik domains bound to the web service are required.",
           "version": "0.8.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -134,12 +207,32 @@
             "rollback",
             "smoke-tests"
           ],
-          "source": "../../skills/devops-cloud/dokploy-compose-deployment/locales/en/SKILL.md"
+          "source": "../../skills/devops-cloud/dokploy-compose-deployment/locales/en/SKILL.md",
+          "inputs": [
+            "Git repository, docker-compose.yml, and compatible Dockerfile.",
+            "Dokploy API/panel access and the correct project/environment.",
+            "Domains, protected variables, persistence decision, and explicit Production approval.",
+            "master (validation) and production (live) branches, with a promotion PR."
+          ],
+          "outputs": [
+            "Identifiable Dokploy Docker Compose resources isolated by environment.",
+            "Variables stored with safe dotenv quoting and no secrets committed to Git.",
+            "HTTPS domains bound to the correct web service.",
+            "Documented smoke tests, healthchecks, logs, and rollback."
+          ],
+          "dependencies": [
+            "containerize-web-application"
+          ],
+          "lastReviewed": "2026-11-11",
+          "platforms": [
+            "dokploy"
+          ]
         },
         {
           "id": "dokploy-swarm-stack-deployment",
           "name": "Dokploy Swarm Stack Deployment",
           "summary": "Prepare, promote, and diagnose Dokploy/Swarm stacks with verifiable backup gates, API-only builds, independent maintenance, and site/app bindings.",
+          "whenToUse": "- The service deploys as a Dokploy/Swarm Stack (`composeType: stack`), not plain Compose or Nixpacks.\n- Development, Preview, and Production environments promote fail-closed.\n- Per-environment site/app bindings, verifiable native backups, and Swarm task diagnosis are required.",
           "version": "0.6.2",
           "status": "experimental",
           "riskLevel": "high",
@@ -158,12 +251,33 @@
             "rollback",
             "smoke-tests"
           ],
-          "source": "../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/en/SKILL.md"
+          "source": "../../skills/devops-cloud/dokploy-swarm-stack-deployment/locales/en/SKILL.md",
+          "inputs": [
+            "Git repository or sanitized ZIP snapshot, compatible Stack Compose, and workflow.",
+            "Dokploy API/panel access, isolated stacks, site/app domains, and protected variables.",
+            "Optional private registry; push and pull permissions must be verified separately.",
+            "Persistence, backup/restore, seed, smoke-test, promotion, and Production approval decisions."
+          ],
+          "outputs": [
+            "Isolated Dokploy/Swarm stacks promotable from Development -> Preview -> Production.",
+            "Reproducible registry-digest builds or explicitly scoped API-only snapshot builds.",
+            "Native volume or remote backups with completion evidence or restore rehearsal.",
+            "Separate site/app surfaces per environment, bound to the full Swarm service.",
+            "Smoke tests, task/log diagnosis, and documented rollback."
+          ],
+          "dependencies": [
+            "containerize-web-application"
+          ],
+          "lastReviewed": "2026-10-24",
+          "platforms": [
+            "dokploy"
+          ]
         },
         {
           "id": "openship-actions-ci",
           "name": "CI with OpenShip Actions and Self-Hosted Runners",
           "summary": "Run CI validation on own infrastructure with OpenShip Actions, in independent mode or with self-hosted runners for GitHub workflows, with a hardened Dokploy alternative.",
+          "whenToUse": "- Typecheck, lint, tests, builds, or migration rehearsals need owned infrastructure.\n- A native OpenShip workflow and its promotion gates need documentation or validation.\n- An independent Dokploy fallback is being assessed without registering GitHub runners.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -177,12 +291,32 @@
             "validation",
             "hardening"
           ],
-          "source": "../../skills/devops-cloud/openship-actions-ci/locales/en/SKILL.md"
+          "source": "../../skills/devops-cloud/openship-actions-ci/locales/en/SKILL.md",
+          "inputs": [
+            "An OpenShip instance with Actions (v0.9.0 or later) verified in its dashboard.",
+            "An execution destination with known OS, architecture, and tooling.",
+            "The instance's GitHub connection for importing workflows and publishing Checks.",
+            "An access policy with per-attempt approvals."
+          ],
+          "outputs": [
+            "Validation running on own infrastructure with Checks published to GitHub.",
+            "Registered, labeled runners in Ready/Idle state.",
+            "Per-workflow limited access and recorded approvals."
+          ],
+          "dependencies": [
+            "ci-cd-pipeline-design"
+          ],
+          "lastReviewed": "2026-10-24",
+          "platforms": [
+            "atlas-openship",
+            "dokploy"
+          ]
         },
         {
           "id": "openship-project-environments",
           "name": "OpenShip Project and Environment Deployment",
           "summary": "Operate OpenShip projects with Production and Preview, persistent services, PostgreSQL migrations, verifiable backups, promotion, and rollback.",
+          "whenToUse": "- Deploying an application to OpenShip/Atlas.\n- Needing Preview and Production environments within one OpenShip project.\n- Migrating PostgreSQL and persistent services from Neon, Vercel, or another provider.\n- Operating backups, promotion, rollback, or Cloudflare changes.",
           "version": "0.2.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -200,7 +334,29 @@
             "cloudflare",
             "atlas"
           ],
-          "source": "../../skills/devops-cloud/openship-project-environments/locales/en/SKILL.md"
+          "source": "../../skills/devops-cloud/openship-project-environments/locales/en/SKILL.md",
+          "inputs": [
+            "Git repository, master/preview/production branches, and an OpenShip-compatible Dockerfile or service definition.",
+            "OpenShip MCP access and target workspace/server.",
+            "One OpenShip project with internal environments; do not create duplicate Preview projects unless OpenShip requires it.",
+            "Data inventory, source PostgreSQL, RPO/RTO, backups, domains, Cloudflare, and explicit Production approval."
+          ],
+          "outputs": [
+            "One OpenShip project with isolated Production and Preview environments.",
+            "Web, worker/cron, and persistent PostgreSQL services with environment-specific volumes.",
+            "Full backup and verified restore rehearsal.",
+            "Promotion of the same validated candidate and documented rollback.",
+            "DNS/TLS changed only after the new Production is validated."
+          ],
+          "dependencies": [
+            "containerize-web-application",
+            "ci-cd-pipeline-design",
+            "openship-actions-ci"
+          ],
+          "lastReviewed": "2026-11-11",
+          "platforms": [
+            "atlas-openship"
+          ]
         }
       ]
     },
@@ -213,6 +369,7 @@
           "id": "backup-and-restore",
           "name": "Backup and Restore",
           "summary": "Define and verify a backup strategy based on recovery objectives.",
+          "whenToUse": "- A service needs protection or recoverability validation.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -221,12 +378,22 @@
             "disaster-recovery",
             "operations"
           ],
-          "source": "../../skills/hosting-support/backup-and-restore/locales/en/SKILL.md"
+          "source": "../../skills/hosting-support/backup-and-restore/locales/en/SKILL.md",
+          "inputs": [
+            "Data inventory, RPO, RTO, retention, encryption, locations, and owners."
+          ],
+          "outputs": [
+            "Backup policy and evidence of a tested restore."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "dns-configuration",
           "name": "DNS Configuration",
           "summary": "Plan and apply DNS changes with validation and safe recovery.",
+          "whenToUse": "- DNS records must be created or changed.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -235,12 +402,22 @@
             "hosting",
             "change-management"
           ],
-          "source": "../../skills/hosting-support/dns-configuration/locales/en/SKILL.md"
+          "source": "../../skills/hosting-support/dns-configuration/locales/en/SKILL.md",
+          "inputs": [
+            "Zone, provider, current records, target, TTL, and change window."
+          ],
+          "outputs": [
+            "Applied records, verified propagation, and documented rollback plan."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "website-migration",
           "name": "Website Migration",
           "summary": "Move a site between environments while minimizing data loss and downtime.",
+          "whenToUse": "- Source, destination, and migration window are identified.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -249,7 +426,16 @@
             "hosting",
             "backup"
           ],
-          "source": "../../skills/hosting-support/website-migration/locales/en/SKILL.md"
+          "source": "../../skills/hosting-support/website-migration/locales/en/SKILL.md",
+          "inputs": [
+            "Inventory, access, data, DNS, email, traffic, and downtime tolerance."
+          ],
+          "outputs": [
+            "Migrated, validated, monitored site with rollback available."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         }
       ]
     },
@@ -262,6 +448,7 @@
           "id": "analytics-measurement-plan",
           "name": "Analytics Measurement Plan",
           "summary": "Turn business goals into events, dimensions, KPIs, and quality controls.",
+          "whenToUse": "- A product needs analytics implementation or remediation.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "medium",
@@ -270,12 +457,22 @@
             "measurement",
             "privacy"
           ],
-          "source": "../../skills/digital-marketing/analytics-measurement-plan/locales/en/SKILL.md"
+          "source": "../../skills/digital-marketing/analytics-measurement-plan/locales/en/SKILL.md",
+          "inputs": [
+            "Goals, journey, conversions, platforms, consent, and reporting needs."
+          ],
+          "outputs": [
+            "Versioned measurement plan with specifications and validation."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "conversion-rate-audit",
           "name": "Conversion Rate Audit",
           "summary": "Identify conversion friction and formulate measurable experiments.",
+          "whenToUse": "- A journey has traffic and a defined conversion.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -284,12 +481,22 @@
             "experimentation",
             "user-experience"
           ],
-          "source": "../../skills/digital-marketing/conversion-rate-audit/locales/en/SKILL.md"
+          "source": "../../skills/digital-marketing/conversion-rate-audit/locales/en/SKILL.md",
+          "inputs": [
+            "Goal, funnel, segments, analytics, user research, and constraints."
+          ],
+          "outputs": [
+            "Backlog of prioritized hypotheses with metrics and test design."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "technical-seo-audit",
           "name": "Technical SEO Audit",
           "summary": "Find technical barriers affecting crawling, indexing, and organic performance.",
+          "whenToUse": "- A site needs SEO diagnosis or is preparing a migration.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -298,7 +505,16 @@
             "audit",
             "indexing"
           ],
-          "source": "../../skills/digital-marketing/technical-seo-audit/locales/en/SKILL.md"
+          "source": "../../skills/digital-marketing/technical-seo-audit/locales/en/SKILL.md",
+          "inputs": [
+            "Domain, markets, CMS, analytics, Search Console, recent changes, and competitors."
+          ],
+          "outputs": [
+            "Prioritized report with evidence, impact, and validation criteria."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         }
       ]
     },
@@ -311,6 +527,7 @@
           "id": "proceso-estandar-desarrollo-ideavo",
           "name": "Standard development process with Ideavo",
           "summary": "Current standard for running projects with Ideavo in phases and blocks, with own CI, real preview QA, and governed production windows.",
+          "whenToUse": "Any new or existing Ideavo development project, including fixes, tracking and release preparation.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -321,12 +538,24 @@
             "ci-cd",
             "governance"
           ],
-          "source": "../../skills/management-quality/proceso-estandar-desarrollo-ideavo/locales/en/SKILL.md"
+          "source": "../../skills/management-quality/proceso-estandar-desarrollo-ideavo/locales/en/SKILL.md",
+          "inputs": [
+            "Phased project plan, repository with master/preview/production branches, own CI on Atlas/Dokploy, and owner-approved autonomy limits."
+          ],
+          "outputs": [
+            "Phases delivered to production with operator-merged PRs, green CI, preview QA, documented windows, and evidenced closeout."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-11-15",
+          "platforms": [
+            "ideavo"
+          ]
         },
         {
           "id": "project-discovery",
           "name": "Project Discovery",
           "summary": "Align the problem, outcomes, scope, risks, and validation plan before execution.",
+          "whenToUse": "- An initiative must turn an idea into verifiable decisions.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -335,12 +564,22 @@
             "requirements",
             "planning"
           ],
-          "source": "../../skills/management-quality/project-discovery/locales/en/SKILL.md"
+          "source": "../../skills/management-quality/project-discovery/locales/en/SKILL.md",
+          "inputs": [
+            "Business context, users, evidence, constraints, owners, and timeline."
+          ],
+          "outputs": [
+            "Validated brief, risk map, initial scope, and next decisions."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "release-readiness-review",
           "name": "Release Readiness Review",
           "summary": "Decide whether a release can proceed using technical, operational, and business evidence.",
+          "whenToUse": "- A release candidate is approaching a shared or production environment.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "high",
@@ -349,12 +588,22 @@
             "quality-assurance",
             "change-management"
           ],
-          "source": "../../skills/management-quality/release-readiness-review/locales/en/SKILL.md"
+          "source": "../../skills/management-quality/release-readiness-review/locales/en/SKILL.md",
+          "inputs": [
+            "Changes, tests, risks, dependencies, observability, support, and rollback."
+          ],
+          "outputs": [
+            "Recorded go, no-go, or conditional-go decision."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         },
         {
           "id": "software-estimation",
           "name": "Software Estimation",
           "summary": "Produce an explainable estimate with a range, assumptions, risks, and confidence level.",
+          "whenToUse": "- There is enough scope to plan or compare alternatives.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -363,7 +612,16 @@
             "planning",
             "risk"
           ],
-          "source": "../../skills/management-quality/software-estimation/locales/en/SKILL.md"
+          "source": "../../skills/management-quality/software-estimation/locales/en/SKILL.md",
+          "inputs": [
+            "Scope, acceptance criteria, architecture, team, dependencies, and constraints."
+          ],
+          "outputs": [
+            "Effort or schedule range with explicit assumptions and risks."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-07-25",
+          "platforms": []
         }
       ]
     },
@@ -376,6 +634,7 @@
           "id": "agent-instructions-authoring",
           "name": "Agent Instructions Authoring",
           "summary": "Write a neutral, reusable instructions file shared across IDEs and coding agents.",
+          "whenToUse": "- The team uses more than one agent or IDE on the same repository.\n- Several instruction files exist with diverging rules.\n- A single source of conventions is needed for every agent to reference.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -385,12 +644,22 @@
             "documentation",
             "conventions"
           ],
-          "source": "../../skills/ide-instructions/agent-instructions-authoring/locales/en/SKILL.md"
+          "source": "../../skills/ide-instructions/agent-instructions-authoring/locales/en/SKILL.md",
+          "inputs": [
+            "Agents and IDEs in use, team conventions, and tasks routinely delegated to the agent."
+          ],
+          "outputs": [
+            "Neutral instructions file with verifiable rules and per-agent references."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-08-10",
+          "platforms": []
         },
         {
           "id": "ide-instructions-audit",
           "name": "IDE Instructions Audit",
           "summary": "Review existing instruction files to detect outdated, contradictory, or unsafe rules.",
+          "whenToUse": "- The agent breaks conventions that are already documented.\n- The repository changed stack, commands, or structure.\n- Secrets or excessive permissions are suspected in the instructions.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "medium",
@@ -400,12 +669,24 @@
             "agent",
             "maintenance"
           ],
-          "source": "../../skills/ide-instructions/ide-instructions-audit/locales/en/SKILL.md"
+          "source": "../../skills/ide-instructions/ide-instructions-audit/locales/en/SKILL.md",
+          "inputs": [
+            "Current instruction files, actual repository state, and issues reported by the team."
+          ],
+          "outputs": [
+            "Prioritized findings report with applied or proposed corrections."
+          ],
+          "dependencies": [
+            "agent-instructions-authoring"
+          ],
+          "lastReviewed": "2026-08-10",
+          "platforms": []
         },
         {
           "id": "ideavo-flujo-ramas",
           "name": "Branch Flow in Ideavo",
           "summary": "Branch flow desarrollo, preview and production in Ideavo projects, including disjoint-history branches.",
+          "whenToUse": "- When creating, promoting, integrating or cleaning branches in an Ideavo project whose working branch is `desarrollo`.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "medium",
@@ -415,12 +696,24 @@
             "ramas",
             "despliegue"
           ],
-          "source": "../../skills/ide-instructions/ideavo-flujo-ramas/locales/en/SKILL.md"
+          "source": "../../skills/ide-instructions/ideavo-flujo-ramas/locales/en/SKILL.md",
+          "inputs": [
+            "Repository, current branches and SHAs, live environment configuration, and owner authority."
+          ],
+          "outputs": [
+            "Documented promotion flow verified per version, with branch status and gate evidence."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-11-24",
+          "platforms": [
+            "ideavo"
+          ]
         },
         {
           "id": "ideavo-instructions-setup",
           "name": "Ideavo Instructions Setup",
           "summary": "Create the Ideavo instructions file with project context, conventions, and boundaries.",
+          "whenToUse": "- The repository will be used with Ideavo and has no instructions of its own.\n- Existing instructions are outdated compared to the actual project.\n- The team repeats the same corrections to the agent in every session.",
           "version": "0.1.0",
           "status": "experimental",
           "riskLevel": "low",
@@ -430,7 +723,18 @@
             "agent",
             "onboarding"
           ],
-          "source": "../../skills/ide-instructions/ideavo-instructions-setup/locales/en/SKILL.md"
+          "source": "../../skills/ide-instructions/ideavo-instructions-setup/locales/en/SKILL.md",
+          "inputs": [
+            "Repository structure, build and test commands, code conventions, and operational constraints."
+          ],
+          "outputs": [
+            "Versioned and verified Ideavo instructions file committed to the repository."
+          ],
+          "dependencies": [],
+          "lastReviewed": "2026-08-10",
+          "platforms": [
+            "ideavo"
+          ]
         }
       ]
     }
